@@ -6,7 +6,7 @@ const int WIDTH{ 7 }, HEIGHT{ 11 };
 
 struct MAPCHIP
 {
-	int hPict_;
+	int tileModel_;
 	int value_;
 	XMFLOAT3 pos_;
 	bool select_;

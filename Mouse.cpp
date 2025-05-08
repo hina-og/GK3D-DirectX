@@ -34,23 +34,8 @@ void Mouse::Initialize()
 
 void Mouse::Update()
 {
-	transform_.position_ = { 0,0,0 };
-	if (Input::IsKey(DIK_A))
-	{
-		transform_.position_.x -= 0.01;
-	}
-	if (Input::IsKey(DIK_D))
-	{
-		transform_.position_.x += 0.01;
-	}
-	if (Input::IsKey(DIK_S))
-	{
-		transform_.position_.z -= 0.01;
-	}
-	if (Input::IsKey(DIK_W))
-	{
-		transform_.position_.z += 0.01;
-	}
+	//transform_.position_ = { 0,0,0 };
+	
 	/*if (Input::IsKey(DIK_LSHIFT))
 	{
 		transform_.position_.y -= 0.01;
@@ -63,6 +48,8 @@ void Mouse::Update()
 	{
 		transform_.rotate_.y -= 360;
 	}
+
+	transform_.rotate_.y += 1.0;
 
 
 	if (hp_ < 1)

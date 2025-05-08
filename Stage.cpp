@@ -1,6 +1,7 @@
 #include "Stage.h"
 #include "Engine/Image.h"
 #include "Engine/Input.h"
+#include "Engine/Model.h"
 
 Stage::Stage(GameObject* parent)
 	: GameObject(parent,"Stage")
@@ -13,10 +14,10 @@ void Stage::Initialize()
 	{
 		for (int x = 0; x < WIDTH; x++)
 		{
-			mapData_[y][x].hPict_ = Image::Load("Image\\empty.png");
-			assert(mapData_[y][x].hPict_ >= 0);
+			mapData_[y][x].tileModel_ = Model::Load("Model\\Tile.fbx");
+			assert(mapData_[y][x].tileModel_ >= 0);
 
-			mapData_[y][x].pos_ = { x * 64.0f + ((1280.0f - (64.0f * WIDTH)) / 2.0f) - 416, y * 64.0f + 8.0f , 0 };
+			mapData_[y][x].pos_ = { (float)x , 0 , (float)y };
 			mapData_[y][x].select_ = false;
 			mapData_[y][x].onPlayer_ = false;
 		}
@@ -25,6 +26,8 @@ void Stage::Initialize()
 
 void Stage::Update()
 {
+	transform_.rotate_.y += 1.0;
+
 	if (Input::IsKey(DIK_A))
 	{
 		transform_.position_.x -= 0.01;
@@ -35,11 +38,11 @@ void Stage::Update()
 	}
 	if (Input::IsKey(DIK_S))
 	{
-		transform_.position_.y -= 0.01;
+		transform_.position_.z -= 0.01;
 	}
 	if (Input::IsKey(DIK_W))
 	{
-		transform_.position_.y += 0.01;
+		transform_.position_.z += 0.01;
 	}
 }
 
@@ -52,11 +55,10 @@ void Stage::Draw()
 			if (!mapData_[y][x].select_)
 			{
 				Transform ftrans;
-				ftrans.position_ = { transform_.position_.x + mapData_[y][x].pos_.x / 1280 , transform_.position_.y + mapData_[y][x].pos_.y / 720  ,0 };
-				//transform_.position_ = { transform_.position_.x + mapData_[y][x].pos_.x , transform_.position_.y + mapData_[y][x].pos_.y  ,0 };
-				ftrans.scale_ = { 0.1,0.1,0.1 };
-				Image::SetTransform(mapData_[y][x].hPict_, ftrans);
-				//Image::Draw(mapData_[y][x].hPict_);
+				ftrans.position_ = { transform_.position_.x + mapData_[y][x].pos_.x,transform_.position_.y + mapData_[y][x].pos_.y ,transform_.position_.z + mapData_[y][x].pos_.z };
+				ftrans.rotate_ = transform_.rotate_;
+				Model::SetTransform(mapData_[y][x].tileModel_, ftrans);
+				Model::Draw(mapData_[y][x].tileModel_);
 			}
 		}
 	}

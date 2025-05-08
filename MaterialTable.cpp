@@ -48,7 +48,7 @@ void MaterialTable::Initialize()
 		table.material[i].name = "empty";
 	}
 
-	makeButton_.Initialize(30, 600, 128, 64, "Image\\Make.png");
+	makeButton_.Initialize(30, 600, 128, 64, "Image\\Make2.png");
 
 	ReadRecipe();
 }
