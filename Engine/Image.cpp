@@ -169,6 +169,16 @@ namespace Image
 		_datas[handle]->alpha = (float)alpha / 255.0f;
 	}
 
+	void SetPosition(int handle, XMFLOAT3 _pos)
+	{
+		_datas[handle]->transform.position_ = _pos;
+	}
+
+	void SeScale(int handle, XMFLOAT3 _sca)
+	{
+		_datas[handle]->transform.scale_ = _sca;
+	}
+
 
 	//ƒ[ƒ‹ƒhs—ñ‚ðÝ’è
 	void SetTransform(int handle, Transform& transform)
@@ -177,8 +187,9 @@ namespace Image
 		{
 			return;
 		}
-
 		_datas[handle]->transform = transform;
+		_datas[handle]->transform.position_.x = _datas[handle]->transform.position_.x / Direct3D::screenWidth_;
+		_datas[handle]->transform.position_.y = _datas[handle]->transform.position_.y / Direct3D::screenHeight_;
 	}
 
 
@@ -190,6 +201,11 @@ namespace Image
 			return XMMatrixIdentity();
 		}
 		return _datas[handle]->transform.GetWorldMatrix();
+	}
+
+	XMFLOAT3 GetImageSize(int handle)
+	{
+		return {_datas[handle]->pSprite->GetTextureSize().x * _datas[handle]->transform.scale_.x, _datas[handle]->pSprite->GetTextureSize().y* _datas[handle]->transform.scale_.y, 0};
 	}
 }
 

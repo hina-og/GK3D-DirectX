@@ -4,7 +4,7 @@
 
 void Char::Load()
 {
-	charPict = Image::Load("Assets\\Image\\char.png");
+	charPict = Image::Load("Image\\char.png");
 }
 
 void Char::Draw(int _x, int _y, std::string _str)

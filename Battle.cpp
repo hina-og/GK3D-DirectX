@@ -9,14 +9,14 @@ Battle::Battle(GameObject* parent)
 
 void Battle::Initialize()
 {
-	material = Instantiate<MaterialTable>(this);
+	
 	stage = Instantiate<Stage>(this);
 	player = Instantiate<Player>(this);
 	enemy = Instantiate<Enemy>(this);
 	//pot = Instantiate<Pot>(this);
 	
 	
-	
+	material = Instantiate<MaterialTable>(this);
 
 	Instantiate<Mouse>(this);
 }
@@ -25,11 +25,12 @@ void Battle::Update()
 {
 	Input::GetMousePosition(mouseX, mouseY);
 
+
 	XMFLOAT3 mousePos = { (float)mouseX - 32,(float)mouseY - 32,0 };
 	selectPos_ = stage->SelectTile(mousePos);
 
 	//マウス左を押しているとき
-	if (Input::IsMouseButton(LEFT_CLICK))
+	if (Input::IsMouseButtonDown(LEFT_CLICK))
 	{
 		//前のフレームでマウス左を押していないとき
 		if (!prevLeftClick && !stage->HasPlayer(selectPos_))

@@ -2,6 +2,8 @@
 #include "Engine/Image.h"
 #include "Engine/Input.h"
 #include "Engine/Model.h"
+#include "Engine/Camera.h"
+#include "Engine/Direct3D.h"
 
 Stage::Stage(GameObject* parent)
 	: GameObject(parent,"Stage")
@@ -17,7 +19,7 @@ void Stage::Initialize()
 			mapData_[y][x].tileModel_ = Model::Load("Model\\Tile.fbx");
 			assert(mapData_[y][x].tileModel_ >= 0);
 
-			mapData_[y][x].pos_ = { (float)x , 0 , (float)y };
+			mapData_[y][x].pos_ = { /*(float)x,0,(float)y*/(float)x - (WIDTH / 2) , 0 , (float)y - (HEIGHT / 2)};
 			mapData_[y][x].select_ = false;
 			mapData_[y][x].onPlayer_ = false;
 		}
@@ -26,23 +28,54 @@ void Stage::Initialize()
 
 void Stage::Update()
 {
-	transform_.rotate_.y += 1.0;
+	if (Input::IsMouseButtonDown(LEFT_CLICK))
+	{
+		XMMATRIX matView = Camera::GetViewMatrix();
+		XMMATRIX matProj = Camera::GetProjectionMatrix();
 
-	if (Input::IsKey(DIK_A))
-	{
-		transform_.position_.x -= 0.01;
-	}
-	if (Input::IsKey(DIK_D))
-	{
-		transform_.position_.x += 0.01;
-	}
-	if (Input::IsKey(DIK_S))
-	{
-		transform_.position_.z -= 0.01;
-	}
-	if (Input::IsKey(DIK_W))
-	{
-		transform_.position_.z += 0.01;
+		float w = Direct3D::screenWidth_ / 2;
+		float h = Direct3D::screenHeight_ / 2;
+
+		//ビューポート行列
+		XMMATRIX vp =
+		{
+			w,0,0,0,
+			0,-h,0,0,
+			0,0,1,0,
+			w,h,0,1
+		};
+
+		XMMATRIX invView = XMMatrixInverse(nullptr, matView);
+		XMMATRIX invProj = XMMatrixInverse(nullptr, matProj);
+		XMMATRIX invVP = XMMatrixInverse(nullptr, vp);
+
+		XMVECTOR mouseFrontPos = { Input::GetMousePosition().x,Input::GetMousePosition().y };
+		XMFLOAT3 mousePos;
+		XMStoreFloat3(&mousePos, mouseFrontPos);
+		mousePos.z = 0;
+		mouseFrontPos = XMLoadFloat3(&mousePos);
+
+		mousePos.z = 1;
+		XMVECTOR mouseBackPos = XMLoadFloat3(&mousePos);
+
+		mouseFrontPos = XMVector3TransformCoord(mouseFrontPos, invVP * invProj * invView);
+		mouseBackPos = XMVector3TransformCoord(mouseBackPos, invVP * invProj * invView);
+
+		RayCastData data;
+		//レイの発射位置（マウス位置参照）
+		XMStoreFloat3(&data.start, mouseFrontPos);
+		XMStoreFloat3(&data.dir, mouseBackPos - mouseFrontPos);
+		for (int y = 0;y < HEIGHT;y++)
+		{
+			for (int x = 0;x < WIDTH;x++)
+			{
+				Model::RayCast(mapData_[y][x].tileModel_, &data);
+				if (data.hit)
+				{
+					return;
+				}
+			}
+		}
 	}
 }
 
@@ -59,6 +92,10 @@ void Stage::Draw()
 				ftrans.rotate_ = transform_.rotate_;
 				Model::SetTransform(mapData_[y][x].tileModel_, ftrans);
 				Model::Draw(mapData_[y][x].tileModel_);
+			}
+			else
+			{
+				int o = 0;
 			}
 		}
 	}

@@ -1,15 +1,7 @@
-
-//
-//　最終更新日：2023/10/20
-//
-
-
-
 #include <Windows.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
-
 #include "global.h"
 #include "RootObject.h"
 #include "Model.h"
@@ -23,7 +15,6 @@
 
 //定数宣言
 const char* WIN_CLASS_NAME = "SampleGame";	//ウィンドウクラス名
-
 
 //プロトタイプ宣言
 HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdShow);

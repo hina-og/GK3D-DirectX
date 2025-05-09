@@ -62,9 +62,6 @@
     <ClCompile Include="Engine\Fbx.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\FbxParts.cpp">
-      <Filter>01Engine\DirectX</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Input.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
@@ -167,6 +164,7 @@
     <ClCompile Include="HUD.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
+    <ClCompile Include="Engine\FbxParts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -182,9 +180,6 @@
       <Filter>01Engine\DirectX</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Fbx.h">
-      <Filter>01Engine\DirectX</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine\FbxParts.h">
       <Filter>01Engine\DirectX</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Input.h">
@@ -293,6 +288,7 @@
     <ClInclude Include="Button.h">
       <Filter>01Engine\DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\FbxParts.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

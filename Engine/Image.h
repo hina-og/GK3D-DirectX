@@ -79,6 +79,9 @@ namespace Image
 	//引数：alpha アルファ値（不透明度）　0～255で指定
 	void SetAlpha(int handle, int alpha);
 
+	void SetPosition(int handle, XMFLOAT3 _pos);
+	void SeScale(int handle, XMFLOAT3 _sca);
+
 	//ワールド行列を設定
 	//引数：handle	設定したい画像の番号
 	//引数：matrix	ワールド行列
@@ -88,4 +91,8 @@ namespace Image
 	//引数：handle	知りたい画像の番号
 	//戻値：ワールド行列
 	XMMATRIX GetMatrix(int handle);
+
+	//画像サイズの取得
+	//戻値：画像サイズ
+	XMFLOAT3 GetImageSize(int handle);
 }

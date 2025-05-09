@@ -1,6 +1,7 @@
 #include "MaterialTable.h"
 #include "Engine/CsvReader.h"
 #include "Engine/Image.h"
+#include "Engine/Direct3D.h"
 
 MaterialTable::MaterialTable(GameObject* parent)
 	: GameObject(parent, "MaterialTable")
@@ -9,10 +10,15 @@ MaterialTable::MaterialTable(GameObject* parent)
 
 void MaterialTable::Initialize()
 {
-	//storage = Instantiate<PuppetStorage>(this);
+	storage = Instantiate<PuppetStorage>(this);
 
 	hTable_ = Image::Load("Image\\MaterialTable.png");
 	assert(hTable_ >= 0);
+
+	transform_.scale_ = { 0.8,1.0,1.0 };
+	Image::SeScale(hTable_, transform_.scale_);
+	transform_.position_ = { -(float)Direct3D::screenWidth_ + Image::GetImageSize(hTable_).x,(float)Direct3D::screenHeight_ - Image::GetImageSize(hTable_).y,0 };
+	Image::SetTransform(hTable_, transform_);
 
 	std::string materialName_[MATERIAL_NUM]
 	{
@@ -27,28 +33,34 @@ void MaterialTable::Initialize()
 	for (int i = 0; i < MATERIAL_NUM; i++)
 	{
 		materialList_[i].type = i;
-		materialList_[i].x = i % 5 * 70 + 25;
-		materialList_[i].y = i / 5 * 70 + 25;
+
 		materialList_[i].name = materialName_[i];
 
 		std::string fileName_ = "Image\\" + materialList_[i].name + ".png";
-		materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y,64,64, fileName_);
+		materialList_[i].button.Initialize(transform_.position_.x + materialList_[i].x, transform_.position_.y + materialList_[i].y, fileName_);
+
+		materialList_[i].x = transform_.position_.x + (i % TABLE_SIZE * materialList_[i].button.GetSize().x - Image::GetImageSize(hTable_).x + materialList_[i].button.GetSize().x / 2);
+		materialList_[i].y = transform_.position_.y - (i / TABLE_SIZE * materialList_[i].button.GetSize().y - Image::GetImageSize(hTable_).y + materialList_[i].button.GetSize().y / 2);
+
+		materialList_[i].button.SetPosition({ (float)materialList_[i].x ,(float)materialList_[i].y,0 });
 	}
 
-	table.x = 30;
-	table.y = 400; 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
-		table.material[i].x = i * 70 + table.x;
-		table.material[i].y = table.y;
+		
 
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
-		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, 64, 64, "Image\\empty.png");
+		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
+
+
+		table.material[i].x = i * table.material[i].button.GetSize().x - (Direct3D::screenWidth_ - table.material[i].button.GetSize().x / 2);
+		table.material[i].y = table.y;
+		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
 
 		table.material[i].name = "empty";
 	}
 
-	makeButton_.Initialize(30, 600, 128, 64, "Image\\Make2.png");
+	makeButton_.Initialize(500,100, "Image\\Make.png");
 
 	ReadRecipe();
 }
@@ -72,7 +84,7 @@ void MaterialTable::Update()
 		{
 			table.material[table.num].type = materialList_[i].type;
 			table.material[table.num].name = materialList_[i].name;
-			table.material[table.num].button.Initialize(table.material[table.num].x, table.material[table.num].y, 64, 64, "Image\\" + table.material[table.num].name + ".png");
+			table.material[table.num].button.Initialize(table.material[table.num].x, table.material[table.num].y, "Image\\" + table.material[table.num].name + ".png");
 			table.num++;
 		}
 	}
@@ -85,13 +97,13 @@ void MaterialTable::Update()
 			{
 				table.material[j].type = table.material[j + 1].type;
 				table.material[j].name = table.material[j + 1].name;
-				table.material[j].button.Initialize(table.material[j].x, table.material[j].y, 64, 64, "Image\\" + table.material[j].name + ".png");
+				table.material[j].button.Initialize(table.material[j].x, table.material[j].y, "Image\\" + table.material[j].name + ".png");
 			}
 			table.num--;
 
 			table.material[table.num].type = MATERIAL_TYPE::EMPTY;
 			table.material[table.num].name = "empty";
-			table.material[table.num].button.Initialize(table.material[table.num].x, table.material[table.num].y, 64, 64, "Assets\\Image\\empty.png");
+			table.material[table.num].button.Initialize(table.material[table.num].x, table.material[table.num].y, "Image\\empty.png");
 		}
 	}
 
@@ -104,9 +116,6 @@ void MaterialTable::Update()
 
 void MaterialTable::Draw()
 {
-	transform_.position_ = { -0.68,0,0 };
-	transform_.scale_ = { 0.8,0.8,0.8 };
-	Image::SetTransform(hTable_, transform_);
 	Image::Draw(hTable_);
 
 	for (int i = 0; i < MATERIAL_NUM; i++)
@@ -217,7 +226,7 @@ void MaterialTable::TableReset()
 	{
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
 		table.material[i].name = "empty";
-		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, 64, 64, "Assets\\Image\\empty.png");	
+		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");	
 		
 		table.num = 0;
 	}

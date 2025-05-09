@@ -1,6 +1,7 @@
 #pragma once
 #include "Button.h"
 #include "Puppet.h"
+#include "Engine/Text.h"
 
 struct Storage
 {
@@ -9,11 +10,13 @@ struct Storage
 	int x, y;
 	Button button;
 	std::string name;
+	Text numText;
 };
 
 class PuppetStorage
 	: public GameObject
 {
+	Text puppetNum;
 	Storage puppetList_[CHARA_TYPE::CHARA_END];
 public:
 	PuppetStorage(GameObject* parent);

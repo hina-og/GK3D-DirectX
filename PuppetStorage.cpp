@@ -24,9 +24,10 @@ void PuppetStorage::Initialize()
 		puppetList_[i].x = i % 5 * 100 + 900;
 		puppetList_[i].y = i / 5 * 70 + 25;
 		puppetList_[i].name = puppetName_[i];
+		puppetList_[i].numText.Initialize();
 
-		std::string fileName_ = "Assets\\Image\\" + puppetList_[i].name + ".png";
-		puppetList_[i].button.Initialize(puppetList_[i].x, puppetList_[i].y, 64, 64, fileName_);
+		std::string fileName_ = "Image\\" + puppetList_[i].name + ".png";
+		puppetList_[i].button.Initialize(puppetList_[i].x, puppetList_[i].y, fileName_);
 	}
 }
 
@@ -43,8 +44,9 @@ void PuppetStorage::Draw()
 	for (int i = 0;i < CHARA_TYPE::CHARA_END;i++)
 	{
 		puppetList_[i].button.Draw();
+		puppetList_[i].numText.Draw(puppetList_[i].x, puppetList_[i].y, puppetList_[i].num);
 
-		Char::Draw(puppetList_[i].x + 54, puppetList_[i].y + 32, std::to_string(puppetList_[i].num));
+		//Char::Draw(puppetList_[i].x + 54, puppetList_[i].y + 32, std::to_string(puppetList_[i].num));
 	}
 
 	
