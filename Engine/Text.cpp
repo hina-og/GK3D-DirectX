@@ -44,9 +44,9 @@ void Text::Draw(int x, int y, const char* str)
 	px = (float)(x - Direct3D::screenWidth_ / 2);
 	py = (float)(-y + Direct3D::screenHeight_ / 2);	//Y軸は+-反転
 
-	//スプライトはPositionを1ずらすと画面サイズの半分ずれるので、ピクセル単位に変換
-	px /= (float)(Direct3D::screenWidth_ / 2.0f);
-	py /= (float)(Direct3D::screenHeight_ / 2.0f);
+	////スプライトはPositionを1ずらすと画面サイズの半分ずれるので、ピクセル単位に変換
+	//px /= (float)(Direct3D::screenWidth_ / 2.0f);
+	//py /= (float)(Direct3D::screenHeight_ / 2.0f);
 
 
 	//１文字ずつ表示する

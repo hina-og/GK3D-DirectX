@@ -45,7 +45,10 @@ void PuppetStorage::Draw()
 	{
 		puppetList_[i].button.Draw();
 		puppetList_[i].numText.Draw(puppetList_[i].x, puppetList_[i].y, puppetList_[i].num);
-
+		if (puppetList_[i].num > 0)
+		{
+			int i = 0;
+		}
 		//Char::Draw(puppetList_[i].x + 54, puppetList_[i].y + 32, std::to_string(puppetList_[i].num));
 	}
 

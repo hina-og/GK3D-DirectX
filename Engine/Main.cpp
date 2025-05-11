@@ -10,6 +10,7 @@
 #include "Input.h"
 #include "Audio.h"
 #include "VFX.h"
+#include "../Time.h"
 
 #pragma comment(lib,"Winmm.lib")
 
@@ -54,6 +55,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
+
+	Time::Initialize();
 
 
 	//ルートオブジェクト準備
@@ -119,6 +122,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				//カメラを更新
 				Camera::Update();
+
+				Time::Update();
 
 				//エフェクトの更新
 				VFX::Update();

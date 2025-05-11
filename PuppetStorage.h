@@ -16,7 +16,6 @@ struct Storage
 class PuppetStorage
 	: public GameObject
 {
-	Text puppetNum;
 	Storage puppetList_[CHARA_TYPE::CHARA_END];
 public:
 	PuppetStorage(GameObject* parent);

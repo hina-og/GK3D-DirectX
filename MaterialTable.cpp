@@ -47,8 +47,6 @@ void MaterialTable::Initialize()
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
-		
-
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
 		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
 
@@ -136,7 +134,7 @@ void MaterialTable::Release()
 
 void MaterialTable::ReadRecipe()
 {
-	CsvReader csv("Assets\\GameData\\Recipe.csv");
+	CsvReader csv("GameData\\Recipe.csv");
 	
 	for (int line = 0;line < csv.GetLines();line++)
 	{

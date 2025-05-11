@@ -10,6 +10,8 @@
 class Battle
 	: public GameObject
 {
+	float deltaTime;
+
 	Stage* stage;
 	Player* player;
 	Enemy* enemy;

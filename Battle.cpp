@@ -1,10 +1,12 @@
 #include "Battle.h"
 #include "Engine/Input.h"
+#include "Time.h"
 
 Battle::Battle(GameObject* parent)
 	: GameObject(parent, "Battle")
 {
 	prevLeftClick = false;
+	deltaTime = 0.0f;
 }
 
 void Battle::Initialize()
@@ -23,6 +25,8 @@ void Battle::Initialize()
 
 void Battle::Update()
 {
+	deltaTime += Time::GetDeltaTime();
+
 	Input::GetMousePosition(mouseX, mouseY);
 
 
@@ -44,6 +48,11 @@ void Battle::Update()
 	{
 		prevLeftClick = false;
 	}
+
+	//‚T•b‚½‚Á‚½‚ç
+	//if (deltaTime > 5.0f)
+	//{
+	//}
 
 	player->SetSelectTile(selectPos_);
 
