@@ -10,7 +10,8 @@
 #include "Input.h"
 #include "Audio.h"
 #include "VFX.h"
-#include "../Time.h"
+#include "../Engine/Time.h"
+
 
 #pragma comment(lib,"Winmm.lib")
 

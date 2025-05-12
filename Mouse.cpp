@@ -44,13 +44,7 @@ void Mouse::Update()
 	{
 		transform_.position_.y += 0.01;
 	}*/
-	if (transform_.rotate_.y > 360)
-	{
-		transform_.rotate_.y -= 360;
-	}
-
-	transform_.rotate_.y += 1.0;
-
+	Move(dir_);
 
 	if (hp_ < 1)
 	{

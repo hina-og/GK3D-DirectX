@@ -15,7 +15,7 @@ class Enemy
 
 	bool prevLeftClick;
 public:
-	Unit unit_;
+	Unit* unit_;
 
 	Enemy(GameObject* parent);
 	void Initialize();

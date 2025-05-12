@@ -15,13 +15,13 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	if ((Input::IsMouseButton(DIK_LEFT)))
+	if ((Input::IsMouseButton(LEFT_CLICK)))
 	{
 		//前のフレームでマウス左を押していないとき
 		if (!prevLeftClick)
 		{
 			XMFLOAT3 pos = { 640 - 64 / 2, 0, 0 };
-			unit_.AddCharacter(pos,ZOMBIE,Puppet::DIRECTION::DOWN);
+			unit_->AddCharacter(pos,MOUSE,Puppet::DIRECTION::DOWN);
 
 			prevLeftClick = true;
 		}

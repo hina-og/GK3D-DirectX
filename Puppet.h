@@ -113,5 +113,26 @@ public:
 	{
 		dir_ = _dir;
 	}
+
+	void Move(DIRECTION _dir)
+	{
+		switch (dir_)
+		{
+		case Puppet::UP:
+			transform_.position_.z += 0.1;
+			break;
+		case Puppet::DOWN:
+			transform_.position_.z -= 0.1;
+			break;
+		case Puppet::LEFT:
+			transform_.position_.x -= 0.1;
+			break;
+		case Puppet::RIGHT:
+			transform_.position_.x += 0.1;
+			break;
+		default:
+			break;
+		}
+	}
 };
 

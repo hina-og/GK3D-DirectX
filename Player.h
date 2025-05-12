@@ -15,7 +15,7 @@ class Player
 	XMFLOAT3 selectPos_;
 	int HP;
 public:
-	Unit unit_;
+	Unit* unit_;
 
 	Player(GameObject* parent);
 	void Initialize();

@@ -1,6 +1,7 @@
 #include "Battle.h"
 #include "Engine/Input.h"
 #include "Time.h"
+#include "Engine/Time.h"
 
 Battle::Battle(GameObject* parent)
 	: GameObject(parent, "Battle")
@@ -20,7 +21,7 @@ void Battle::Initialize()
 	
 	material = Instantiate<MaterialTable>(this);
 
-	Instantiate<Mouse>(this);
+	//Instantiate<Mouse>(this);
 }
 
 void Battle::Update()
@@ -39,7 +40,7 @@ void Battle::Update()
 		//前のフレームでマウス左を押していないとき
 		if (!prevLeftClick && !stage->HasPlayer(selectPos_))
 		{
-			player->unit_.AddCharacter(selectPos_, 0, Puppet::UP);
+			player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);
 
 			prevLeftClick = true;
 		}
@@ -50,14 +51,21 @@ void Battle::Update()
 	}
 
 	//５秒たったら
-	//if (deltaTime > 5.0f)
-	//{
-	//}
+	if (deltaTime > 0.0f)
+	{
+		int i = 0;
+	}
+	if (deltaTime > 2.0f)
+	{
+		XMFLOAT3 pos = { 0,0,0 };
+		enemy->unit_->AddCharacter(pos, 0, Puppet::DOWN);
+		deltaTime -= 2.0f;
+	}
 
 	player->SetSelectTile(selectPos_);
 
-	player->unit_.InRange(enemy->unit_.GetPuppetArray());
-	enemy->unit_.InRange(player->unit_.GetPuppetArray());
+	player->unit_->InRange(enemy->unit_->GetPuppetArray());
+	enemy->unit_->InRange(player->unit_->GetPuppetArray());
 }
 
 void Battle::Draw()

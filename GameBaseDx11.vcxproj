@@ -149,6 +149,7 @@
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\Main.cpp" />
     <ClCompile Include="Engine\Model.cpp" />
+    <ClCompile Include="Engine\Time.cpp" />
     <ClCompile Include="Engine\VFX.cpp" />
     <ClCompile Include="Engine\RootObject.cpp" />
     <ClCompile Include="Engine\SceneManager.cpp" />
@@ -166,7 +167,6 @@
     <ClCompile Include="PuppetStorage.cpp" />
     <ClCompile Include="SetUp.cpp" />
     <ClCompile Include="Stage.cpp" />
-    <ClCompile Include="Time.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Zombie.cpp" />
@@ -192,6 +192,7 @@
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Model.h" />
+    <ClInclude Include="Engine\Time.h" />
     <ClInclude Include="Engine\VFX.h" />
     <ClInclude Include="Engine\RootObject.h" />
     <ClInclude Include="Engine\SceneManager.h" />
@@ -211,7 +212,6 @@
     <ClInclude Include="PuppetStorage.h" />
     <ClInclude Include="SetUp.h" />
     <ClInclude Include="Stage.h" />
-    <ClInclude Include="Time.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Zombie.h" />

@@ -10,9 +10,39 @@ MaterialTable::MaterialTable(GameObject* parent)
 
 void MaterialTable::Initialize()
 {
+
+	CsvReader csv("Image\\ImageData.csv");
+	struct imageData
+	{
+		std::string name;
+		float scaleX;
+		float scaleY;
+		int distX;
+		int distY;
+	};
+
+	std::vector<imageData> image;
+
+	//for (int line = 1;line < csv.GetLines();line++)
+	//{
+	//	image[line].name = csv.GetString(line, 0);
+	//	image[line].scaleX = csv.GetFloat(line, 1);
+	//	image[line].scaleY = csv.GetFloat(line, 2);
+	//	image[line].distX = csv.GetInt(line, 3);
+	//	image[line].distY = csv.GetInt(line, 4);
+	//}
+
+
 	storage = Instantiate<PuppetStorage>(this);
 
 	hTable_ = Image::Load("Image\\MaterialTable.png");
+	if (hTable_ >= 0)
+	{
+		for (int i = 0;i < image.size();i++)
+		{
+			//image[i].name = 
+		}
+	}
 	assert(hTable_ >= 0);
 
 	transform_.scale_ = { 0.8,1.0,1.0 };

@@ -30,7 +30,7 @@ void Zombie::Initialize()
 
 void Zombie::Update()
 {
-
+	Move(dir_);
 
 	if (isAttack_)
 	{
