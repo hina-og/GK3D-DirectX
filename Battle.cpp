@@ -2,6 +2,8 @@
 #include "Engine/Input.h"
 #include "Time.h"
 #include "Engine/Time.h"
+#include "SetUp.h"
+#include "Engine/CsvReader.h"
 
 Battle::Battle(GameObject* parent)
 	: GameObject(parent, "Battle")
@@ -12,7 +14,21 @@ Battle::Battle(GameObject* parent)
 
 void Battle::Initialize()
 {
-	
+	CsvReader levelData;
+
+	switch (SetUp::currentDifficulty)
+	{
+	case Difficulty::Easy:
+		levelData.Load("GameData\\LevelEasy");
+		break;
+	case Difficulty::Normal:
+		levelData.Load("GameData\\LevelNormal");
+		break;
+	case Difficulty::Hard:
+		levelData.Load("GameData\\LevelHard");
+		break;
+	}
+
 	stage = Instantiate<Stage>(this);
 	player = Instantiate<Player>(this);
 	enemy = Instantiate<Enemy>(this);
@@ -22,12 +38,12 @@ void Battle::Initialize()
 	material = Instantiate<MaterialTable>(this);
 
 	//Instantiate<Mouse>(this);
+
+	time = INIT_BATTLE_TIME;
 }
 
 void Battle::Update()
 {
-	deltaTime += Time::GetDeltaTime();
-
 	Input::GetMousePosition(mouseX, mouseY);
 
 
@@ -50,22 +66,12 @@ void Battle::Update()
 		prevLeftClick = false;
 	}
 
-	//‚T•b‚½‚Á‚½‚ç
-	if (deltaTime > 0.0f)
-	{
-		int i = 0;
-	}
-	if (deltaTime > 2.0f)
-	{
-		XMFLOAT3 pos = { 0,0,0 };
-		enemy->unit_->AddCharacter(pos, 0, Puppet::DOWN);
-		deltaTime -= 2.0f;
-	}
-
 	player->SetSelectTile(selectPos_);
 
 	player->unit_->InRange(enemy->unit_->GetPuppetArray());
 	enemy->unit_->InRange(player->unit_->GetPuppetArray());
+
+	time -= Time::GetDeltaTime();
 }
 
 void Battle::Draw()

@@ -143,9 +143,6 @@
     <ClCompile Include="PuppetStorage.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
-    <ClCompile Include="SetUp.cpp">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
@@ -165,7 +162,10 @@
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
     <ClCompile Include="Engine\FbxParts.cpp" />
-    <ClCompile Include="Time.cpp" />
+    <ClCompile Include="Engine\Time.cpp" />
+    <ClCompile Include="SetUp.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -268,9 +268,6 @@
     <ClInclude Include="PuppetStorage.h">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="SetUp.h">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
@@ -290,7 +287,10 @@
       <Filter>01Engine\DirectX</Filter>
     </ClInclude>
     <ClInclude Include="Engine\FbxParts.h" />
-    <ClInclude Include="Time.h" />
+    <ClInclude Include="Engine\Time.h" />
+    <ClInclude Include="SetUp.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

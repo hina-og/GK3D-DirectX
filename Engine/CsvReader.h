@@ -4,8 +4,10 @@
 
 class CsvReader {
 public:
+	CsvReader() {};
 	CsvReader(std::string filename);
 	~CsvReader();
+	void Load(std::string filename);
 	//èc
 	int GetLines();
 	//â°

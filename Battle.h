@@ -10,6 +10,9 @@
 class Battle
 	: public GameObject
 {
+	const float INIT_BATTLE_TIME{ 120.0 };
+	float time;
+
 	float deltaTime;
 
 	Stage* stage;

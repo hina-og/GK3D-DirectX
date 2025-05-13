@@ -28,22 +28,30 @@ void Mouse::Initialize()
 	hp_ = 100;
 	cost_ = 1;
 	power_ = 5;
+	speed_ = 1.0;
 
 	isAlive_ = true;
 }
 
 void Mouse::Update()
 {
-	//transform_.position_ = { 0,0,0 };
-	
-	/*if (Input::IsKey(DIK_LSHIFT))
+	if (Input::IsKeyDown(DIK_W))
 	{
-		transform_.position_.y -= 0.01;
+		dir_ = UP;
 	}
-	if (Input::IsKey(DIK_SPACE))
+	if (Input::IsKeyDown(DIK_A))
 	{
-		transform_.position_.y += 0.01;
-	}*/
+		dir_ = LEFT;
+	}
+	if (Input::IsKeyDown(DIK_S))
+	{
+		dir_ = DOWN;
+	}
+	if (Input::IsKeyDown(DIK_D))
+	{
+		dir_ = RIGHT;
+	}
+
 	Move(dir_);
 
 	if (hp_ < 1)

@@ -1,14 +1,16 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+enum class Difficulty
+{
+    Easy,
+    Normal,
+    Hard
+};
+
 class SetUp
-    : public GameObject
 {
 public:
-    SetUp(GameObject* parent);
-    void Initialize();
-    void Update();
-    void Draw();
-    void Release();
+    static Difficulty currentDifficulty;
 };
 

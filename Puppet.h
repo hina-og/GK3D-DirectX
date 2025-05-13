@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Engine/GameObject.h"
+#include "Engine/Time.h"
 
 enum CHARA_TYPE
 {
@@ -34,7 +35,7 @@ protected:
 	int hp_;//体力
 	int cost_;//召喚コスト
 	int power_;//攻撃力
-	int speed_;//移動速度や攻撃速度
+	float speed_;//移動速度や攻撃速度
 	//--------------------
 	
 
@@ -119,16 +120,16 @@ public:
 		switch (dir_)
 		{
 		case Puppet::UP:
-			transform_.position_.z += 0.1;
+			transform_.position_.z += speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::DOWN:
-			transform_.position_.z -= 0.1;
+			transform_.position_.z -= speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::LEFT:
-			transform_.position_.x -= 0.1;
+			transform_.position_.x -= speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::RIGHT:
-			transform_.position_.x += 0.1;
+			transform_.position_.x += speed_ * Time::GetDeltaTime();
 			break;
 		default:
 			break;

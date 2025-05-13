@@ -1,5 +1,6 @@
 #include "Zombie.h"
 #include "Engine/Image.h"
+#include "Engine/Input.h"
 
 Zombie::Zombie(GameObject* parent)
 {
@@ -30,6 +31,8 @@ void Zombie::Initialize()
 
 void Zombie::Update()
 {
+
+
 	Move(dir_);
 
 	if (isAttack_)
