@@ -10,10 +10,20 @@
 class Battle
 	: public GameObject
 {
-	const float INIT_BATTLE_TIME{ 120.0 };
-	float time;
+	struct SpawnData
+	{
+		int type_;//出てくるキャラの種類
+		float time_;//出てくる残り時間
+		int line_;//出てくる列
+	};
+	std::vector<SpawnData> spawnList_;
+	int spawnedNum;
 
-	float deltaTime;
+	const float INIT_BATTLE_TIME{ 120.0 };
+	
+	float time;
+	Text timeText;
+	bool isTimeStert;
 
 	Stage* stage;
 	Player* player;
@@ -25,10 +35,10 @@ class Battle
 	int mouseY;
 	XMFLOAT3 selectPos_;
 
-	bool prevLeftClick;
-
 	std::vector<Puppet*> pPuppet_;
 	std::vector<Puppet*> ePuppet_;
+
+	bool isReady;
 public:
 	Battle(GameObject* parent);
 	void Initialize();

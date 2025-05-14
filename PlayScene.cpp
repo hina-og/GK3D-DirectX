@@ -14,7 +14,6 @@ PlayScene::~PlayScene()
 void PlayScene::Initialize()
 {
 	Instantiate<Battle>(this);
-	//Instantiate<HUD>(this);
 }
 
 void PlayScene::Update()

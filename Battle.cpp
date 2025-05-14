@@ -4,12 +4,11 @@
 #include "Engine/Time.h"
 #include "SetUp.h"
 #include "Engine/CsvReader.h"
+#include "Engine/Text.h"
 
 Battle::Battle(GameObject* parent)
 	: GameObject(parent, "Battle")
 {
-	prevLeftClick = false;
-	deltaTime = 0.0f;
 }
 
 void Battle::Initialize()
@@ -19,15 +18,26 @@ void Battle::Initialize()
 	switch (SetUp::currentDifficulty)
 	{
 	case Difficulty::Easy:
-		levelData.Load("GameData\\LevelEasy");
+		levelData.Load("GameData\\LevelEasy.csv");
 		break;
 	case Difficulty::Normal:
-		levelData.Load("GameData\\LevelNormal");
+		levelData.Load("GameData\\LevelNormal.csv");
 		break;
 	case Difficulty::Hard:
-		levelData.Load("GameData\\LevelHard");
+		levelData.Load("GameData\\LevelHard.csv");
 		break;
 	}
+	for (int line = 0;line < levelData.GetLines();line++)
+	{
+		SpawnData sData;
+		Puppet p;
+		sData.type_ = p.CharacterType(levelData.GetString(line, 0));
+		sData.time_ = levelData.GetFloat(line, 1);
+		sData.line_ = levelData.GetInt(line, 2);
+
+		spawnList_.push_back(sData);
+	}
+	spawnedNum = 0;
 
 	stage = Instantiate<Stage>(this);
 	player = Instantiate<Player>(this);
@@ -40,30 +50,38 @@ void Battle::Initialize()
 	//Instantiate<Mouse>(this);
 
 	time = INIT_BATTLE_TIME;
+	timeText.Initialize();
+	isTimeStert = false;
+
+	isReady = false;
 }
 
 void Battle::Update()
 {
+	for (int i = spawnedNum;i < spawnList_.size();i++)
+	{
+		if (time < spawnList_[i].time_)
+		{
+			XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,HEIGHT / 2 + 1};
+			enemy->unit_->AddCharacter(pos, spawnList_[i].type_, Puppet::DOWN);
+			spawnedNum++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	
 	Input::GetMousePosition(mouseX, mouseY);
 
-
-	XMFLOAT3 mousePos = { (float)mouseX - 32,(float)mouseY - 32,0 };
+	XMFLOAT3 mousePos = { (float)mouseX,(float)mouseY,0 };
 	selectPos_ = stage->SelectTile(mousePos);
 
 	//マウス左を押しているとき
 	if (Input::IsMouseButtonDown(LEFT_CLICK))
 	{
+		player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);
 		//前のフレームでマウス左を押していないとき
-		if (!prevLeftClick && !stage->HasPlayer(selectPos_))
-		{
-			player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);
-
-			prevLeftClick = true;
-		}
-	}
-	else
-	{
-		prevLeftClick = false;
 	}
 
 	player->SetSelectTile(selectPos_);
@@ -71,11 +89,18 @@ void Battle::Update()
 	player->unit_->InRange(enemy->unit_->GetPuppetArray());
 	enemy->unit_->InRange(player->unit_->GetPuppetArray());
 
-	time -= Time::GetDeltaTime();
+	if(isTimeStert && time >= 0)
+		time -= Time::GetDeltaTime();
+
+	if (isReady)
+		isTimeStert = true;
+
 }
 
 void Battle::Draw()
 {
+	timeText.Draw(1200,0,time + 1.0f);
+	isReady = true;
 }
 
 void Battle::Release()

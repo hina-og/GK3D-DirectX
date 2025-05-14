@@ -6,6 +6,7 @@ class Text
 	int hPict_;
 
 	unsigned int width_, height_;	//1•¶š•ª‚Ì•‚Æ‚‚³
+	unsigned int gap_;//•¶š‚Æ•¶š‚ÌŠÔŠu
 	char fileName_[MAX_PATH];
 	unsigned int rowLength_;
 

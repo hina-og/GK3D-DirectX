@@ -11,6 +11,8 @@ enum CHARA_TYPE
 	CHARA_END
 };
 
+
+
 class Puppet
 	: public GameObject
 {
@@ -134,6 +136,12 @@ public:
 		default:
 			break;
 		}
+	}
+
+	int CharacterType(std::string _type)
+	{
+		if (_type == "Mouse") return CHARA_TYPE::MOUSE;
+		if (_type == "Zombie") return CHARA_TYPE::ZOMBIE;
 	}
 };
 

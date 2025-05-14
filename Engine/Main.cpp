@@ -124,7 +124,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//カメラを更新
 				Camera::Update();
 
-				Time::Update();
+				
 
 				//エフェクトの更新
 				VFX::Update();
@@ -139,6 +139,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				//エフェクトの描画
 				VFX::Draw();
+
+				Time::Update();
 
 				//描画終了
 				Direct3D::EndDraw();

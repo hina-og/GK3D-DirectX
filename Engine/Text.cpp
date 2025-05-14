@@ -2,7 +2,7 @@
 #include "Direct3D.h"
 #include "Text.h"
 
-Text::Text() : hPict_(-1), width_(16), height_(32), fileName_("char.png"), rowLength_(16)
+Text::Text() : hPict_(-1), width_(16), height_(32), gap_(10), fileName_("char.png"), rowLength_(16)
 {
 }
 
@@ -72,7 +72,7 @@ void Text::Draw(int x, int y, const char* str)
 		Image::Draw(hPict_);
 
 		//ŽŸ‚ÌˆÊ’u‚É‚¸‚ç‚·
-		px += width_ / (float)(Direct3D::screenWidth_ / 2.0f);
+		px += width_ + gap_;
 	}
 }
 
