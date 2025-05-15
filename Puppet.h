@@ -123,15 +123,19 @@ public:
 		{
 		case Puppet::UP:
 			transform_.position_.z += speed_ * Time::GetDeltaTime();
+			transform_.rotate_.y = 180.0;
 			break;
 		case Puppet::DOWN:
 			transform_.position_.z -= speed_ * Time::GetDeltaTime();
+			transform_.rotate_.y = 0.0;
 			break;
 		case Puppet::LEFT:
 			transform_.position_.x -= speed_ * Time::GetDeltaTime();
+			transform_.rotate_.y = 240.0;
 			break;
 		case Puppet::RIGHT:
 			transform_.position_.x += speed_ * Time::GetDeltaTime();
+			transform_.rotate_.y = 120.0;
 			break;
 		default:
 			break;

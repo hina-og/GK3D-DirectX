@@ -25,7 +25,8 @@ public:
 	void Draw();
 	void Release();
 
-	bool HasPlayer(XMFLOAT3 _pos);
-	XMFLOAT3 SelectTile(XMFLOAT3 _pos);
+	bool HasPlayer(XMFLOAT2 _num);
+	XMFLOAT3 SelectTilePosition(XMFLOAT2 _pos);
+	XMFLOAT2 SelectTileNumber(XMFLOAT2 _pos);
 };
 

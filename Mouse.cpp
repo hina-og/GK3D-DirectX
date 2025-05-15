@@ -11,6 +11,7 @@ void Mouse::Initialize()
 {
 	hModel_ = Model::Load("Model\\Zombie.fbx");
 	assert(hModel_ >= 0);
+	//Model::SetAnimFrame(hModel_, 5, 120, 1);
 
 	hPict_ = Image::Load("Image\\Mouse.png");
 	assert(hPict_ > 0);
@@ -35,24 +36,24 @@ void Mouse::Initialize()
 
 void Mouse::Update()
 {
-	if (Input::IsKeyDown(DIK_W))
-	{
-		dir_ = UP;
-	}
-	if (Input::IsKeyDown(DIK_A))
-	{
-		dir_ = LEFT;
-	}
-	if (Input::IsKeyDown(DIK_S))
-	{
-		dir_ = DOWN;
-	}
-	if (Input::IsKeyDown(DIK_D))
-	{
-		dir_ = RIGHT;
-	}
+	//if (Input::IsKeyDown(DIK_W))
+	//{
+	//	dir_ = UP;
+	//}
+	//if (Input::IsKeyDown(DIK_A))
+	//{
+	//	dir_ = LEFT;
+	//}
+	//if (Input::IsKeyDown(DIK_S))
+	//{
+	//	dir_ = DOWN;
+	//}
+	//if (Input::IsKeyDown(DIK_D))
+	//{
+	//	dir_ = RIGHT;
+	//}
 
-	Move(dir_);
+	
 
 	if (hp_ < 1)
 	{

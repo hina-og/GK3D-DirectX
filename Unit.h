@@ -17,6 +17,7 @@ public:
 	void Release();
 	void AddCharacter(XMFLOAT3 _pos, int _type, Puppet::DIRECTION _dir);
 	std::vector<Puppet*> GetPuppetArray();
+	void InvaderMove();
 	void InRange(std::vector<Puppet*> _puppet);
 };
 

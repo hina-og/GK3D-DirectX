@@ -170,6 +170,12 @@ namespace Input
 		_y = mousePos_.y;
 	}
 
+	void GetMousePosition(float& _x, float& _y)
+	{
+		_x = mousePos_.x;
+		_y = mousePos_.y;
+	}
+
 	//マウスカーソルの位置をセット
 	void SetMousePosition(int x, int y)
 	{

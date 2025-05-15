@@ -47,6 +47,14 @@ std::vector<Puppet*> Unit::GetPuppetArray()
 	return puppet_;
 }
 
+void Unit::InvaderMove()
+{
+	for (int p = 0; p < puppet_.size(); p++)
+	{
+		puppet_[p]->Move(puppet_[p]->dir_);
+	}
+}
+
 void Unit::InRange(std::vector<Puppet*> _puppet)
 {
 	// 事前に攻撃範囲を取得してキャッシュ

@@ -74,17 +74,20 @@ void Battle::Update()
 	
 	Input::GetMousePosition(mouseX, mouseY);
 
-	XMFLOAT3 mousePos = { (float)mouseX,(float)mouseY,0 };
-	selectPos_ = stage->SelectTile(mousePos);
+
 
 	//マウス左を押しているとき
 	if (Input::IsMouseButtonDown(LEFT_CLICK))
 	{
-		player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);
-		//前のフレームでマウス左を押していないとき
+		XMFLOAT2 mousePos = { (float)mouseX,(float)mouseY };
+		selectPos_ = stage->SelectTilePosition(mousePos);
+		if (!stage->HasPlayer(stage->SelectTileNumber(mousePos)))
+			player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);
 	}
 
 	player->SetSelectTile(selectPos_);
+
+	enemy->unit_->InvaderMove();
 
 	player->unit_->InRange(enemy->unit_->GetPuppetArray());
 	enemy->unit_->InRange(player->unit_->GetPuppetArray());
