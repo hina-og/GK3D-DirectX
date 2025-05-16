@@ -9,9 +9,9 @@ Mouse::Mouse(GameObject* parent)
 
 void Mouse::Initialize()
 {
-	hModel_ = Model::Load("Model\\Zombie.fbx");
+	hModel_ = Model::Load("Model\\ZombieD_Run.fbx");
 	assert(hModel_ >= 0);
-	//Model::SetAnimFrame(hModel_, 5, 120, 1);
+	Model::SetAnimFrame(hModel_, 5, 120, 1);
 
 	hPict_ = Image::Load("Image\\Mouse.png");
 	assert(hPict_ > 0);
@@ -36,23 +36,10 @@ void Mouse::Initialize()
 
 void Mouse::Update()
 {
-	//if (Input::IsKeyDown(DIK_W))
-	//{
-	//	dir_ = UP;
-	//}
-	//if (Input::IsKeyDown(DIK_A))
-	//{
-	//	dir_ = LEFT;
-	//}
-	//if (Input::IsKeyDown(DIK_S))
-	//{
-	//	dir_ = DOWN;
-	//}
-	//if (Input::IsKeyDown(DIK_D))
-	//{
-	//	dir_ = RIGHT;
-	//}
-
+	if (isAttack_)
+	{
+		Attack();
+	}
 	
 
 	if (hp_ < 1)
@@ -60,19 +47,15 @@ void Mouse::Update()
 		isAlive_ = false;
 	}
 
-	//‰æ–Ê“à‚É‚¢‚È‚¯‚ê‚Î
-	if (!InWindow(transform_.position_))
-	{
-		//KillMe();
-	}
-
 }
 
 void Mouse::Draw()
 {
-	Model::SetTransform(hModel_, transform_);
-	Model::Draw(hModel_);
-
+	if (!isAttack_)
+	{
+		Model::SetTransform(hModel_, transform_);
+		Model::Draw(hModel_);
+	}
 	//Image::SetTransform(hPict_, transform_);
 	//Image::Draw(hPict_);
 }

@@ -57,43 +57,38 @@ void Unit::InvaderMove()
 
 void Unit::InRange(std::vector<Puppet*> _puppet)
 {
-	// 事前に攻撃範囲を取得してキャッシュ
-	for (int p = 0; p < puppet_.size(); p++)
+	for (int my = 0; my < puppet_.size(); my++)
 	{
-		puppet_[p]->isAttack_ = false;
-		// 攻撃範囲のタイルを事前に計算
-		const auto& attackTiles = puppet_[p]->GetAttackTiles(puppet_[p]->dir_);
+		puppet_[my]->inRangeChara_.clear();
+		puppet_[my]->isAttack_ = false;
+		std::vector<Puppet::Pos> attackTiles = puppet_[my]->GetAttackTiles(puppet_[my]->dir_);
 
-		for (int e = 0; e < _puppet.size(); e++)
+		for (int enemy = 0; enemy < _puppet.size(); enemy++)
 		{
-			// 敵キャラクターが生きているかどうかを最初にチェック
-			if (!_puppet[e]->isAlive_)
+			if (!_puppet[enemy]->isAlive_)
 				continue;
 
-			// 敵キャラクターの位置をキャッシュ
-			const XMFLOAT3& enemyPos = _puppet[e]->GetPosition();
+			XMFLOAT3 enemyPos = _puppet[enemy]->GetPosition();
 
-			// 攻撃範囲の各タイルについて
 			for (int rangeNum = 0; rangeNum < attackTiles.size(); rangeNum++)
 			{
-				XMFLOAT3 AttackPos = {
-					puppet_[p]->GetPosition().x + attackTiles[rangeNum].x * 64,
-					puppet_[p]->GetPosition().y + attackTiles[rangeNum].y * 64,
+				XMFLOAT3 attackPos = {
+					puppet_[my]->GetPosition().x + attackTiles[rangeNum].x,
+					puppet_[my]->GetPosition().z + attackTiles[rangeNum].y,
 					0
 				};
 
-				// 距離計算を簡素化
-				if (abs(AttackPos.x - enemyPos.x) < 64 &&
-					abs(AttackPos.y - enemyPos.y) < 64)
+				float x = abs(attackPos.x - enemyPos.x), y = abs(attackPos.y - enemyPos.z);
+				if (x < 1.0 &&
+					y < 1.0)
 				{
-					puppet_[p]->isAttack_ = true;
-					puppet_[p]->inRangeChara_.push_back(_puppet[e]);
-					//break;  // 1体でも範囲に入れば、攻撃可能と判断
+					puppet_[my]->isAttack_ = true;
+					puppet_[my]->inRangeChara_.push_back(_puppet[enemy]);
 				}
 			}
 
-			// 範囲内に敵キャラがいれば、無駄なループを終了
-			if (puppet_[p]->isAttack_) break;
+			if (puppet_[my]->isAttack_)
+				break;
 		}
 	}
 }

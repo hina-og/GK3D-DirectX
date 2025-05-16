@@ -10,10 +10,6 @@ const float ENEMY_START_TIME{ 3.0 };
 class Enemy
 	: public GameObject
 {
-	
-	bool isAddEnemy_;
-
-	bool prevLeftClick;
 public:
 	Unit* unit_;
 

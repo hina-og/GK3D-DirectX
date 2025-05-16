@@ -4,8 +4,6 @@
 Enemy::Enemy(GameObject* parent)
 	: GameObject(parent, "Enemy")
 {
-	//isAddEnemy_ = false;
-	prevLeftClick = false;
 }
 
 void Enemy::Initialize()
@@ -15,21 +13,6 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	if ((Input::IsMouseButton(LEFT_CLICK)))
-	{
-		//前のフレームでマウス左を押していないとき
-		if (!prevLeftClick)
-		{
-			XMFLOAT3 pos = { 640 - 64 / 2, 0, 0 };
-			unit_->AddCharacter(pos,MOUSE,Puppet::DIRECTION::DOWN);
-
-			prevLeftClick = true;
-		}
-	}
-	else
-	{
-		prevLeftClick = false;
-	}
 }
 
 void Enemy::Draw()

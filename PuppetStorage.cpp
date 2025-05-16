@@ -1,5 +1,6 @@
 #include "PuppetStorage.h"
 #include "Char.h"
+#include "Engine/Direct3D.h"
 
 PuppetStorage::PuppetStorage(GameObject* parent)
 	:GameObject(parent, "PuppetStorage")
@@ -9,6 +10,14 @@ PuppetStorage::PuppetStorage(GameObject* parent)
 
 void PuppetStorage::Initialize()
 {
+	hTable_ = Image::Load("Image\\MaterialTable.png");
+	assert(hTable_ >= 0);
+
+	transform_.scale_ = { 0.8,1.0,1.0 };
+	Image::SeScale(hTable_, transform_.scale_);
+	transform_.position_ = { (float)Direct3D::screenWidth_ - Image::GetImageSize(hTable_).x,(float)Direct3D::screenHeight_ - Image::GetImageSize(hTable_).y,0 };
+	Image::SetTransform(hTable_, transform_);
+
 	std::string puppetName_[CHARA_TYPE::CHARA_END]
 	{
 		"Mouse",
@@ -41,6 +50,8 @@ void PuppetStorage::Update()
 
 void PuppetStorage::Draw()
 {
+	Image::Draw(hTable_);
+
 	for (int i = 0;i < CHARA_TYPE::CHARA_END;i++)
 	{
 		puppetList_[i].button.Draw();
@@ -51,8 +62,6 @@ void PuppetStorage::Draw()
 		}
 		//Char::Draw(puppetList_[i].x + 54, puppetList_[i].y + 32, std::to_string(puppetList_[i].num));
 	}
-
-	
 }
 
 void PuppetStorage::Release()

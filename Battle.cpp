@@ -15,10 +15,12 @@ void Battle::Initialize()
 {
 	CsvReader levelData;
 
+	SetUp::currentDifficulty = Difficulty::Easy;
+
 	switch (SetUp::currentDifficulty)
 	{
 	case Difficulty::Easy:
-		levelData.Load("GameData\\LevelEasy.csv");
+		levelData.Load("GameData\\LevelDie.csv");
 		break;
 	case Difficulty::Normal:
 		levelData.Load("GameData\\LevelNormal.csv");
@@ -79,18 +81,31 @@ void Battle::Update()
 	//ƒ}ƒEƒX¶‚ð‰Ÿ‚µ‚Ä‚¢‚é‚Æ‚«
 	if (Input::IsMouseButtonDown(LEFT_CLICK))
 	{
-		XMFLOAT2 mousePos = { (float)mouseX,(float)mouseY };
+		XMFLOAT2 mousePos = { (float)mouseX, (float)mouseY };
+		XMFLOAT2 tileNum = { -1, -1 };
+		XMFLOAT3 tilePos = {};
+
+		bool hit = stage->SelectTile(mousePos, tileNum, tilePos);
+		if (hit && !stage->HasPlayer(tileNum)) {
+			selectPos_ = tilePos;
+			player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);
+		}
+
+
+		/*XMFLOAT2 mousePos = { (float)mouseX,(float)mouseY };
 		selectPos_ = stage->SelectTilePosition(mousePos);
 		if (!stage->HasPlayer(stage->SelectTileNumber(mousePos)))
-			player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);
+			player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);*/
 	}
 
 	player->SetSelectTile(selectPos_);
 
+	//player->unit_->InvaderMove();
 	enemy->unit_->InvaderMove();
 
 	player->unit_->InRange(enemy->unit_->GetPuppetArray());
 	enemy->unit_->InRange(player->unit_->GetPuppetArray());
+	
 
 	if(isTimeStert && time >= 0)
 		time -= Time::GetDeltaTime();
@@ -102,7 +117,7 @@ void Battle::Update()
 
 void Battle::Draw()
 {
-	timeText.Draw(1200,0,time + 1.0f);
+	timeText.Draw(1000,0,time + 1.0f);
 	isReady = true;
 }
 

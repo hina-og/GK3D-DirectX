@@ -16,68 +16,13 @@ enum CHARA_TYPE
 class Puppet
 	: public GameObject
 {
-protected:
-
-	
-
+public:
 	struct Pos
 	{
 		int x;
 		int y;
 	};
 
-	int hModel_;
-	int hPict_;
-	int rangePict_;
-
-	
-
-	//-----ステータス-----
-	/*　あとでパラメータは読み込むようにする　*/
-	int hp_;//体力
-	int cost_;//召喚コスト
-	int power_;//攻撃力
-	float speed_;//移動速度や攻撃速度
-	//--------------------
-	
-
-
-	void Initialize() {};
-	void Update() {};
-	void Draw() {};
-	void Release() {};
-
-	Pos rotate(Pos _pos, int _dir)
-	{
-		switch (_dir)
-		{
-		case DIRECTION::UP:
-			return { _pos.x,  _pos.y };
-		case DIRECTION::RIGHT:
-			return { -_pos.y, _pos.x };
-		case DIRECTION::DOWN:
-			return { -_pos.x, -_pos.y };
-		case DIRECTION::LEFT:
-			return { _pos.y,  -_pos.x };
-		}
-	}
-
-	bool InWindow(XMFLOAT3 _pos)
-	{
-		if (0 <= _pos.y && _pos.y <= 720 &&
-			0 <= _pos.x && _pos.x <= 1280)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	virtual void Attack() 
-	{
-
-	};
-
-public:
 	enum DIRECTION
 	{
 		UP = 0,
@@ -147,5 +92,61 @@ public:
 		if (_type == "Mouse") return CHARA_TYPE::MOUSE;
 		if (_type == "Zombie") return CHARA_TYPE::ZOMBIE;
 	}
+protected:
+
+
+
+
+
+	int hModel_;
+	int hPict_;
+	int rangePict_;
+
+
+
+	//-----ステータス-----
+	/*　あとでパラメータは読み込むようにする　*/
+	int hp_;//体力
+	int cost_;//召喚コスト
+	int power_;//攻撃力
+	float speed_;//移動速度や攻撃速度
+	//--------------------
+
+
+
+	void Initialize() {};
+	void Update() {};
+	void Draw() {};
+	void Release() {};
+
+	Pos rotate(Pos _pos, int _dir)
+	{
+		switch (_dir)
+		{
+		case DIRECTION::UP:
+			return { _pos.x,  _pos.y };
+		case DIRECTION::RIGHT:
+			return { -_pos.y, _pos.x };
+		case DIRECTION::DOWN:
+			return { -_pos.x, -_pos.y };
+		case DIRECTION::LEFT:
+			return { _pos.y,  -_pos.x };
+		}
+	}
+
+	bool InWindow(XMFLOAT3 _pos)
+	{
+		if (0 <= _pos.y && _pos.y <= 720 &&
+			0 <= _pos.x && _pos.x <= 1280)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	virtual void Attack()
+	{
+
+	};
 };
 

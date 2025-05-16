@@ -28,5 +28,6 @@ public:
 	bool HasPlayer(XMFLOAT2 _num);
 	XMFLOAT3 SelectTilePosition(XMFLOAT2 _pos);
 	XMFLOAT2 SelectTileNumber(XMFLOAT2 _pos);
+	bool SelectTile(XMFLOAT2 _screenPos, XMFLOAT2& _outNum, XMFLOAT3& _outPos);
 };
 

@@ -88,7 +88,7 @@ void MaterialTable::Initialize()
 		table.material[i].name = "empty";
 	}
 
-	makeButton_.Initialize(500,100, "Image\\Make.png");
+	makeButton_.Initialize(transform_.position_.x,200, "Image\\Make.png");
 
 	ReadRecipe();
 }
@@ -104,7 +104,6 @@ void MaterialTable::Update()
 		table.material[i].button.Update();
 	}
 	makeButton_.Update();
-
 
 	for (int i = 0; i < MATERIAL_NUM; i++)
 	{
