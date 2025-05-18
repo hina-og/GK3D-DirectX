@@ -259,6 +259,18 @@ void MaterialTable::TableReset()
 	}
 }
 
+int MaterialTable::GetSelectStragePuppet()
+{
+	storage->puppetList_[storage->selectPuppetNumber].num--;
+	
+	return storage->selectPuppetNumber;
+}
+
+bool MaterialTable::isNotEmpty()
+{
+	return storage->puppetList_[storage->selectPuppetNumber].num > 0;
+}
+
 MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)
 {
 	if (name == "BONE") 

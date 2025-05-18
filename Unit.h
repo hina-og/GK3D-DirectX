@@ -19,5 +19,6 @@ public:
 	std::vector<Puppet*> GetPuppetArray();
 	void InvaderMove();
 	void InRange(std::vector<Puppet*> _puppet);
+	void PastLine(float _z);
 };
 

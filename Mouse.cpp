@@ -9,7 +9,7 @@ Mouse::Mouse(GameObject* parent)
 
 void Mouse::Initialize()
 {
-	hModel_ = Model::Load("Model\\ZombieD_Run.fbx");
+	hModel_ = Model::Load("Model\\ZombieD.fbx");
 	assert(hModel_ >= 0);
 	Model::SetAnimFrame(hModel_, 5, 120, 1);
 

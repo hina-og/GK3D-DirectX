@@ -16,9 +16,13 @@ struct Storage
 class PuppetStorage
 	: public GameObject
 {
+	
 	int hTable_;
-	Storage puppetList_[CHARA_TYPE::CHARA_END];
+
 public:
+	Storage puppetList_[CHARA_TYPE::CHARA_END];
+	int selectPuppetNumber;
+
 	PuppetStorage(GameObject* parent);
 	void Initialize();
 	void Update();

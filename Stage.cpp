@@ -25,6 +25,8 @@ void Stage::Initialize()
 			mapData_[y][x].onPlayer_ = false;
 		}
 	}
+	startLine_ = mapData_[HEIGHT-1][0].pos_.z + 1;
+	endLine_ = mapData_[0][0].pos_.z - 0.5;
 }
 
 void Stage::Update()
@@ -63,18 +65,7 @@ void Stage::Release()
 
 bool Stage::HasPlayer(XMFLOAT2 _num)
 {
-
-	if (mapData_[(int)_num.y][(int)_num.x].select_)
-	{
-		//選んだマスにプレイヤーキャラがいるならtrue
-		if (mapData_[(int)_num.y][(int)_num.x].onPlayer_)
-			return true;
-		else
-			mapData_[(int)_num.y][(int)_num.x].onPlayer_ = true;
-	}
-
-
-	return false;
+	return (mapData_[(int)_num.y][(int)_num.x].select_ &&mapData_[(int)_num.y][(int)_num.x].onPlayer_);
 }
 
 XMFLOAT3 Stage::SelectTilePosition(XMFLOAT2 _pos)
@@ -249,4 +240,12 @@ bool Stage::SelectTile(XMFLOAT2 _screenPos, XMFLOAT2& _outNum, XMFLOAT3& _outPos
 	}
 
 	return false;
+}
+
+void Stage::PlaceCharacter(XMFLOAT2 _num)
+{
+	if (mapData_[(int)_num.y][(int)_num.x].select_)
+	{
+		mapData_[(int)_num.y][(int)_num.x].onPlayer_ = true;
+	}
 }

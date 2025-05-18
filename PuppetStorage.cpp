@@ -38,6 +38,8 @@ void PuppetStorage::Initialize()
 		std::string fileName_ = "Image\\" + puppetList_[i].name + ".png";
 		puppetList_[i].button.Initialize(puppetList_[i].x, puppetList_[i].y, fileName_);
 	}
+
+	selectPuppetNumber = 0;
 }
 
 void PuppetStorage::Update()
@@ -45,6 +47,15 @@ void PuppetStorage::Update()
 	for (int i = 0;i < CHARA_TYPE::CHARA_END;i++)
 	{
 		puppetList_[i].button.Update();
+	}
+
+	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
+	{
+		if (puppetList_[i].button.isPress_)
+		{
+			selectPuppetNumber = i;
+			break;
+		}
 	}
 }
 
@@ -60,7 +71,6 @@ void PuppetStorage::Draw()
 		{
 			int i = 0;
 		}
-		//Char::Draw(puppetList_[i].x + 54, puppetList_[i].y + 32, std::to_string(puppetList_[i].num));
 	}
 }
 

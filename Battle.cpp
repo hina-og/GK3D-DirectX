@@ -64,7 +64,7 @@ void Battle::Update()
 	{
 		if (time < spawnList_[i].time_)
 		{
-			XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,HEIGHT / 2 + 1};
+			XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,stage->startLine_};
 			enemy->unit_->AddCharacter(pos, spawnList_[i].type_, Puppet::DOWN);
 			spawnedNum++;
 		}
@@ -86,25 +86,22 @@ void Battle::Update()
 		XMFLOAT3 tilePos = {};
 
 		bool hit = stage->SelectTile(mousePos, tileNum, tilePos);
-		if (hit && !stage->HasPlayer(tileNum)) {
+		if (hit && !stage->HasPlayer(tileNum) && material->isNotEmpty()) 
+		{
 			selectPos_ = tilePos;
-			player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);
+			stage->PlaceCharacter(tileNum);
+			player->unit_->AddCharacter(selectPos_, material->GetSelectStragePuppet(), Puppet::UP);
 		}
-
-
-		/*XMFLOAT2 mousePos = { (float)mouseX,(float)mouseY };
-		selectPos_ = stage->SelectTilePosition(mousePos);
-		if (!stage->HasPlayer(stage->SelectTileNumber(mousePos)))
-			player->unit_->AddCharacter(selectPos_, 0, Puppet::UP);*/
 	}
 
 	player->SetSelectTile(selectPos_);
 
-	//player->unit_->InvaderMove();
 	enemy->unit_->InvaderMove();
 
 	player->unit_->InRange(enemy->unit_->GetPuppetArray());
 	enemy->unit_->InRange(player->unit_->GetPuppetArray());
+
+	enemy->unit_->PastLine(stage->endLine_);
 	
 
 	if(isTimeStert && time >= 0)

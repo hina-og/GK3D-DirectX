@@ -51,7 +51,8 @@ void Unit::InvaderMove()
 {
 	for (int p = 0; p < puppet_.size(); p++)
 	{
-		puppet_[p]->Move(puppet_[p]->dir_);
+		if(!puppet_[p]->isAttack_)
+			puppet_[p]->Move(puppet_[p]->dir_);
 	}
 }
 
@@ -89,6 +90,17 @@ void Unit::InRange(std::vector<Puppet*> _puppet)
 
 			if (puppet_[my]->isAttack_)
 				break;
+		}
+	}
+}
+
+void Unit::PastLine(float _z)
+{
+	for (int p = 0; p < puppet_.size(); p++)
+	{
+		if (puppet_[p]->GetPosition().z < _z)
+		{
+			puppet_[p]->KillMe();
 		}
 	}
 }

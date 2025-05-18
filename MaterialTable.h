@@ -78,4 +78,6 @@ public:
 	void ReadRecipe();
 	int MakePuppet();
 	void TableReset();
+	int GetSelectStragePuppet();
+	bool isNotEmpty();
 };
