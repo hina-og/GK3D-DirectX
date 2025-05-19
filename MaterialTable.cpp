@@ -67,10 +67,10 @@ void MaterialTable::Initialize()
 		materialList_[i].name = materialName_[i];
 
 		std::string fileName_ = "Image\\" + materialList_[i].name + ".png";
-		materialList_[i].button.Initialize(transform_.position_.x + materialList_[i].x, transform_.position_.y + materialList_[i].y, fileName_);
+		materialList_[i].button.Initialize(0, 0, fileName_);
 
-		materialList_[i].x = transform_.position_.x + (i % TABLE_SIZE * materialList_[i].button.GetSize().x - Image::GetImageSize(hTable_).x + materialList_[i].button.GetSize().x / 2);
-		materialList_[i].y = transform_.position_.y - (i / TABLE_SIZE * materialList_[i].button.GetSize().y - Image::GetImageSize(hTable_).y + materialList_[i].button.GetSize().y / 2);
+		materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x - Direct3D::screenWidth_ + materialList_[i].button.GetSize().x / 2 + Image::GetImageSize(hTable_).x - TABLE_SIZE * materialList_[i].button.GetSize().x / 2;
+		materialList_[i].y = transform_.position_.y - (i / TABLE_SIZE * materialList_[i].button.GetSize().y - Image::GetImageSize(hTable_).y + materialList_[i].button.GetSize().y / 2) + table.y;
 
 		materialList_[i].button.SetPosition({ (float)materialList_[i].x ,(float)materialList_[i].y,0 });
 	}
@@ -80,8 +80,7 @@ void MaterialTable::Initialize()
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
 		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
 
-
-		table.material[i].x = i * table.material[i].button.GetSize().x - (Direct3D::screenWidth_ - table.material[i].button.GetSize().x / 2);
+		table.material[i].x = i * table.material[i].button.GetSize().x - Direct3D::screenWidth_ + table.material[i].button.GetSize().x / 2 + Image::GetImageSize(hTable_).x - TABLE_SIZE * table.material[i].button.GetSize().x / 2;
 		table.material[i].y = table.y;
 		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
 

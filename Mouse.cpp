@@ -9,9 +9,9 @@ Mouse::Mouse(GameObject* parent)
 
 void Mouse::Initialize()
 {
-	hModel_ = Model::Load("Model\\ZombieD.fbx");
+	hModel_ = Model::Load("Model\\ZombieD_Attack.fbx");
 	assert(hModel_ >= 0);
-	Model::SetAnimFrame(hModel_, 5, 120, 1);
+	Model::SetAnimFrame(hModel_, 20, 170, 2);
 
 	hPict_ = Image::Load("Image\\Mouse.png");
 	assert(hPict_ > 0);
@@ -39,6 +39,10 @@ void Mouse::Update()
 	if (isAttack_)
 	{
 		Attack();
+	}
+	else if (Model::GetAnimFrame(hModel_) >= 115)
+	{
+		//Model::SetAnimFrame(hModel_, 6, 115, 1);
 	}
 	
 
