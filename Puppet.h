@@ -2,16 +2,27 @@
 #include <vector>
 #include "Engine/GameObject.h"
 #include "Engine/Time.h"
+#include "Engine/Input.h"
 
 enum CHARA_TYPE
 {
 	MOUSE = 0,
 	ZOMBIE,
+	MUSHROOM,
+	SLIME,
+	GOLEM,
+	GHOST,
 	FAILURE,
 	CHARA_END
 };
 
-
+enum CHARA_STATE
+{
+	STAND = 0,
+	RUN,
+	ATTACK,
+	STATE_END
+};
 
 class Puppet
 	: public GameObject
@@ -26,8 +37,8 @@ public:
 	enum DIRECTION
 	{
 		UP = 0,
-		DOWN,
 		LEFT,
+		DOWN,
 		RIGHT
 	};
 
@@ -62,25 +73,63 @@ public:
 		dir_ = _dir;
 	}
 
+	void SetDirection(int _dir)
+	{
+		switch (_dir)
+		{
+		case 0:
+			dir_ = UP;
+			break;
+		case 1:
+			dir_ = LEFT;
+			break;
+		case 2:
+			dir_ = DOWN;
+			break;
+		case 3:
+			dir_ = RIGHT;
+			break;
+		default:
+			break;
+		}
+	}
+
+	void FacingDirection()
+	{
+		switch (dir_)
+		{
+		case Puppet::UP:
+			transform_.rotate_.y = 180.0;
+			break;
+		case Puppet::LEFT:
+			transform_.rotate_.y = 270.0;
+			break;
+		case Puppet::DOWN:
+			transform_.rotate_.y = 0.0;
+			break;
+		case Puppet::RIGHT:
+			transform_.rotate_.y = 90.0;
+			break;
+		default:
+			break;
+		}
+	}
+
 	void Move(DIRECTION _dir)
 	{
 		switch (dir_)
 		{
 		case Puppet::UP:
 			transform_.position_.z += speed_ * Time::GetDeltaTime();
-			transform_.rotate_.y = 180.0;
-			break;
-		case Puppet::DOWN:
-			transform_.position_.z -= speed_ * Time::GetDeltaTime();
-			transform_.rotate_.y = 0.0;
 			break;
 		case Puppet::LEFT:
 			transform_.position_.x -= speed_ * Time::GetDeltaTime();
-			transform_.rotate_.y = 240.0;
+			break;
+		case Puppet::DOWN:
+			transform_.position_.z -= speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::RIGHT:
 			transform_.position_.x += speed_ * Time::GetDeltaTime();
-			transform_.rotate_.y = 120.0;
 			break;
 		default:
 			break;
@@ -92,16 +141,16 @@ public:
 		if (_type == "Mouse") return CHARA_TYPE::MOUSE;
 		if (_type == "Zombie") return CHARA_TYPE::ZOMBIE;
 	}
+
+	int GetPower() { return power_; }
+
 protected:
 
-
-
-
-
 	int hModel_;
+	int modelList_[STATE_END];
 	int hPict_;
 	int rangePict_;
-
+	bool attacked_;
 
 
 	//-----ステータス-----
@@ -134,19 +183,6 @@ protected:
 		}
 	}
 
-	bool InWindow(XMFLOAT3 _pos)
-	{
-		if (0 <= _pos.y && _pos.y <= 720 &&
-			0 <= _pos.x && _pos.x <= 1280)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	virtual void Attack()
-	{
-
-	};
+	virtual void Attack() {};
 };
 

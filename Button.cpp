@@ -58,6 +58,11 @@ void Button::SetPosition(XMFLOAT3 _pos)
 	y_ = _pos.y;
 }
 
+XMFLOAT3 Button::GetPosition()
+{
+	return { (float)x_,(float)y_,0 };
+}
+
 XMFLOAT3 Button::GetSize()
 {
 	XMFLOAT3 returnSize = { (float)size_.w_,(float)size_.h_,0 };

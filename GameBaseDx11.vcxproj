@@ -75,7 +75,7 @@
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\lib\vs2017\x64\debug;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0\lib\vs2017\x64\debug;C:\Program Files\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x64\debug;$(LibraryPath);C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.2\lib\vs2019\x64\debug;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.2\lib\vs2019\x64\release;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\release;C:\Users\anber\Desktop\学校\必要なファイル\debug;C:\Users\anber\Desktop\学校\必要なファイル\release</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\include;C:\Program Files\Autodesk\FBX\FBX SDK\2019.5\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0\include;$(IncludePath);C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.2\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include</IncludePath>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\include;C:\Program Files\Autodesk\FBX\FBX SDK\2019.5\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0\include;$(IncludePath);C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.2\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\Users\anber\Desktop\学校\必要なファイル\include</IncludePath>
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.0.1\lib\vs2017\x64\release;C:\Program Files\Autodesk\FBX\FBX SDK\2020.0\lib\vs2017\x64\release;C:\Program Files\Autodesk\FBX\FBX SDK\2019.5\lib\vs2017\x64\release;$(LibraryPath);C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.2\lib\vs2019\x64\debug;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.2\lib\vs2019\x64\release;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\release;C:\Users\anber\Desktop\学校\必要なファイル\release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -84,6 +84,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);C:\Users\anber\Desktop\学校\必要なファイル\release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;C:\Users\anber\Desktop\学校\必要なファイル\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -135,7 +136,6 @@
     <ClCompile Include="Battle.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Char.cpp" />
-    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
@@ -161,14 +161,19 @@
     <ClCompile Include="Engine\Text.cpp" />
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
-    <ClCompile Include="GameoverScene.cpp" />
-    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="Golem.cpp" />
     <ClCompile Include="MaterialTable.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="Pot.cpp" />
     <ClCompile Include="PuppetStorage.cpp" />
     <ClCompile Include="SetUp.cpp" />
+    <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Unit.cpp" />
@@ -178,7 +183,6 @@
     <ClInclude Include="Battle.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Char.h" />
-    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />
@@ -204,16 +208,20 @@
     <ClInclude Include="Engine\Text.h" />
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
-    <ClInclude Include="GameoverScene.h" />
-    <ClInclude Include="HUD.h" />
+    <ClInclude Include="GameClear.h" />
+    <ClInclude Include="GameOver.h" />
+    <ClInclude Include="Ghost.h" />
+    <ClInclude Include="Golem.h" />
     <ClInclude Include="MaterialTable.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Pot.h" />
     <ClInclude Include="Puppet.h" />
     <ClInclude Include="PuppetStorage.h" />
     <ClInclude Include="SetUp.h" />
+    <ClInclude Include="Slime.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Unit.h" />

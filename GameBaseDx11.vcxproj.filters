@@ -39,12 +39,6 @@
     <Filter Include="Scene\TitleScene">
       <UniqueIdentifier>{7bd55817-dfe4-42c4-bf54-544828187f5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scene\ClearScene">
-      <UniqueIdentifier>{ef623309-85b7-4c70-82d4-0e6f08a1cc6c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene\GameOverScene">
-      <UniqueIdentifier>{ffb09074-968a-411d-b857-16c3883bc20a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -116,12 +110,6 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>Scene\TitleScene</Filter>
     </ClCompile>
-    <ClCompile Include="ClearScene.cpp">
-      <Filter>Scene\ClearScene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameoverScene.cpp">
-      <Filter>Scene\GameOverScene</Filter>
-    </ClCompile>
     <ClCompile Include="PlayScene.cpp">
       <Filter>Scene\PlayScene</Filter>
     </ClCompile>
@@ -158,13 +146,35 @@
     <ClCompile Include="Button.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\FbxParts.cpp" />
-    <ClCompile Include="Engine\Time.cpp" />
     <ClCompile Include="SetUp.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Pot.cpp">
+      <Filter>Scene\PlayScene\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>Scene\PlayScene\Battle\Puppet</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClear.cpp">
+      <Filter>Scene\PlayScene\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOver.cpp">
+      <Filter>Scene\PlayScene\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\FbxParts.cpp">
+      <Filter>01Engine\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Time.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Ghost.cpp">
+      <Filter>Scene\PlayScene\Battle\Puppet</Filter>
+    </ClCompile>
+    <ClCompile Include="Golem.cpp">
+      <Filter>Scene\PlayScene\Battle\Puppet</Filter>
+    </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>Scene\PlayScene\Battle\Puppet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -234,15 +244,8 @@
     <ClInclude Include="Engine\VFX.h">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="HUD.h" />
     <ClInclude Include="TitleScene.h">
       <Filter>Scene\TitleScene</Filter>
-    </ClInclude>
-    <ClInclude Include="ClearScene.h">
-      <Filter>Scene\ClearScene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameoverScene.h">
-      <Filter>Scene\GameOverScene</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
       <Filter>Scene\PlayScene</Filter>
@@ -286,10 +289,32 @@
     <ClInclude Include="Button.h">
       <Filter>01Engine\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\FbxParts.h" />
-    <ClInclude Include="Engine\Time.h" />
     <ClInclude Include="SetUp.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>Scene\PlayScene\Battle\Puppet</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOver.h">
+      <Filter>Scene\PlayScene\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClear.h">
+      <Filter>Scene\PlayScene\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\FbxParts.h">
+      <Filter>01Engine\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Time.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>Scene\PlayScene\Battle\Puppet</Filter>
+    </ClInclude>
+    <ClInclude Include="Ghost.h">
+      <Filter>Scene\PlayScene\Battle\Puppet</Filter>
+    </ClInclude>
+    <ClInclude Include="Golem.h">
+      <Filter>Scene\PlayScene\Battle\Puppet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

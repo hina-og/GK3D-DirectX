@@ -19,11 +19,20 @@ class Battle
 	std::vector<SpawnData> spawnList_;
 	int spawnedNum;
 
-	const float INIT_BATTLE_TIME{ 120.0 };
+	const float INIT_BATTLE_TIME{ 60.0 };
 	
 	float time;
 	Text timeText;
 	bool isTimeStert;
+
+	const int MAX_DURABILITY{ 40 };
+
+	int durability;//‘Ï‹v’l
+	Text durabilityText;
+
+	float getMaterialTime;
+
+	int selectDir;
 
 	Stage* stage;
 	Player* player;
@@ -39,6 +48,7 @@ class Battle
 	std::vector<Puppet*> ePuppet_;
 
 	bool isReady;
+	bool isBattleEnd;
 public:
 	Battle(GameObject* parent);
 	void Initialize();

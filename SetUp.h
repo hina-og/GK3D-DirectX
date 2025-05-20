@@ -5,7 +5,8 @@ enum class Difficulty
 {
     Easy,
     Normal,
-    Hard
+    Hard,
+    Despair
 };
 
 class SetUp

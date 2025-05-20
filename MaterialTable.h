@@ -4,6 +4,7 @@
 #include "Puppet.h"
 #include <vector>
 #include "PuppetStorage.h"
+#include "Pot.h"
 
 const int TABLE_SIZE{ 5 };
 const int RECIPE_DATA_SIZE{ 6 };
@@ -17,6 +18,7 @@ enum MATERIAL_TYPE
 	BACTERIA,
 	ROCK,
 	BRAIN,
+	WATER,
 	EMPTY,
 	FREE,
 	MATERIAL_END,
@@ -37,6 +39,8 @@ struct Material
 	int y;
 	Button button;
 	std::string name;
+	int num;
+	Text text;
 };
 
 struct Table
@@ -57,6 +61,8 @@ struct Recipe
 class MaterialTable
 	: public GameObject
 {
+	const int INIT_MATERIAL_NUM{ 2 };
+
 	int hTable_;
 	Material materialList_[MATERIAL_TYPE::MATERIAL_END];
 	Table table;
@@ -80,4 +86,5 @@ public:
 	void TableReset();
 	int GetSelectStragePuppet();
 	bool isNotEmpty();
+	void GetRandomMaterial();
 };

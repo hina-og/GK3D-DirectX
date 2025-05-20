@@ -29,6 +29,7 @@ public:
 	void Release();
 
 	void SetPosition(XMFLOAT3 _pos);
+	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetSize();
 	bool IsMouseInButton(XMFLOAT3 _mousePos);
 };

@@ -12,11 +12,13 @@ TitleScene::TitleScene(GameObject* parent)
 
 void TitleScene::Initialize()
 {
-	hPict_ = Image::Load("Image\\TitleScene.png");
+	hPict_ = Image::Load("Image\\Title.png");
 
 	easy_.Initialize(0, Direct3D::screenHeight_ / 4 * 1, "Image\\Easy.png");
 	normal_.Initialize(0, Direct3D::screenHeight_ / 4 * 2, "Image\\Normal.png");
 	hard_.Initialize(0, Direct3D::screenHeight_ / 4 * 3, "Image\\Hard.png");
+
+	canStart_ = false;
 }
 
 void TitleScene::Update()
@@ -25,27 +27,30 @@ void TitleScene::Update()
 	normal_.Update();
 	hard_.Update();
 
-	if (Input::IsKeyDown(DIK_RETURN))
+	if (Input::IsKey(DIK_D) && Input::IsKey(DIK_I) && Input::IsKey(DIK_E))
 	{
-		SceneManager* pSM = (SceneManager*)(FindObject("SceneManager"));
-		pSM->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
+		SetUp::currentDifficulty = Difficulty::Despair;
+		canStart_ = true;
 	}
 
 	if (easy_.isPress_)
 	{
 		SetUp::currentDifficulty = Difficulty::Easy;
-		SceneManager* pSM = (SceneManager*)(FindObject("SceneManager"));
-		pSM->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
+		canStart_ = true;
 	}
 	if (normal_.isPress_)
 	{
 		SetUp::currentDifficulty = Difficulty::Normal;
-		SceneManager* pSM = (SceneManager*)(FindObject("SceneManager"));
-		pSM->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
+		canStart_ = true;
 	}
 	if (hard_.isPress_)
 	{
 		SetUp::currentDifficulty = Difficulty::Hard;
+		canStart_ = true;
+	}
+
+	if (canStart_)
+	{
 		SceneManager* pSM = (SceneManager*)(FindObject("SceneManager"));
 		pSM->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
 	}

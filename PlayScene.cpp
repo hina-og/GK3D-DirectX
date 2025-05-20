@@ -1,6 +1,5 @@
 #include "PlayScene.h"
 #include "Battle.h"
-#include "HUD.h"
 
 PlayScene::PlayScene(GameObject* parent)
 	:GameObject(parent,"PlayScene")

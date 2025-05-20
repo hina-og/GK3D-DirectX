@@ -1,7 +1,6 @@
 #include "sceneManager.h"
 #include "../TitleScene.h"
 #include "../PlayScene.h"
-#include "../ClearScene.h"
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
@@ -17,9 +16,9 @@ SceneManager::SceneManager(GameObject * parent)
 void SceneManager::Initialize()
 {
 	//最初のシーンを準備
-	currentSceneID_ = SCENE_ID_PLAY;
+	currentSceneID_ = SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;
-	Instantiate<PlayScene>(this);
+	Instantiate<TitleScene>(this);
 }
 
 //更新
@@ -43,7 +42,6 @@ void SceneManager::Update()
 			break;
 		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); 
 			break;
-		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this);
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;

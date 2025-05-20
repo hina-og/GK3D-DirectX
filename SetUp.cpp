@@ -1,3 +1,3 @@
 #include "SetUp.h"
 
-Difficulty SetUp::currentDifficulty = Difficulty::Normal;
+Difficulty SetUp::currentDifficulty = Difficulty::Easy;

@@ -5,6 +5,8 @@
 #include "SetUp.h"
 #include "Engine/CsvReader.h"
 #include "Engine/Text.h"
+#include "GameOver.h"
+#include "GameClear.h"
 
 Battle::Battle(GameObject* parent)
 	: GameObject(parent, "Battle")
@@ -15,18 +17,19 @@ void Battle::Initialize()
 {
 	CsvReader levelData;
 
-	SetUp::currentDifficulty = Difficulty::Easy;
-
 	switch (SetUp::currentDifficulty)
 	{
 	case Difficulty::Easy:
-		levelData.Load("GameData\\LevelDie.csv");
+		levelData.Load("GameData\\LevelEasy.csv");
 		break;
 	case Difficulty::Normal:
 		levelData.Load("GameData\\LevelNormal.csv");
 		break;
 	case Difficulty::Hard:
 		levelData.Load("GameData\\LevelHard.csv");
+		break;
+	case Difficulty::Despair:
+		levelData.Load("GameData\\LevelDespair.csv");
 		break;
 	}
 	for (int line = 0;line < levelData.GetLines();line++)
@@ -44,10 +47,12 @@ void Battle::Initialize()
 	stage = Instantiate<Stage>(this);
 	player = Instantiate<Player>(this);
 	enemy = Instantiate<Enemy>(this);
-	//pot = Instantiate<Pot>(this);
 	
 	
+	pot = Instantiate<Pot>(this);
 	material = Instantiate<MaterialTable>(this);
+	
+	pot->SetPosition(material->GetPosition().x, -450, 0);
 
 	//Instantiate<Mouse>(this);
 
@@ -55,67 +60,115 @@ void Battle::Initialize()
 	timeText.Initialize();
 	isTimeStert = false;
 
+	durability = MAX_DURABILITY;
+	durabilityText.Initialize();
+
+	getMaterialTime = 0.0;
+
 	isReady = false;
+	isBattleEnd = false;
+
+	selectDir = Puppet::UP;
 }
 
 void Battle::Update()
 {
-	for (int i = spawnedNum;i < spawnList_.size();i++)
+	if (0 < durability && 0 < time)
 	{
-		if (time < spawnList_[i].time_)
+		for (int i = spawnedNum; i < spawnList_.size(); i++)
 		{
-			XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,stage->startLine_};
-			enemy->unit_->AddCharacter(pos, spawnList_[i].type_, Puppet::DOWN);
-			spawnedNum++;
+			if (time < spawnList_[i].time_)
+			{
+				XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,stage->startLine_ };
+				enemy->unit_->AddCharacter(pos, spawnList_[i].type_, Puppet::DOWN);
+				spawnedNum++;
+			}
+			else
+			{
+				break;
+			}
 		}
-		else
+
+		Input::GetMousePosition(mouseX, mouseY);
+
+		if (Input::IsKeyDown(DIK_W))
 		{
-			break;
+			selectDir = Puppet::UP;
 		}
+		else if (Input::IsKeyDown(DIK_A))
+		{
+			selectDir = Puppet::LEFT;
+		}
+		else if (Input::IsKeyDown(DIK_S))
+		{
+			selectDir = Puppet::DOWN;
+		}
+		else if (Input::IsKeyDown(DIK_D))
+		{
+			selectDir = Puppet::RIGHT;
+		}
+
+		//マウス左を押しているとき
+		if (Input::IsMouseButtonDown(LEFT_CLICK))
+		{
+			XMFLOAT2 mousePos = { (float)mouseX, (float)mouseY };
+			XMFLOAT2 tileNum = { -1, -1 };
+			XMFLOAT3 tilePos = {};
+
+			bool hit = stage->SelectTile(mousePos, tileNum, tilePos);
+			if (hit && !stage->HasPlayer(tileNum) && material->isNotEmpty())
+			{
+				selectPos_ = tilePos;
+				stage->PlaceCharacter(tileNum);
+				player->unit_->AddCharacter(selectPos_, material->GetSelectStragePuppet(), selectDir);
+			}
+		}
+		enemy->unit_->InvaderMove();
+
+		player->SetSelectTile(selectPos_);
+
+
+
+		player->unit_->InRange(enemy->unit_->GetPuppetArray());
+		enemy->unit_->InRange(player->unit_->GetPuppetArray());
+
+		enemy->unit_->PastLine(stage->endLine_, durability);
+
+		if (1 <= getMaterialTime)
+		{
+			material->GetRandomMaterial();
+			getMaterialTime--;
+		}
+
+		getMaterialTime += Time::GetDeltaTime();
+
+
+		if (isTimeStert && time >= 0)
+			time -= Time::GetDeltaTime();
+
+		if (isReady)
+			isTimeStert = true;
 	}
-	
-	Input::GetMousePosition(mouseX, mouseY);
-
-
-
-	//マウス左を押しているとき
-	if (Input::IsMouseButtonDown(LEFT_CLICK))
+	else if(!isBattleEnd)
 	{
-		XMFLOAT2 mousePos = { (float)mouseX, (float)mouseY };
-		XMFLOAT2 tileNum = { -1, -1 };
-		XMFLOAT3 tilePos = {};
-
-		bool hit = stage->SelectTile(mousePos, tileNum, tilePos);
-		if (hit && !stage->HasPlayer(tileNum) && material->isNotEmpty()) 
+		if (time <= 0)
 		{
-			selectPos_ = tilePos;
-			stage->PlaceCharacter(tileNum);
-			player->unit_->AddCharacter(selectPos_, material->GetSelectStragePuppet(), Puppet::UP);
+			Instantiate<GameClear>(this);
 		}
+		else if (durability < 0)
+		{
+			Instantiate<GameOver>(this);
+		}
+		isBattleEnd = true;
 	}
-
-	player->SetSelectTile(selectPos_);
-
-	enemy->unit_->InvaderMove();
-
-	player->unit_->InRange(enemy->unit_->GetPuppetArray());
-	enemy->unit_->InRange(player->unit_->GetPuppetArray());
-
-	enemy->unit_->PastLine(stage->endLine_);
-	
-
-	if(isTimeStert && time >= 0)
-		time -= Time::GetDeltaTime();
-
-	if (isReady)
-		isTimeStert = true;
-
 }
 
 void Battle::Draw()
 {
-	timeText.Draw(1000,0,time + 1.0f);
+	timeText.Draw(1280,720,time + 1.0f);
 	isReady = true;
+
+	durabilityText.Draw(640, 980, durability);
 }
 
 void Battle::Release()

@@ -1,13 +1,11 @@
-#include "Mouse.h"
-#include "Engine/Image.h"
+#include "Ghost.h"
 #include "Engine/Model.h"
-#include "Engine/Input.h"
 
-Mouse::Mouse(GameObject* parent)
+Ghost::Ghost(GameObject* parent)
 {
 }
 
-void Mouse::Initialize()
+void Ghost::Initialize()
 {
 	modelList_[STAND] = Model::Load("Model\\ZombieD.fbx");
 	assert(modelList_[STAND] >= 0);
@@ -16,26 +14,28 @@ void Mouse::Initialize()
 	modelList_[ATTACK] = Model::Load("Model\\ZombieD_Attack.fbx");
 	assert(modelList_[ATTACK] >= 0);
 	hModel_ = modelList_[STAND];
-	Model::SetAnimFrame(hModel_, 20, 170, 2);
+	Model::SetAnimFrame(hModel_, 1, 180, 1);
 
 	range_ =
 	{
+		{-1,-3}, {0,-3}, {1,-3},
+		{-1,-2}, {0,-2}, {1,-2},
 		{-1,-1}, {0,-1}, {1,-1},
 				 {0, 0}
 	};
 	dir_ = DIRECTION::UP;
 
-	hp_ = 10;
+	hp_ = 12;
 	cost_ = 1;
-	power_ = 5;
-	speed_ = 1.5;
+	power_ = 7;
+	speed_ = 1.0;
 
 	isAlive_ = true;
 	isAttack_ = false;
 	attacked_ = false;
 }
 
-void Mouse::Update()
+void Ghost::Update()
 {
 	FacingDirection();
 
@@ -46,13 +46,13 @@ void Mouse::Update()
 			hModel_ = modelList_[ATTACK];
 			Model::SetAnimFrame(hModel_, 1, 180, 1);
 		}
-		if(Model::GetAnimFrame(hModel_) >= 90 && !attacked_)
+		if (Model::GetAnimFrame(hModel_) >= 90 && !attacked_)
 			Attack();
 	}
-	else if(hModel_ != modelList_[RUN])
+	else if (hModel_ != modelList_[RUN])
 	{
 		hModel_ = modelList_[RUN];
-		Model::SetAnimFrame(hModel_, 15, 170, 2);
+		Model::SetAnimFrame(hModel_, 15, 170, 1);
 	}
 
 
@@ -66,20 +66,19 @@ void Mouse::Update()
 	{
 		KillMe();
 	}
-
 }
 
-void Mouse::Draw()
+void Ghost::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 }
 
-void Mouse::Release()
+void Ghost::Release()
 {
 }
 
-void Mouse::Attack()
+void Ghost::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{

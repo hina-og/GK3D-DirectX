@@ -8,6 +8,8 @@ class TitleScene :
     Button easy_;
     Button normal_;
     Button hard_;
+
+    bool canStart_;
 public:
     TitleScene(GameObject* parent);
     void Initialize();

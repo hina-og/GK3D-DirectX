@@ -15,6 +15,13 @@ void Unit::Initialize()
 
 void Unit::Update()
 {
+	for (int p = 0; p < puppet_.size(); p++)
+	{
+		if (puppet_[p]->IsDead())
+		{
+			puppet_.erase(puppet_.begin() + p);
+		}
+	}
 }
 
 void Unit::Draw()
@@ -34,6 +41,44 @@ void Unit::AddCharacter(XMFLOAT3 _pos, int _type, Puppet::DIRECTION _dir)
 		break;
 	case ZOMBIE:
 		puppet_.push_back(Instantiate<Zombie>(this));
+		break;
+	case SLIME:
+		puppet_.push_back(Instantiate<Slime>(this));
+		break;
+	case GOLEM:
+		puppet_.push_back(Instantiate<Golem>(this));
+		break;
+	case GHOST:
+		puppet_.push_back(Instantiate<Ghost>(this));
+		break;
+	default:
+		break;
+	}
+	puppet_.back()->SetPosition(_pos);
+	puppet_.back()->SetDirection(_dir);
+}
+
+void Unit::AddCharacter(XMFLOAT3 _pos, int _type, int _dir)
+{
+	switch (_type)
+	{
+	case MOUSE:
+		puppet_.push_back(Instantiate<Mouse>(this));
+		break;
+	case ZOMBIE:
+		puppet_.push_back(Instantiate<Zombie>(this));
+		break;
+	case MUSHROOM:
+		puppet_.push_back(Instantiate<Mushroom>(this));
+		break;
+	case SLIME:
+		puppet_.push_back(Instantiate<Slime>(this));
+		break;
+	case GOLEM:
+		puppet_.push_back(Instantiate<Golem>(this));
+		break;
+	case GHOST:
+		puppet_.push_back(Instantiate<Ghost>(this));
 		break;
 	default:
 		break;
@@ -94,13 +139,15 @@ void Unit::InRange(std::vector<Puppet*> _puppet)
 	}
 }
 
-void Unit::PastLine(float _z)
+void Unit::PastLine(float _z, int& _durability)
 {
 	for (int p = 0; p < puppet_.size(); p++)
 	{
-		if (puppet_[p]->GetPosition().z < _z)
+		if (puppet_[p]->GetPosition().z < _z && !puppet_[p]->IsDead())
 		{
+			_durability -= puppet_[p]->GetPower();
 			puppet_[p]->KillMe();
+			puppet_.erase(puppet_.begin() + p);
 		}
 	}
 }

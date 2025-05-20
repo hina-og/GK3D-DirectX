@@ -1,41 +1,39 @@
-#include "Mouse.h"
-#include "Engine/Image.h"
+#include "Golem.h"
 #include "Engine/Model.h"
-#include "Engine/Input.h"
 
-Mouse::Mouse(GameObject* parent)
+Golem::Golem(GameObject* parent)
 {
 }
 
-void Mouse::Initialize()
+void Golem::Initialize()
 {
-	modelList_[STAND] = Model::Load("Model\\ZombieD.fbx");
+	modelList_[STAND] = Model::Load("Model\\Enemy.fbx");
 	assert(modelList_[STAND] >= 0);
-	modelList_[RUN] = Model::Load("Model\\ZombieD_Run.fbx");
+	modelList_[RUN] = Model::Load("Model\\Enemy.fbx");
 	assert(modelList_[RUN] >= 0);
-	modelList_[ATTACK] = Model::Load("Model\\ZombieD_Attack.fbx");
+	modelList_[ATTACK] = Model::Load("Model\\Enemy.fbx");
 	assert(modelList_[ATTACK] >= 0);
 	hModel_ = modelList_[STAND];
-	Model::SetAnimFrame(hModel_, 20, 170, 2);
+	Model::SetAnimFrame(hModel_, 1, 180, 1);
 
 	range_ =
 	{
 		{-1,-1}, {0,-1}, {1,-1},
-				 {0, 0}
+		{-1, 0}, {0, 0}, {1, 0}
 	};
 	dir_ = DIRECTION::UP;
 
-	hp_ = 10;
+	hp_ = 21;
 	cost_ = 1;
-	power_ = 5;
-	speed_ = 1.5;
+	power_ = 10;
+	speed_ = 0.2;
 
 	isAlive_ = true;
 	isAttack_ = false;
 	attacked_ = false;
 }
 
-void Mouse::Update()
+void Golem::Update()
 {
 	FacingDirection();
 
@@ -46,13 +44,13 @@ void Mouse::Update()
 			hModel_ = modelList_[ATTACK];
 			Model::SetAnimFrame(hModel_, 1, 180, 1);
 		}
-		if(Model::GetAnimFrame(hModel_) >= 90 && !attacked_)
+		if (Model::GetAnimFrame(hModel_) >= 90 && !attacked_)
 			Attack();
 	}
-	else if(hModel_ != modelList_[RUN])
+	else if (hModel_ != modelList_[RUN])
 	{
 		hModel_ = modelList_[RUN];
-		Model::SetAnimFrame(hModel_, 15, 170, 2);
+		Model::SetAnimFrame(hModel_, 15, 170, 1);
 	}
 
 
@@ -66,20 +64,19 @@ void Mouse::Update()
 	{
 		KillMe();
 	}
-
 }
 
-void Mouse::Draw()
+void Golem::Draw()
 {
 	Model::SetTransform(hModel_, transform_);
 	Model::Draw(hModel_);
 }
 
-void Mouse::Release()
+void Golem::Release()
 {
 }
 
-void Mouse::Attack()
+void Golem::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{

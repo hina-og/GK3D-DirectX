@@ -23,26 +23,10 @@ void MaterialTable::Initialize()
 
 	std::vector<imageData> image;
 
-	//for (int line = 1;line < csv.GetLines();line++)
-	//{
-	//	image[line].name = csv.GetString(line, 0);
-	//	image[line].scaleX = csv.GetFloat(line, 1);
-	//	image[line].scaleY = csv.GetFloat(line, 2);
-	//	image[line].distX = csv.GetInt(line, 3);
-	//	image[line].distY = csv.GetInt(line, 4);
-	//}
-
 
 	storage = Instantiate<PuppetStorage>(this);
 
 	hTable_ = Image::Load("Image\\MaterialTable.png");
-	if (hTable_ >= 0)
-	{
-		for (int i = 0;i < image.size();i++)
-		{
-			//image[i].name = 
-		}
-	}
 	assert(hTable_ >= 0);
 
 	transform_.scale_ = { 0.8,1.0,1.0 };
@@ -57,7 +41,8 @@ void MaterialTable::Initialize()
 		"soul",
 		"bacteria",
 		"rock",
-		"brain"
+		"brain",
+		"water"
 	};
 
 	for (int i = 0; i < MATERIAL_NUM; i++)
@@ -70,9 +55,11 @@ void MaterialTable::Initialize()
 		materialList_[i].button.Initialize(0, 0, fileName_);
 
 		materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x - Direct3D::screenWidth_ + materialList_[i].button.GetSize().x / 2 + Image::GetImageSize(hTable_).x - TABLE_SIZE * materialList_[i].button.GetSize().x / 2;
-		materialList_[i].y = transform_.position_.y - (i / TABLE_SIZE * materialList_[i].button.GetSize().y - Image::GetImageSize(hTable_).y + materialList_[i].button.GetSize().y / 2) + table.y;
+		materialList_[i].y = transform_.position_.y - (i / TABLE_SIZE * materialList_[i].button.GetSize().y - Image::GetImageSize(hTable_).y + materialList_[i].button.GetSize().y / 2) + table.y - 128;
 
 		materialList_[i].button.SetPosition({ (float)materialList_[i].x ,(float)materialList_[i].y,0 });
+		materialList_[i].num = INIT_MATERIAL_NUM;
+		materialList_[i].text.Initialize();
 	}
 
 	for (int i = 0; i < TABLE_SIZE; i++)
@@ -87,7 +74,7 @@ void MaterialTable::Initialize()
 		table.material[i].name = "empty";
 	}
 
-	makeButton_.Initialize(transform_.position_.x,200, "Image\\Make.png");
+	makeButton_.Initialize(transform_.position_.x,400, "Image\\Make.png");
 
 	ReadRecipe();
 }
@@ -106,12 +93,13 @@ void MaterialTable::Update()
 
 	for (int i = 0; i < MATERIAL_NUM; i++)
 	{
-		if (materialList_[i].button.isPress_ && table.num < TABLE_SIZE)
+		if (materialList_[i].button.isPress_ && table.num < TABLE_SIZE && 0 < materialList_[i].num)
 		{
 			table.material[table.num].type = materialList_[i].type;
 			table.material[table.num].name = materialList_[i].name;
 			table.material[table.num].button.Initialize(table.material[table.num].x, table.material[table.num].y, "Image\\" + table.material[table.num].name + ".png");
 			table.num++;
+			materialList_[i].num--;
 		}
 	}
 
@@ -119,12 +107,23 @@ void MaterialTable::Update()
 	{
 		if (table.material[i].button.isPress_ && 0 < table.num && table.material[i].name != "empty")
 		{
+
+			for (int j = 0; j < MATERIAL_NUM; j++)
+			{
+				if (table.material[i].type == materialList_[j].type)
+				{
+					materialList_[j].num++;
+				}
+			}
+
 			for (int j = i; j < TABLE_SIZE - 1; j++)
 			{
 				table.material[j].type = table.material[j + 1].type;
 				table.material[j].name = table.material[j + 1].name;
 				table.material[j].button.Initialize(table.material[j].x, table.material[j].y, "Image\\" + table.material[j].name + ".png");
 			}
+
+			
 			table.num--;
 
 			table.material[table.num].type = MATERIAL_TYPE::EMPTY;
@@ -147,6 +146,7 @@ void MaterialTable::Draw()
 	for (int i = 0; i < MATERIAL_NUM; i++)
 	{
 		materialList_[i].button.Draw();
+		materialList_[i].text.Draw(materialList_[i].x + 670, 1280 - materialList_[i].y -900, materialList_[i].num);
 	}
 
 	for (int i = 0; i < TABLE_SIZE; i++)
@@ -195,6 +195,9 @@ void MaterialTable::ReadRecipe()
 			case BRAIN:
 				r.materialType[i] = MATERIAL_TYPE::BRAIN;
 				break;
+			case WATER:
+				r.materialType[i] = MATERIAL_TYPE::WATER;
+				break;
 			case EMPTY:
 				r.materialType[i] = MATERIAL_TYPE::EMPTY;
 				break;
@@ -210,6 +213,18 @@ void MaterialTable::ReadRecipe()
 			break;
 		case ZOMBIE:
 			r.puppetType = CHARA_TYPE::ZOMBIE;
+			break;
+		case MUSHROOM:
+			r.puppetType = CHARA_TYPE::MUSHROOM;
+			break;
+		case SLIME:
+			r.puppetType = CHARA_TYPE::SLIME;
+			break;
+		case GOLEM:
+			r.puppetType = CHARA_TYPE::GOLEM;
+			break;
+		case GHOST:
+			r.puppetType = CHARA_TYPE::GHOST;
 			break;
 		default:
 			r.puppetType = CHARA_TYPE::FAILURE;
@@ -270,6 +285,11 @@ bool MaterialTable::isNotEmpty()
 	return storage->puppetList_[storage->selectPuppetNumber].num > 0;
 }
 
+void MaterialTable::GetRandomMaterial()
+{
+	materialList_[rand() % MATERIAL_END].num++;
+}
+
 MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)
 {
 	if (name == "BONE") 
@@ -284,6 +304,8 @@ MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)
 		return ROCK;
 	if (name == "BRAIN") 
 		return BRAIN;
+	if (name == "WATER")
+		return WATER;
 	if (name == "EMPTY") 
 		return EMPTY;
 	if (name == "FREE") 
@@ -298,6 +320,14 @@ CHARA_TYPE MaterialTable::StringToCharaType(const std::string& name)
 		return MOUSE;
 	if (name == "ZOMBIE") 
 		return ZOMBIE;
+	if (name == "MUSHROOM")
+		return MUSHROOM;
+	if (name == "SLIME")
+		return SLIME;
+	if (name == "GOLEM")
+		return GOLEM;
+	if (name == "GHOST")
+		return GHOST;
 	if (name == "FAILURE") 
 		return FAILURE;
 
