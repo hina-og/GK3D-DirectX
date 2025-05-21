@@ -1,0 +1,7 @@
+name,hp,cost,power,speed
+Mouse,10,1,5,1.5
+Zombie,20,1,5,0.8
+"Mushroom				",,,,
+"Skime				",,,,
+"Golem				",,,,
+"Ghost				",,,,

@@ -23,10 +23,10 @@ void Golem::Initialize()
 	};
 	dir_ = DIRECTION::UP;
 
-	hp_ = 21;
-	cost_ = 1;
-	power_ = 10;
-	speed_ = 0.2;
+	status.hp_ = 21;
+	status.cost_ = 1;
+	status.power_ = 10;
+	status.speed_ = 0.2;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -60,7 +60,7 @@ void Golem::Update()
 		attacked_ = false;
 	}
 
-	if (hp_ < 1)
+	if (status.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -80,7 +80,7 @@ void Golem::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-power_);
+		inRangeChara_[i]->ControlHP(-status.power_);
 	}
 	attacked_ = true;
 }

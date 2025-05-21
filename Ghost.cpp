@@ -25,10 +25,10 @@ void Ghost::Initialize()
 	};
 	dir_ = DIRECTION::UP;
 
-	hp_ = 12;
-	cost_ = 1;
-	power_ = 7;
-	speed_ = 1.0;
+	status.hp_ = 12;
+	status.cost_ = 1;
+	status.power_ = 7;
+	status.speed_ = 1.0;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -62,7 +62,7 @@ void Ghost::Update()
 		attacked_ = false;
 	}
 
-	if (hp_ < 1)
+	if (status.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -82,7 +82,7 @@ void Ghost::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-power_);
+		inRangeChara_[i]->ControlHP(-status.power_);
 	}
 	attacked_ = true;
 }

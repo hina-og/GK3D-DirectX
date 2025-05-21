@@ -3,6 +3,8 @@
 #include "Engine/GameObject.h"
 #include "Engine/Time.h"
 #include "Engine/Input.h"
+#include "Engine/CsvReader.h"
+#include "Engine/Model.h"
 
 enum CHARA_TYPE
 {
@@ -53,7 +55,7 @@ public:
 
 	void ControlHP (int _addNum)
 	{
-		hp_ += _addNum;
+		status.hp_ += _addNum;
 	}
 
 	std::vector<Pos> GetAttackTiles(DIRECTION _dir)
@@ -120,16 +122,16 @@ public:
 		switch (dir_)
 		{
 		case Puppet::UP:
-			transform_.position_.z += speed_ * Time::GetDeltaTime();
+			transform_.position_.z += status.speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::LEFT:
-			transform_.position_.x -= speed_ * Time::GetDeltaTime();
+			transform_.position_.x -= status.speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::DOWN:
-			transform_.position_.z -= speed_ * Time::GetDeltaTime();
+			transform_.position_.z -= status.speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::RIGHT:
-			transform_.position_.x += speed_ * Time::GetDeltaTime();
+			transform_.position_.x += status.speed_ * Time::GetDeltaTime();
 			break;
 		default:
 			break;
@@ -142,7 +144,7 @@ public:
 		if (_type == "Zombie") return CHARA_TYPE::ZOMBIE;
 	}
 
-	int GetPower() { return power_; }
+	int GetPower() { return status.power_; }
 
 protected:
 
@@ -152,21 +154,76 @@ protected:
 	int rangePict_;
 	bool attacked_;
 
-
-	//-----ステータス-----
-	/*　あとでパラメータは読み込むようにする　*/
-	int hp_;//体力
-	int cost_;//召喚コスト
-	int power_;//攻撃力
-	float speed_;//移動速度や攻撃速度
-	//--------------------
-
-
+	struct Status
+	{
+		//-----ステータス-----
+		/*　あとでパラメータは読み込むようにする　*/
+		std::string name_;
+		int hp_;//体力
+		int cost_;//召喚コスト
+		int power_;//攻撃力
+		float speed_;//移動速度や攻撃速度
+		//--------------------
+	};
+	Status status;
 
 	void Initialize() {};
 	void Update() {};
 	void Draw() {};
 	void Release() {};
+
+	void LoadStatus(int _type)
+	{
+		CsvReader csv("GameData\\PuppetData.csv");
+
+		for (int line = 1;line < csv.GetLines();line++)
+		{
+			if (_type + 1 == line)
+			{
+				SetStatus(csv, line);
+			}
+			/*switch (_type)
+			{
+			case MOUSE:
+				SetStatus(csv, _type);
+				break;
+			case ZOMBIE:
+				SetStatus(csv, _type);
+				break;
+			case MUSHROOM:
+				SetStatus(csv, _type);
+				break;
+			case SLIME:
+				SetStatus(csv, _type);
+				break;
+			case GOLEM:
+				SetStatus(csv, _type);
+				break;
+			case GHOST:
+				SetStatus(csv, _type);
+				break;
+			default:
+				SetStatus(csv, MOUSE);
+				break;
+			}*/
+		}
+	}
+
+	void SetStatus(CsvReader _csv, int _line)
+	{
+		status.name_ = _csv.GetString(_line, 0);
+		status.hp_ = _csv.GetInt(_line, 1);
+		status.cost_ = _csv.GetInt(_line, 2);
+		status.power_ = _csv.GetInt(_line, 3);
+		status.speed_ = _csv.GetFloat(_line, 4);
+
+		modelList_[STAND] = Model::Load("Model\\" + status.name_ + ".fbx");
+		assert(modelList_[STAND] >= 0);
+		modelList_[RUN] = Model::Load("Model\\" + status.name_ + "_Run.fbx");
+		assert(modelList_[RUN] >= 0);
+		modelList_[ATTACK] = Model::Load("Model\\" + status.name_ + "_Attack.fbx");
+		assert(modelList_[ATTACK] >= 0);
+	}
 
 	Pos rotate(Pos _pos, int _dir)
 	{

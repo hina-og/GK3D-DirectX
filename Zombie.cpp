@@ -9,12 +9,8 @@ Zombie::Zombie(GameObject* parent)
 
 void Zombie::Initialize()
 {
-	modelList_[STAND] = Model::Load("Model\\ZombieD.fbx");
-	assert(modelList_[STAND] >= 0);
-	modelList_[RUN] = Model::Load("Model\\ZombieD_Run.fbx");
-	assert(modelList_[RUN] >= 0);
-	modelList_[ATTACK] = Model::Load("Model\\ZombieD_Attack.fbx");
-	assert(modelList_[ATTACK] >= 0);
+	LoadStatus(ZOMBIE);
+
 	hModel_ = modelList_[STAND];
 	Model::SetAnimFrame(hModel_, 20, 170, 2);
 
@@ -24,11 +20,6 @@ void Zombie::Initialize()
 		{-1, 0}, {0, 0}, {1, 0},
 	};
 	dir_ = DIRECTION::UP;
-
-	hp_ = 20;
-	cost_ = 1;
-	power_ = 5;
-	speed_ = 0.8;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -62,7 +53,7 @@ void Zombie::Update()
 		attacked_ = false;
 	}
 
-	if (hp_ < 1)
+	if (status.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -82,7 +73,7 @@ void Zombie::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-power_);
+		inRangeChara_[i]->ControlHP(-status.power_);
 	}
 	attacked_ = true;
 }

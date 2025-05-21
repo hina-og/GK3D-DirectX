@@ -9,12 +9,8 @@ Mouse::Mouse(GameObject* parent)
 
 void Mouse::Initialize()
 {
-	modelList_[STAND] = Model::Load("Model\\ZombieD.fbx");
-	assert(modelList_[STAND] >= 0);
-	modelList_[RUN] = Model::Load("Model\\ZombieD_Run.fbx");
-	assert(modelList_[RUN] >= 0);
-	modelList_[ATTACK] = Model::Load("Model\\ZombieD_Attack.fbx");
-	assert(modelList_[ATTACK] >= 0);
+	LoadStatus(MOUSE);
+
 	hModel_ = modelList_[STAND];
 	Model::SetAnimFrame(hModel_, 20, 170, 2);
 
@@ -24,11 +20,6 @@ void Mouse::Initialize()
 				 {0, 0}
 	};
 	dir_ = DIRECTION::UP;
-
-	hp_ = 10;
-	cost_ = 1;
-	power_ = 5;
-	speed_ = 1.5;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -44,7 +35,7 @@ void Mouse::Update()
 		if (hModel_ != modelList_[ATTACK])
 		{
 			hModel_ = modelList_[ATTACK];
-			Model::SetAnimFrame(hModel_, 1, 180, 1);
+			Model::SetAnimFrame(hModel_, 15, 170, 2);
 		}
 		if(Model::GetAnimFrame(hModel_) >= 90 && !attacked_)
 			Attack();
@@ -52,7 +43,7 @@ void Mouse::Update()
 	else if(hModel_ != modelList_[RUN])
 	{
 		hModel_ = modelList_[RUN];
-		Model::SetAnimFrame(hModel_, 15, 170, 2);
+		Model::SetAnimFrame(hModel_, 15, 170, 3);
 	}
 
 
@@ -62,7 +53,7 @@ void Mouse::Update()
 		attacked_ = false;
 	}
 
-	if (hp_ < 1)
+	if (status.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -83,7 +74,7 @@ void Mouse::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-power_);
+		inRangeChara_[i]->ControlHP(-status.power_);
 	}
 	attacked_ = true;
 }

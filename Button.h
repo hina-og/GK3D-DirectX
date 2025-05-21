@@ -21,6 +21,7 @@ class Button
 	bool prevLeftClick;
 public:
 	bool isPress_;
+	bool isSelect_;
 
 	Button();
 	void Initialize(int _x, int _y, std::string _fileName);

@@ -155,7 +155,7 @@ void Battle::Update()
 		{
 			Instantiate<GameClear>(this);
 		}
-		else if (durability < 0)
+		else
 		{
 			Instantiate<GameOver>(this);
 		}

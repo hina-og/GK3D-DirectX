@@ -24,10 +24,10 @@ void Slime::Initialize()
 	};
 	dir_ = DIRECTION::UP;
 
-	hp_ = 10;
-	cost_ = 1;
-	power_ = 3;
-	speed_ = 1.2;
+	status.hp_ = 10;
+	status.cost_ = 1;
+	status.power_ = 3;
+	status.speed_ = 1.2;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -61,7 +61,7 @@ void Slime::Update()
 		attacked_ = false;
 	}
 
-	if (hp_ < 1)
+	if (status.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -81,7 +81,7 @@ void Slime::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-power_);
+		inRangeChara_[i]->ControlHP(-status.power_);
 	}
 	attacked_ = true;
 }

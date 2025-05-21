@@ -24,10 +24,10 @@ void Mushroom::Initialize()
 	};
 	dir_ = DIRECTION::UP;
 
-	hp_ = 15;
-	cost_ = 1;
-	power_ = 6;
-	speed_ = 0.5;
+	status.hp_ = 15;
+	status.cost_ = 1;
+	status.power_ = 6;
+	status.speed_ = 0.5;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -61,7 +61,7 @@ void Mushroom::Update()
 		attacked_ = false;
 	}
 
-	if (hp_ < 1)
+	if (status.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -81,7 +81,7 @@ void Mushroom::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-power_);
+		inRangeChara_[i]->ControlHP(-status.power_);
 	}
 	attacked_ = true;
 }

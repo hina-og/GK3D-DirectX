@@ -1,6 +1,7 @@
 #include "Button.h"
 #include "Engine/Image.h"
 #include "Engine/Input.h"
+#include "Engine/Direct3D.h"
 
 Button::Button()
 {
@@ -25,10 +26,11 @@ void Button::Initialize(int _x, int _y, std::string _fileName)
 void Button::Update()
 {
 	isPress_ = false;
+	isSelect_ = false;
 
 	Input::GetMousePosition(mouseX, mouseY);
 
-	XMFLOAT3 mousePos = { (float)mouseX * 2 - 1280,(float)-(mouseY * 2 - 720) ,0 };
+	XMFLOAT3 mousePos = { (float)mouseX * 2 - Direct3D::screenWidth_,(float)-(mouseY * 2 - Direct3D::screenHeight_) ,0 };
 
 	if (IsMouseInButton(mousePos))
 	{
@@ -37,6 +39,7 @@ void Button::Update()
 		{
 			isPress_ = true;
 		}
+		isSelect_ = true;
 	}
 }
 
