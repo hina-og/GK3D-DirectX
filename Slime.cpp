@@ -7,12 +7,8 @@ Slime::Slime(GameObject* parent)
 
 void Slime::Initialize()
 {
-	modelList_[STAND] = Model::Load("Model\\Enemy.fbx");
-	assert(modelList_[STAND] >= 0);
-	modelList_[RUN] = Model::Load("Model\\Enemy.fbx");
-	assert(modelList_[RUN] >= 0);
-	modelList_[ATTACK] = Model::Load("Model\\Enemy.fbx");
-	assert(modelList_[ATTACK] >= 0);
+	LoadStatus(SLIME);
+
 	hModel_ = modelList_[STAND];
 	Model::SetAnimFrame(hModel_, 1, 180, 1);
 
@@ -23,11 +19,6 @@ void Slime::Initialize()
 		{0, 0},
 	};
 	dir_ = DIRECTION::UP;
-
-	status.hp_ = 10;
-	status.cost_ = 1;
-	status.power_ = 3;
-	status.speed_ = 1.2;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -61,7 +52,7 @@ void Slime::Update()
 		attacked_ = false;
 	}
 
-	if (status.hp_ < 1)
+	if (status_.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -81,7 +72,7 @@ void Slime::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-status.power_);
+		inRangeChara_[i]->ControlHP(-status_.power_);
 	}
 	attacked_ = true;
 }

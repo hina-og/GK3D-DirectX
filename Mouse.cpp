@@ -53,7 +53,7 @@ void Mouse::Update()
 		attacked_ = false;
 	}
 
-	if (status.hp_ < 1)
+	if (status_.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -74,7 +74,7 @@ void Mouse::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-status.power_);
+		inRangeChara_[i]->ControlHP(-status_.power_);
 	}
 	attacked_ = true;
 }

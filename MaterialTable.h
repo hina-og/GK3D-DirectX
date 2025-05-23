@@ -61,7 +61,7 @@ struct Recipe
 class MaterialTable
 	: public GameObject
 {
-	const int INIT_MATERIAL_NUM{ 2 };
+	const int INIT_MATERIAL_NUM{ 5 };
 
 	int hTable_;
 	Material materialList_[MATERIAL_TYPE::MATERIAL_END];

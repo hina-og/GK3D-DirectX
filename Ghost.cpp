@@ -7,12 +7,8 @@ Ghost::Ghost(GameObject* parent)
 
 void Ghost::Initialize()
 {
-	modelList_[STAND] = Model::Load("Model\\ZombieD.fbx");
-	assert(modelList_[STAND] >= 0);
-	modelList_[RUN] = Model::Load("Model\\ZombieD_Run.fbx");
-	assert(modelList_[RUN] >= 0);
-	modelList_[ATTACK] = Model::Load("Model\\ZombieD_Attack.fbx");
-	assert(modelList_[ATTACK] >= 0);
+	LoadStatus(GHOST);
+
 	hModel_ = modelList_[STAND];
 	Model::SetAnimFrame(hModel_, 1, 180, 1);
 
@@ -24,11 +20,6 @@ void Ghost::Initialize()
 				 {0, 0}
 	};
 	dir_ = DIRECTION::UP;
-
-	status.hp_ = 12;
-	status.cost_ = 1;
-	status.power_ = 7;
-	status.speed_ = 1.0;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -62,7 +53,7 @@ void Ghost::Update()
 		attacked_ = false;
 	}
 
-	if (status.hp_ < 1)
+	if (status_.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -82,7 +73,7 @@ void Ghost::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-status.power_);
+		inRangeChara_[i]->ControlHP(-status_.power_);
 	}
 	attacked_ = true;
 }

@@ -55,7 +55,7 @@ public:
 
 	void ControlHP (int _addNum)
 	{
-		status.hp_ += _addNum;
+		status_.hp_ += _addNum;
 	}
 
 	std::vector<Pos> GetAttackTiles(DIRECTION _dir)
@@ -122,16 +122,16 @@ public:
 		switch (dir_)
 		{
 		case Puppet::UP:
-			transform_.position_.z += status.speed_ * Time::GetDeltaTime();
+			transform_.position_.z += status_.speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::LEFT:
-			transform_.position_.x -= status.speed_ * Time::GetDeltaTime();
+			transform_.position_.x -= status_.speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::DOWN:
-			transform_.position_.z -= status.speed_ * Time::GetDeltaTime();
+			transform_.position_.z -= status_.speed_ * Time::GetDeltaTime();
 			break;
 		case Puppet::RIGHT:
-			transform_.position_.x += status.speed_ * Time::GetDeltaTime();
+			transform_.position_.x += status_.speed_ * Time::GetDeltaTime();
 			break;
 		default:
 			break;
@@ -144,7 +144,7 @@ public:
 		if (_type == "Zombie") return CHARA_TYPE::ZOMBIE;
 	}
 
-	int GetPower() { return status.power_; }
+	int GetPower() { return status_.power_; }
 
 protected:
 
@@ -153,6 +153,16 @@ protected:
 	int hPict_;
 	int rangePict_;
 	bool attacked_;
+
+	struct AnimData
+	{
+		int sAttack_;//Attackアニメーションの始まり
+		int eAttack_;//Attackアニメーションの終わり
+		int attack_;//攻撃するフレーム
+		
+		int sRun_;//Runアニメーションのループ開始フレーム
+		int eRun_;//Runアニメーションのループ終了フレーム
+	};
 
 	struct Status
 	{
@@ -165,7 +175,8 @@ protected:
 		float speed_;//移動速度や攻撃速度
 		//--------------------
 	};
-	Status status;
+	AnimData anim_;
+	Status status_;
 
 	void Initialize() {};
 	void Update() {};
@@ -211,17 +222,17 @@ protected:
 
 	void SetStatus(CsvReader _csv, int _line)
 	{
-		status.name_ = _csv.GetString(_line, 0);
-		status.hp_ = _csv.GetInt(_line, 1);
-		status.cost_ = _csv.GetInt(_line, 2);
-		status.power_ = _csv.GetInt(_line, 3);
-		status.speed_ = _csv.GetFloat(_line, 4);
+		status_.name_ = _csv.GetString(_line, 0);
+		status_.hp_ = _csv.GetInt(_line, 1);
+		status_.cost_ = _csv.GetInt(_line, 2);
+		status_.power_ = _csv.GetInt(_line, 3);
+		status_.speed_ = _csv.GetFloat(_line, 4);
 
-		modelList_[STAND] = Model::Load("Model\\" + status.name_ + ".fbx");
+		modelList_[STAND] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + ".fbx");
 		assert(modelList_[STAND] >= 0);
-		modelList_[RUN] = Model::Load("Model\\" + status.name_ + "_Run.fbx");
+		modelList_[RUN] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + "_Run.fbx");
 		assert(modelList_[RUN] >= 0);
-		modelList_[ATTACK] = Model::Load("Model\\" + status.name_ + "_Attack.fbx");
+		modelList_[ATTACK] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + "_Attack.fbx");
 		assert(modelList_[ATTACK] >= 0);
 	}
 

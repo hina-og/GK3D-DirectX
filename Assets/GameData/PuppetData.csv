@@ -1,7 +1,7 @@
-name,hp,cost,power,speed
-Mouse,10,1,5,1.5
-Zombie,20,1,5,0.8
-"Mushroom				",,,,
-"Skime				",,,,
-"Golem				",,,,
-"Ghost				",,,,
+name,hp,cost,power,speed,attackFrame
+Mouse,10,1,5,1.5,
+Zombie,20,1,5,0.8,
+Mushroom,15,1,6,0.5,
+Slime,10,1,10,1.2,75
+Golem,21,1,10,0.2,
+Ghost,12,1,7,1,

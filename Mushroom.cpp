@@ -7,14 +7,10 @@ Mushroom::Mushroom(GameObject* parent)
 
 void Mushroom::Initialize()
 {
-	modelList_[STAND] = Model::Load("Model\\Enemy.fbx");
-	assert(modelList_[STAND] >= 0);
-	modelList_[RUN] = Model::Load("Model\\Enemy.fbx");
-	assert(modelList_[RUN] >= 0);
-	modelList_[ATTACK] = Model::Load("Model\\Enemy.fbx");
-	assert(modelList_[ATTACK] >= 0);
+	LoadStatus(MUSHROOM);
+
 	hModel_ = modelList_[STAND];
-	Model::SetAnimFrame(hModel_, 1, 180, 1);
+	Model::SetAnimFrame(hModel_, 1, 60, 1);
 
 	range_ =
 	{
@@ -23,11 +19,6 @@ void Mushroom::Initialize()
 		{ 1, 1}, {0, 1}, {1, 1},
 	};
 	dir_ = DIRECTION::UP;
-
-	status.hp_ = 15;
-	status.cost_ = 1;
-	status.power_ = 6;
-	status.speed_ = 0.5;
 
 	isAlive_ = true;
 	isAttack_ = false;
@@ -43,7 +34,7 @@ void Mushroom::Update()
 		if (hModel_ != modelList_[ATTACK])
 		{
 			hModel_ = modelList_[ATTACK];
-			Model::SetAnimFrame(hModel_, 1, 180, 1);
+			Model::SetAnimFrame(hModel_, 1, 120, 1);
 		}
 		if (Model::GetAnimFrame(hModel_) >= 90 && !attacked_)
 			Attack();
@@ -51,17 +42,17 @@ void Mushroom::Update()
 	else if (hModel_ != modelList_[RUN])
 	{
 		hModel_ = modelList_[RUN];
-		Model::SetAnimFrame(hModel_, 15, 170, 1);
+		Model::SetAnimFrame(hModel_, 10, 60, 1);
 	}
 
 
-	if (hModel_ == modelList_[ATTACK] && Model::GetAnimFrame(hModel_) >= 180)
+	if (hModel_ == modelList_[ATTACK] && Model::GetAnimFrame(hModel_) >= 120)
 	{
 		isAttack_ = false;
 		attacked_ = false;
 	}
 
-	if (status.hp_ < 1)
+	if (status_.hp_ < 1)
 	{
 		KillMe();
 	}
@@ -81,7 +72,7 @@ void Mushroom::Attack()
 {
 	for (int i = 0; i < inRangeChara_.size(); i++)
 	{
-		inRangeChara_[i]->ControlHP(-status.power_);
+		inRangeChara_[i]->ControlHP(-status_.power_);
 	}
 	attacked_ = true;
 }
