@@ -23,6 +23,12 @@ void Button::Initialize(int _x, int _y, std::string _fileName)
 	isPress_ = false;
 }
 
+void Button::Initialize(int _x, int _y)
+{
+	x_ = _x;
+	y_ = -_y;
+}
+
 void Button::Update()
 {
 	isPress_ = false;
@@ -53,6 +59,17 @@ void Button::Draw()
 
 void Button::Release()
 {
+}
+
+void Button::LoadButtonImage(std::string _fileName)
+{
+	hPict_ = Image::Load(_fileName.c_str());
+	assert(hPict_ >= 0);
+
+	XMFLOAT3 size = Image::GetImageSize(hPict_);
+
+	size_.w_ = size.x * 2;
+	size_.h_ = size.y * 2;
 }
 
 void Button::SetPosition(XMFLOAT3 _pos)

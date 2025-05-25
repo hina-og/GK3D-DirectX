@@ -14,7 +14,6 @@ enum CHARA_TYPE
 	SLIME,
 	GOLEM,
 	GHOST,
-	FAILURE,
 	CHARA_END
 };
 

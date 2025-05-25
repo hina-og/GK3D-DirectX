@@ -49,10 +49,10 @@ void Battle::Initialize()
 	enemy = Instantiate<Enemy>(this);
 	
 	
-	pot = Instantiate<Pot>(this);
+	//pot = Instantiate<Pot>(this);
 	material = Instantiate<MaterialTable>(this);
 	
-	pot->SetPosition(material->GetPosition().x, -450, 0);
+	//pot->SetPosition(material->GetPosition().x, -450, 0);
 
 	//Instantiate<Mouse>(this);
 

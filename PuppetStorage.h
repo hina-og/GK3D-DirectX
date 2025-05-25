@@ -1,6 +1,7 @@
 #pragma once
 #include "Button.h"
 #include "Puppet.h"
+#include "Engine/CsvReader.h"
 #include "Engine/Text.h"
 
 struct Storage
@@ -29,6 +30,7 @@ public:
 	void Draw();
 	void Release();
 
+	void LoadImageData(CsvReader _csv);
 	void AddStorage(int _type);
 };
 

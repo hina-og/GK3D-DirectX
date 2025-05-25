@@ -25,10 +25,12 @@ public:
 
 	Button();
 	void Initialize(int _x, int _y, std::string _fileName);
+	void Initialize(int _x, int _y);
 	void Update();
 	void Draw();
 	void Release();
 
+	void LoadButtonImage(std::string _fileName);
 	void SetPosition(XMFLOAT3 _pos);
 	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetSize();

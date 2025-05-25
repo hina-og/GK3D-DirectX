@@ -95,4 +95,8 @@ namespace Image
 	//画像サイズの取得
 	//戻値：画像サイズ
 	XMFLOAT3 GetImageSize(int handle);
+
+	//画像位置の取得
+	//戻り値：画像位置
+	XMFLOAT3 GetImagePosition(int handle);
 }

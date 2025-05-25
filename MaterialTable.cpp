@@ -11,68 +11,77 @@ MaterialTable::MaterialTable(GameObject* parent)
 void MaterialTable::Initialize()
 {
 
-	CsvReader csv("Image\\ImageData.csv");
-	struct imageData
+	CsvReader csv("GameData\\ImageData.csv");
+
+	//storage = Instantiate<PuppetStorage>(this);
+	//storage->LoadImageData(csv);
+
+	enum IMAGE_DATA//読み込む画像データの順番
 	{
-		std::string name;
-		float scaleX;
-		float scaleY;
-		int distX;
-		int distY;
+		name = 0,
+		posX,
+		posY,
+		scaleX,
+		scaleY,
 	};
 
-	std::vector<imageData> image;
-
-
-	storage = Instantiate<PuppetStorage>(this);
-
-	hTable_ = Image::Load("Image\\MaterialTable.png");
-	assert(hTable_ >= 0);
-
-	transform_.scale_ = { 0.8,1.0,1.0 };
-	Image::SeScale(hTable_, transform_.scale_);
-	transform_.position_ = { -(float)Direct3D::screenWidth_ + Image::GetImageSize(hTable_).x,(float)Direct3D::screenHeight_ - Image::GetImageSize(hTable_).y,0 };
-	Image::SetTransform(hTable_, transform_);
-
-	std::string materialName_[MATERIAL_NUM]
+	CsvReader csvMaterial("GameData\\Recipe.csv");
+	materialName_.resize(csvMaterial.GetColumns(0) - 1);
+	for (int column = 1; column < csvMaterial.GetColumns(0); column++)
 	{
-		"bone",
-		"meat",
-		"soul",
-		"bacteria",
-		"rock",
-		"brain",
-		"water"
-	};
-
-	for (int i = 0; i < MATERIAL_NUM; i++)
-	{
-		materialList_[i].type = i;
-
-		materialList_[i].name = materialName_[i];
-
-		std::string fileName_ = "Image\\" + materialList_[i].name + ".png";
-		materialList_[i].button.Initialize(0, 0, fileName_);
-
-		materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x - Direct3D::screenWidth_ + materialList_[i].button.GetSize().x / 2 + Image::GetImageSize(hTable_).x - TABLE_SIZE * materialList_[i].button.GetSize().x / 2;
-		materialList_[i].y = transform_.position_.y - (i / TABLE_SIZE * materialList_[i].button.GetSize().y - Image::GetImageSize(hTable_).y + materialList_[i].button.GetSize().y / 2) + table.y - 128;
-
-		materialList_[i].button.SetPosition({ (float)materialList_[i].x ,(float)materialList_[i].y,0 });
-		materialList_[i].num = INIT_MATERIAL_NUM;
-		materialList_[i].text.Initialize();
+		materialName_[column - 1] += csvMaterial.GetString(0, column);
 	}
 
-	for (int i = 0; i < TABLE_SIZE; i++)
+	for (int line = 1; line < csv.GetLines() - 1; line++)
 	{
-		table.material[i].type = MATERIAL_TYPE::EMPTY;
-		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
+		if (csv.GetString(line, name) == "Material")
+		{
+			for (int i = 0; i < materialName_.size(); i++)
+			{
+				materialList_[i].type = i;
 
-		table.material[i].x = i * table.material[i].button.GetSize().x - Direct3D::screenWidth_ + table.material[i].button.GetSize().x / 2 + Image::GetImageSize(hTable_).x - TABLE_SIZE * table.material[i].button.GetSize().x / 2;
-		table.material[i].y = table.y;
-		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
+				materialList_[i].name = materialName_[i];
 
-		table.material[i].name = "empty";
+				std::string fileName = "Image\\" + materialList_[i].name + ".png";
+				materialList_[i].button.LoadButtonImage(fileName);
+
+				materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x + csv.GetFloat(line, posX);
+				materialList_[i].y = i / TABLE_SIZE * materialList_[i].button.GetSize().y + csv.GetFloat(line, posY);
+				materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y);
+				materialList_[i].num = INIT_MATERIAL_NUM;
+				materialList_[i].text.Initialize();
+			}
+		}
+		else if (csv.GetString(line, name) == "Table")
+		{
+			for (int i = 0; i < TABLE_SIZE; i++)
+			{
+				table.material[i].type = MATERIAL_TYPE::EMPTY;
+				table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
+
+				table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(line, posX);
+				table.material[i].y = table.y - 300;
+				table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
+
+				table.material[i].name = "empty";
+			}
+		}
+		else
+		{
+			hTable_ = Image::Load("Image\\" + csv.GetString(line, name) + ".png");
+			assert(hTable_ >= 0);
+			Transform ftrans;
+			ftrans.position_ = { csv.GetFloat(line,posX),csv.GetFloat(line,posY),1.0 };
+			ftrans.scale_ = { csv.GetFloat(line,scaleX),csv.GetFloat(line,scaleY),1.0 };
+			Image::SetTransform(hTable_, ftrans);
+		}
 	}
+
+	
+
+
+
+
 
 	makeButton_.Initialize(transform_.position_.x,400, "Image\\Make.png");
 
@@ -81,7 +90,7 @@ void MaterialTable::Initialize()
 
 void MaterialTable::Update()
 {
-	for (int i = 0; i < MATERIAL_NUM; i++)
+	for (int i = 0; i < materialName_.size(); i++)
 	{
 		materialList_[i].button.Update();
 	}
@@ -91,7 +100,7 @@ void MaterialTable::Update()
 	}
 	makeButton_.Update();
 
-	for (int i = 0; i < MATERIAL_NUM; i++)
+	for (int i = 0; i < materialName_.size(); i++)
 	{
 		if (materialList_[i].button.isPress_ && table.num < TABLE_SIZE && 0 < materialList_[i].num)
 		{
@@ -108,7 +117,7 @@ void MaterialTable::Update()
 		if (table.material[i].button.isPress_ && 0 < table.num && table.material[i].name != "empty")
 		{
 
-			for (int j = 0; j < MATERIAL_NUM; j++)
+			for (int j = 0; j < materialName_.size(); j++)
 			{
 				if (table.material[i].type == materialList_[j].type)
 				{
@@ -134,16 +143,16 @@ void MaterialTable::Update()
 
 	if (makeButton_.isPress_)
 	{
-		storage->AddStorage(MakePuppet());
+		//storage->AddStorage(MakePuppet());
 		TableReset();
 	}
 }
 
 void MaterialTable::Draw()
 {
-	Image::Draw(hTable_);
+	//Image::Draw(hTable_);
 
-	for (int i = 0; i < MATERIAL_NUM; i++)
+	for (int i = 0; i < materialName_.size(); i++)
 	{
 		materialList_[i].button.Draw();
 		materialList_[i].text.Draw(materialList_[i].x + 670, 1280 - materialList_[i].y -900, materialList_[i].num);
@@ -164,101 +173,48 @@ void MaterialTable::ReadRecipe()
 {
 	CsvReader csv("GameData\\Recipe.csv");
 	
-	for (int line = 0;line < csv.GetLines();line++)
+	for (int line = 1;line < csv.GetLines();line++)
 	{
 		Recipe r;
-		std::string recipeData[RECIPE_DATA_SIZE];
-		for (int column = 0;column < csv.GetColumns(line);column++)
+		for (int column = 1;column < csv.GetColumns(line);column++)
 		{
-			recipeData[column] = csv.GetString(line, column);
+			r.ratio[column - 1] = csv.GetInt(line, column);
 		}
-
-		for (int i = 0; i < RECIPE_DATA_SIZE - 1; i++)
-		{
-			switch (StringToMaterialType(recipeData[i]))
-			{
-			case BONE:
-				r.materialType[i] = MATERIAL_TYPE::BONE;
-				break;
-			case MEAT:
-				r.materialType[i] = MATERIAL_TYPE::MEAT;
-				break;
-			case SOUL:
-				r.materialType[i] = MATERIAL_TYPE::SOUL;
-				break;
-			case BACTERIA:
-				r.materialType[i] = MATERIAL_TYPE::BACTERIA;
-				break;
-			case ROCK:
-				r.materialType[i] = MATERIAL_TYPE::ROCK;
-				break;
-			case BRAIN:
-				r.materialType[i] = MATERIAL_TYPE::BRAIN;
-				break;
-			case WATER:
-				r.materialType[i] = MATERIAL_TYPE::WATER;
-				break;
-			case EMPTY:
-				r.materialType[i] = MATERIAL_TYPE::EMPTY;
-				break;
-			default:
-				r.materialType[i] = MATERIAL_TYPE::FREE;
-				break;
-			}
-		}
-		switch (StringToCharaType(recipeData[RECIPE_DATA_SIZE - 1]))
-		{
-		case MOUSE:
-			r.puppetType = CHARA_TYPE::MOUSE;
-			break;
-		case ZOMBIE:
-			r.puppetType = CHARA_TYPE::ZOMBIE;
-			break;
-		case MUSHROOM:
-			r.puppetType = CHARA_TYPE::MUSHROOM;
-			break;
-		case SLIME:
-			r.puppetType = CHARA_TYPE::SLIME;
-			break;
-		case GOLEM:
-			r.puppetType = CHARA_TYPE::GOLEM;
-			break;
-		case GHOST:
-			r.puppetType = CHARA_TYPE::GHOST;
-			break;
-		default:
-			r.puppetType = CHARA_TYPE::FAILURE;
-			break;
-		}
+		r.puppetType = line - 1;
 		recipeList_.push_back(r);
 	}
 }
 
 int MaterialTable::MakePuppet()
 {
-	int returnType = FAILURE;
-	bool allTrue = false;
+	int resoult = MOUSE;
+	int material[MATERIAL_END];
+	for (int i = 0; i < materialName_.size(); i++)
+	{
+		material[i] = 0;
+	}
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
-		for (int recipeNum = 0;recipeNum < recipeList_.size();recipeNum++)
+		material[table.material[i].type] += 1;
+	}
+	for (int recipeNum = 0; recipeNum < recipeList_.size(); recipeNum++)
+	{
+		for (int materialNum = 0; materialNum < materialName_.size(); materialNum++)
 		{
-			for (int j = 0;j < TABLE_SIZE;j++)
+			if (material[materialNum] < recipeList_[recipeNum].ratio[materialNum])
 			{
-				if (recipeList_[recipeNum].materialType[j] != table.material[j].type)
-				{
-					break;
-				}
-				if (j == TABLE_SIZE - 1)
-				{
-					allTrue = true;
-					returnType = recipeList_[recipeNum].puppetType;
-				}
+				break;
+			}
+
+			if (materialNum == materialName_.size() - 1)
+			{
+				resoult = recipeNum;
 			}
 		}
 	}
 
-	return returnType;
+	return resoult;
 }
 
 void MaterialTable::TableReset()
@@ -275,19 +231,19 @@ void MaterialTable::TableReset()
 
 int MaterialTable::GetSelectStragePuppet()
 {
-	storage->puppetList_[storage->selectPuppetNumber].num--;
+	//storage->puppetList_[storage->selectPuppetNumber].num--;
 	
-	return storage->selectPuppetNumber;
+	return 1;//storage->selectPuppetNumber;
 }
 
 bool MaterialTable::isNotEmpty()
 {
-	return storage->puppetList_[storage->selectPuppetNumber].num > 0;
+	return true;//storage->puppetList_[storage->selectPuppetNumber].num > 0;
 }
 
 void MaterialTable::GetRandomMaterial()
 {
-	materialList_[rand() % MATERIAL_END].num++;
+	materialList_[rand() % materialName_.size()].num++;
 }
 
 MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)
@@ -308,10 +264,8 @@ MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)
 		return WATER;
 	if (name == "EMPTY") 
 		return EMPTY;
-	if (name == "FREE") 
-		return FREE;
 
-	return FREE;  // 不明な場合
+	return EMPTY;
 }
 
 CHARA_TYPE MaterialTable::StringToCharaType(const std::string& name)
@@ -328,8 +282,6 @@ CHARA_TYPE MaterialTable::StringToCharaType(const std::string& name)
 		return GOLEM;
 	if (name == "GHOST")
 		return GHOST;
-	if (name == "FAILURE") 
-		return FAILURE;
 
-	return FAILURE;  // 不明な場合
+	return MOUSE;
 }

@@ -19,12 +19,9 @@ enum MATERIAL_TYPE
 	ROCK,
 	BRAIN,
 	WATER,
-	EMPTY,
-	FREE,
 	MATERIAL_END,
+	EMPTY,
 };
-
-const int MATERIAL_NUM{ MATERIAL_END - 2 };
 
 enum MATERIAL_TAG
 {
@@ -54,19 +51,20 @@ struct Table
 
 struct Recipe
 {
-	int materialType[TABLE_SIZE];
-	int puppetType;
+	int ratio[MATERIAL_END];//ëfçﬁÇÃäÑçá
+	int puppetType;//çÏÇÍÇÈÉLÉÉÉâ
 };
 
 class MaterialTable
 	: public GameObject
 {
 	const int INIT_MATERIAL_NUM{ 5 };
+	std::vector<std::string> materialName_;
 
 	int hTable_;
 	Material materialList_[MATERIAL_TYPE::MATERIAL_END];
 	Table table;
-	PuppetStorage* storage;
+	//PuppetStorage* storage;
 
 	Button makeButton_;
 

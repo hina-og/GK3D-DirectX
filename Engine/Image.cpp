@@ -207,5 +207,11 @@ namespace Image
 	{
 		return {_datas[handle]->pSprite->GetTextureSize().x * _datas[handle]->transform.scale_.x, _datas[handle]->pSprite->GetTextureSize().y* _datas[handle]->transform.scale_.y, 0};
 	}
+
+	XMFLOAT3 GetImagePosition(int handle)
+	{
+		return _datas[handle]->transform.position_;
+	}
+	
 }
 

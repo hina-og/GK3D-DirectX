@@ -26,7 +26,6 @@ void PuppetStorage::Initialize()
 		"Slime",
 		"Golem",
 		"Ghost",
-		"Potato"
 		//"Failure"
 	};
 
@@ -79,6 +78,10 @@ void PuppetStorage::Draw()
 }
 
 void PuppetStorage::Release()
+{
+}
+
+void PuppetStorage::LoadImageData(CsvReader _csv)
 {
 }
 

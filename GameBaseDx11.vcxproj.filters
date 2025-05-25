@@ -39,6 +39,9 @@
     <Filter Include="Scene\TitleScene">
       <UniqueIdentifier>{7bd55817-dfe4-42c4-bf54-544828187f5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene\PlayScene\Battle\Unit">
+      <UniqueIdentifier>{43e62ef0-103b-4b50-ae24-ce87732e09bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -119,22 +122,13 @@
     <ClCompile Include="Char.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClCompile>
     <ClCompile Include="MaterialTable.cpp">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
     <ClCompile Include="PuppetStorage.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
     <ClCompile Include="Stage.cpp">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClCompile>
-    <ClCompile Include="Unit.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
     <ClCompile Include="Zombie.cpp">
@@ -175,6 +169,15 @@
     </ClCompile>
     <ClCompile Include="Slime.cpp">
       <Filter>Scene\PlayScene\Battle\Puppet</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Scene\PlayScene\Battle\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Scene\PlayScene\Battle\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>Scene\PlayScene\Battle\Unit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,13 +259,7 @@
     <ClInclude Include="Char.h">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClInclude>
     <ClInclude Include="MaterialTable.h">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
     <ClInclude Include="Pot.h">
@@ -272,9 +269,6 @@
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
     <ClInclude Include="Stage.h">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClInclude>
-    <ClInclude Include="Unit.h">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.h">
@@ -315,6 +309,15 @@
     </ClInclude>
     <ClInclude Include="Golem.h">
       <Filter>Scene\PlayScene\Battle\Puppet</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Scene\PlayScene\Battle\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Scene\PlayScene\Battle\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>Scene\PlayScene\Battle\Unit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
