@@ -13,8 +13,8 @@ void MaterialTable::Initialize()
 
 	CsvReader csv("GameData\\ImageData.csv");
 
-	//storage = Instantiate<PuppetStorage>(this);
-	//storage->LoadImageData(csv);
+	storage = Instantiate<PuppetStorage>(this);
+	storage->LoadImageData(csv);
 
 	enum IMAGE_DATA//“Ç‚İ‚Ş‰æ‘œƒf[ƒ^‚Ì‡”Ô
 	{
@@ -32,58 +32,54 @@ void MaterialTable::Initialize()
 		materialName_[column - 1] += csvMaterial.GetString(0, column);
 	}
 
-	for (int line = 1; line < csv.GetLines() - 1; line++)
-	{
-		if (csv.GetString(line, name) == "Material")
-		{
-			for (int i = 0; i < materialName_.size(); i++)
-			{
-				materialList_[i].type = i;
-
-				materialList_[i].name = materialName_[i];
-
-				std::string fileName = "Image\\" + materialList_[i].name + ".png";
-				materialList_[i].button.LoadButtonImage(fileName);
-
-				materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x + csv.GetFloat(line, posX);
-				materialList_[i].y = i / TABLE_SIZE * materialList_[i].button.GetSize().y + csv.GetFloat(line, posY);
-				materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y);
-				materialList_[i].num = INIT_MATERIAL_NUM;
-				materialList_[i].text.Initialize();
-			}
-		}
-		else if (csv.GetString(line, name) == "Table")
-		{
-			for (int i = 0; i < TABLE_SIZE; i++)
-			{
-				table.material[i].type = MATERIAL_TYPE::EMPTY;
-				table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
-
-				table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(line, posX);
-				table.material[i].y = table.y - 300;
-				table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
-
-				table.material[i].name = "empty";
-			}
-		}
-		else
-		{
-			hTable_ = Image::Load("Image\\" + csv.GetString(line, name) + ".png");
-			assert(hTable_ >= 0);
-			Transform ftrans;
-			ftrans.position_ = { csv.GetFloat(line,posX),csv.GetFloat(line,posY),1.0 };
-			ftrans.scale_ = { csv.GetFloat(line,scaleX),csv.GetFloat(line,scaleY),1.0 };
-			Image::SetTransform(hTable_, ftrans);
-		}
-	}
-
+	hTable_ = Image::Load("Image\\" + csv.GetString(1, name) + ".png");
+	assert(hTable_ >= 0);
+	Transform ftrans;
+	ftrans.position_ = { csv.GetFloat(1,posX),csv.GetFloat(1,posY),1.0 };
+	ftrans.scale_ = { csv.GetFloat(1,scaleX),csv.GetFloat(1,scaleY),1.0 };
+	Image::SetTransform(hTable_, ftrans);
 	
 
+	hTableFrame_ = Image::Load("Image\\" + csv.GetString(5, name) + ".png");
+	assert(hTableFrame_ >= 0);
+	Image::SetTransform(hTableFrame_, ftrans);
 
 
+	for (int i = 0; i < materialName_.size(); i++)
+	{
+		materialList_[i].type = i;
+
+		materialList_[i].name = materialName_[i];
+
+		std::string fileName = "Image\\" + materialList_[i].name + ".png";
+		materialList_[i].button.LoadButtonImage(fileName);
+
+		materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x + csv.GetFloat(2, posX);
+		materialList_[i].y = i / TABLE_SIZE * materialList_[i].button.GetSize().y + csv.GetFloat(2, posY);
+		materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y);
+		materialList_[i].num = INIT_MATERIAL_NUM;
+		materialList_[i].text.Initialize();
+		materialList_[i].textX = csv.GetFloat(6, posX);
+		materialList_[i].textY = csv.GetFloat(6, posY);
+	}
 
 
-	makeButton_.Initialize(transform_.position_.x,400, "Image\\Make.png");
+	for (int i = 0; i < TABLE_SIZE; i++)
+	{
+		table.material[i].type = MATERIAL_TYPE::EMPTY;
+		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(3, posX);
+		table.material[i].y = csv.GetFloat(3, posY);
+		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
+
+		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(3,posX);
+		table.material[i].y = csv.GetFloat(3,posY);
+		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
+
+		table.material[i].name = "empty";
+	}
+
+
+	makeButton_.Initialize(csv.GetFloat(4,posX), csv.GetFloat(4,posY), "Image\\" + csv.GetString(4,name) + ".png");
 
 	ReadRecipe();
 }
@@ -143,25 +139,28 @@ void MaterialTable::Update()
 
 	if (makeButton_.isPress_)
 	{
-		//storage->AddStorage(MakePuppet());
+		storage->AddStorage(MakePuppet());
 		TableReset();
 	}
 }
 
 void MaterialTable::Draw()
 {
-	//Image::Draw(hTable_);
+	Image::Draw(hTable_);
 
 	for (int i = 0; i < materialName_.size(); i++)
 	{
 		materialList_[i].button.Draw();
-		materialList_[i].text.Draw(materialList_[i].x + 670, 1280 - materialList_[i].y -900, materialList_[i].num);
+		materialList_[i].text.Draw(materialList_[i].x + materialList_[i].textX, materialList_[i].y + materialList_[i].textY, materialList_[i].num);
 	}
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		table.material[i].button.Draw();
 	}
+	
+	Image::Draw(hTableFrame_);
+
 	makeButton_.Draw();
 }
 

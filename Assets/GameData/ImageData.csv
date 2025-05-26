@@ -1,4 +1,7 @@
 name,positionX,positionY,scaleX,scaleY
-MaterialTable,0,0,0.8,1.0
-Material,-1125,-550,1.0,1.0
-table,-1125,0,1.0,1.0
+MaterialTable,-872.5,320,0.8,1
+Material,-1125,-550,1,1
+Table,-1125,-200,1,1
+Make,-872.5,340,1,1
+MaterialTableFrame,-872.5,320,0.8,1
+MaterialNumText,650,390,1,1

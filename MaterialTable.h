@@ -38,6 +38,8 @@ struct Material
 	std::string name;
 	int num;
 	Text text;
+	int textX;
+	int textY;
 };
 
 struct Table
@@ -62,9 +64,10 @@ class MaterialTable
 	std::vector<std::string> materialName_;
 
 	int hTable_;
+	int hTableFrame_;
 	Material materialList_[MATERIAL_TYPE::MATERIAL_END];
 	Table table;
-	//PuppetStorage* storage;
+	PuppetStorage* storage;
 
 	Button makeButton_;
 

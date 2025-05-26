@@ -5,7 +5,6 @@
 PuppetStorage::PuppetStorage(GameObject* parent)
 	:GameObject(parent, "PuppetStorage")
 {
-	int i = 0;
 }
 
 void PuppetStorage::Initialize()
