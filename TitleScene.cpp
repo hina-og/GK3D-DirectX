@@ -68,4 +68,5 @@ void TitleScene::Draw()
 
 void TitleScene::Release()
 {
+	Image::AllRelease();
 }

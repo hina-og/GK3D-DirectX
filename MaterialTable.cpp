@@ -1,6 +1,7 @@
 #include "MaterialTable.h"
 #include "Engine/CsvReader.h"
 #include "Engine/Image.h"
+#include "Engine/Audio.h"
 #include "Engine/Direct3D.h"
 
 MaterialTable::MaterialTable(GameObject* parent)
@@ -13,17 +14,11 @@ void MaterialTable::Initialize()
 
 	CsvReader csv("GameData\\ImageData.csv");
 
+
 	storage = Instantiate<PuppetStorage>(this);
 	storage->LoadImageData(csv);
 
-	enum IMAGE_DATA//読み込む画像データの順番
-	{
-		name = 0,
-		posX,
-		posY,
-		scaleX,
-		scaleY,
-	};
+
 
 	CsvReader csvMaterial("GameData\\Recipe.csv");
 	materialName_.resize(csvMaterial.GetColumns(0) - 1);
@@ -31,6 +26,7 @@ void MaterialTable::Initialize()
 	{
 		materialName_[column - 1] += csvMaterial.GetString(0, column);
 	}
+
 
 	hTable_ = Image::Load("Image\\" + csv.GetString(1, name) + ".png");
 	assert(hTable_ >= 0);
@@ -81,6 +77,12 @@ void MaterialTable::Initialize()
 
 	makeButton_.Initialize(csv.GetFloat(4,posX), csv.GetFloat(4,posY), "Image\\" + csv.GetString(4,name) + ".png");
 
+	addAnim_.Initialize("Image\\flashAnim.png", 0, 0, 64, 64, false, 3, false);
+	addAnim_.SetSpeed(0.15);
+
+	//sSelect_ = Audio::Load("Sounds\\SE\\add.wav", false, 1);
+
+
 	ReadRecipe();
 }
 
@@ -96,18 +98,22 @@ void MaterialTable::Update()
 	}
 	makeButton_.Update();
 
+
+	//素材を選択したらテーブルに置く
 	for (int i = 0; i < materialName_.size(); i++)
 	{
 		if (materialList_[i].button.isPress_ && table.num < TABLE_SIZE && 0 < materialList_[i].num)
 		{
 			table.material[table.num].type = materialList_[i].type;
 			table.material[table.num].name = materialList_[i].name;
-			table.material[table.num].button.Initialize(table.material[table.num].x, table.material[table.num].y, "Image\\" + table.material[table.num].name + ".png");
+			table.material[table.num].button.ChangeImage("Image\\" + table.material[table.num].name + ".png");
 			table.num++;
 			materialList_[i].num--;
 		}
 	}
 
+
+	//選択したテーブルの素材を戻す
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		if (table.material[i].button.isPress_ && 0 < table.num && table.material[i].name != "empty")
@@ -125,7 +131,7 @@ void MaterialTable::Update()
 			{
 				table.material[j].type = table.material[j + 1].type;
 				table.material[j].name = table.material[j + 1].name;
-				table.material[j].button.Initialize(table.material[j].x, table.material[j].y, "Image\\" + table.material[j].name + ".png");
+				table.material[j].button.ChangeImage("Image\\" + table.material[j].name + ".png");
 			}
 
 			
@@ -133,15 +139,17 @@ void MaterialTable::Update()
 
 			table.material[table.num].type = MATERIAL_TYPE::EMPTY;
 			table.material[table.num].name = "empty";
-			table.material[table.num].button.Initialize(table.material[table.num].x, table.material[table.num].y, "Image\\empty.png");
+			table.material[table.num].button.ChangeImage("Image\\empty.png");
+
 		}
 	}
-
 	if (makeButton_.isPress_)
 	{
 		storage->AddStorage(MakePuppet());
 		TableReset();
+		//Audio::Play(sSelect_);
 	}
+	addAnim_.Update();
 }
 
 void MaterialTable::Draw()
@@ -162,6 +170,7 @@ void MaterialTable::Draw()
 	Image::Draw(hTableFrame_);
 
 	makeButton_.Draw();
+	addAnim_.Draw();
 }
 
 void MaterialTable::Release()
@@ -222,27 +231,29 @@ void MaterialTable::TableReset()
 	{
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
 		table.material[i].name = "empty";
-		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");	
-		
+		table.material[i].button.ChangeImage("Image\\empty.png");
 		table.num = 0;
 	}
 }
 
 int MaterialTable::GetSelectStragePuppet()
 {
-	//storage->puppetList_[storage->selectPuppetNumber].num--;
+	storage->puppetList_[storage->selectPuppetNumber].num--;
 	
-	return 1;//storage->selectPuppetNumber;
+	return storage->selectPuppetNumber;
 }
 
 bool MaterialTable::isNotEmpty()
 {
-	return true;//storage->puppetList_[storage->selectPuppetNumber].num > 0;
+	return storage->puppetList_[storage->selectPuppetNumber].num > 0;
 }
 
 void MaterialTable::GetRandomMaterial()
 {
-	materialList_[rand() % materialName_.size()].num++;
+	int randNum = rand() % materialName_.size();
+	materialList_[randNum].num++;
+	addAnim_.SetPosition({ (float)materialList_[randNum].x,(float)materialList_[randNum].y,0 });
+	addAnim_.Start();
 }
 
 MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)

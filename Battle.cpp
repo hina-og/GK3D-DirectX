@@ -54,8 +54,6 @@ void Battle::Initialize()
 	
 	//pot->SetPosition(material->GetPosition().x, -450, 0);
 
-	//Instantiate<Mouse>(this);
-
 	time = INIT_BATTLE_TIME;
 	timeText.Initialize();
 	isTimeStert = false;

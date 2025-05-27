@@ -5,6 +5,7 @@
 #include <vector>
 #include "PuppetStorage.h"
 #include "Pot.h"
+#include "Animation.h"
 
 const int TABLE_SIZE{ 5 };
 const int RECIPE_DATA_SIZE{ 6 };
@@ -57,6 +58,15 @@ struct Recipe
 	int puppetType;//作れるキャラ
 };
 
+enum IMAGE_DATA//読み込む画像データの順番
+{
+	name = 0,
+	posX,
+	posY,
+	scaleX,
+	scaleY,
+};
+
 class MaterialTable
 	: public GameObject
 {
@@ -65,11 +75,15 @@ class MaterialTable
 
 	int hTable_;
 	int hTableFrame_;
+
+	int sSelect_;
+
 	Material materialList_[MATERIAL_TYPE::MATERIAL_END];
 	Table table;
 	PuppetStorage* storage;
 
 	Button makeButton_;
+	Animation addAnim_;
 
 	std::vector<Recipe> recipeList_;
 

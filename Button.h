@@ -35,5 +35,6 @@ public:
 	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetSize();
 	bool IsMouseInButton(XMFLOAT3 _mousePos);
+	void ChangeImage(std::string _fileName);
 };
 

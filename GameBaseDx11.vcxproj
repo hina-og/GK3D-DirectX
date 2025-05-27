@@ -133,6 +133,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Battle.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Char.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Battle.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Char.h" />
@@ -212,6 +214,7 @@
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Golem.h" />
+    <ClInclude Include="ImageData.h" />
     <ClInclude Include="MaterialTable.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Mushroom.h" />

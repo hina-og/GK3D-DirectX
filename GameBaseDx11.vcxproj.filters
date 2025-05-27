@@ -179,6 +179,7 @@
     <ClCompile Include="Unit.cpp">
       <Filter>Scene\PlayScene\Battle\Unit</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -319,6 +320,8 @@
     <ClInclude Include="Unit.h">
       <Filter>Scene\PlayScene\Battle\Unit</Filter>
     </ClInclude>
+    <ClInclude Include="ImageData.h" />
+    <ClInclude Include="Animation.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

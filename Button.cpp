@@ -98,3 +98,9 @@ bool Button::IsMouseInButton(XMFLOAT3 _mousePos)
 	}
 	return false;
 }
+
+void Button::ChangeImage(std::string _fileName)
+{
+	hPict_ = Image::Load(_fileName.c_str());
+	assert(hPict_ >= 0);
+}
