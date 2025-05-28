@@ -40,11 +40,11 @@ void Mouse::Update()
 		if(Model::GetAnimFrame(hModel_) >= 90 && !attacked_)
 			Attack();
 	}
-	else if(hModel_ != modelList_[RUN])
+	else/* if(hModel_ != modelList_[RUN])
 	{
 		hModel_ = modelList_[RUN];
-		Model::SetAnimFrame(hModel_, 15, 170, 3);
-	}
+		Model::SetAnimFrame(hModel_, animData_.sRun_, animData_.eRun_, 3);
+	}*/
 
 
 	if (hModel_ == modelList_[ATTACK] && Model::GetAnimFrame(hModel_) >= 180)

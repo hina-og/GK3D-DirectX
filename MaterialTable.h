@@ -8,8 +8,6 @@
 #include "Animation.h"
 
 const int TABLE_SIZE{ 5 };
-const int RECIPE_DATA_SIZE{ 6 };
-
 
 enum MATERIAL_TYPE
 {
@@ -76,7 +74,7 @@ class MaterialTable
 	int hTable_;
 	int hTableFrame_;
 
-	int sSelect_;
+	int hSelect_;
 
 	Material materialList_[MATERIAL_TYPE::MATERIAL_END];
 	Table table;

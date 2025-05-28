@@ -118,6 +118,15 @@ public:
 
 	void Move(DIRECTION _dir)
 	{
+		if (hModel_ != modelList_[RUN])
+		{
+			hModel_ = hModel_ = modelList_[RUN];
+			Model::SetAnimFrame(hModel_, 0, animData_.totalRunFrame_, animData_.runSpeed_);
+		}
+		else if (animData_.eRun_ <= Model::GetAnimFrame(hModel_))
+		{
+			Model::SetAnimFrame(hModel_, animData_.sRun_, animData_.eRun_, animData_.runSpeed_);
+		}
 		switch (dir_)
 		{
 		case Puppet::UP:
@@ -147,21 +156,23 @@ public:
 
 protected:
 
+	struct AnimationData
+	{
+		int sRun_;//Runアニメーションのループ開始フレーム
+		int eRun_;//Runアニメーションのループ終了フレーム
+		int runSpeed_;//Runアニメーションの速度
+		int totalRunFrame_;//Runアニメーションのフレーム数
+		int attack_;//攻撃するフレーム
+		int attackSpeed_;//Attackアニメーションの速度
+		int totalAttackFrame_;//Runアニメーションのフレーム数
+	};
+
+	AnimationData animData_;
 	int hModel_;
 	int modelList_[STATE_END];
 	int hPict_;
 	int rangePict_;
 	bool attacked_;
-
-	struct AnimData
-	{
-		int sAttack_;//Attackアニメーションの始まり
-		int eAttack_;//Attackアニメーションの終わり
-		int attack_;//攻撃するフレーム
-		
-		int sRun_;//Runアニメーションのループ開始フレーム
-		int eRun_;//Runアニメーションのループ終了フレーム
-	};
 
 	struct Status
 	{
@@ -174,7 +185,6 @@ protected:
 		float speed_;//移動速度や攻撃速度
 		//--------------------
 	};
-	AnimData anim_;
 	Status status_;
 
 	void Initialize() {};
@@ -192,30 +202,6 @@ protected:
 			{
 				SetStatus(csv, line);
 			}
-			/*switch (_type)
-			{
-			case MOUSE:
-				SetStatus(csv, _type);
-				break;
-			case ZOMBIE:
-				SetStatus(csv, _type);
-				break;
-			case MUSHROOM:
-				SetStatus(csv, _type);
-				break;
-			case SLIME:
-				SetStatus(csv, _type);
-				break;
-			case GOLEM:
-				SetStatus(csv, _type);
-				break;
-			case GHOST:
-				SetStatus(csv, _type);
-				break;
-			default:
-				SetStatus(csv, MOUSE);
-				break;
-			}*/
 		}
 	}
 
@@ -226,6 +212,8 @@ protected:
 		status_.cost_ = _csv.GetInt(_line, 2);
 		status_.power_ = _csv.GetInt(_line, 3);
 		status_.speed_ = _csv.GetFloat(_line, 4);
+		animData_ = { _csv.GetInt(_line, 5), _csv.GetInt(_line, 6), _csv.GetInt(_line, 7), _csv.GetInt(_line, 8), _csv.GetInt(_line, 9), _csv.GetInt(_line, 10), _csv.GetInt(_line, 11) };
+
 
 		modelList_[STAND] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + ".fbx");
 		assert(modelList_[STAND] >= 0);

@@ -5,7 +5,7 @@
 #include "Engine/Direct3D.h"
 
 MaterialTable::MaterialTable(GameObject* parent)
-	: GameObject(parent, "MaterialTable")
+	: GameObject(parent, "MaterialTable"), hSelect_(-1)
 {
 }
 
@@ -80,7 +80,7 @@ void MaterialTable::Initialize()
 	addAnim_.Initialize("Image\\flashAnim.png", 0, 0, 64, 64, false, 3, false);
 	addAnim_.SetSpeed(0.15);
 
-	//sSelect_ = Audio::Load("Sounds\\SE\\add.wav", false, 1);
+	//hSelect_ = Audio::Load("Sounds\\SE\\add.wav");
 
 
 	ReadRecipe();
@@ -147,7 +147,7 @@ void MaterialTable::Update()
 	{
 		storage->AddStorage(MakePuppet());
 		TableReset();
-		//Audio::Play(sSelect_);
+		//Audio::Play(hSelect_);
 	}
 	addAnim_.Update();
 }

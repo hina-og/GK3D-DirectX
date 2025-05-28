@@ -27,6 +27,9 @@ void Stage::Initialize()
 	}
 	startLine_ = mapData_[HEIGHT-1][0].pos_.z + 1;
 	endLine_ = mapData_[0][0].pos_.z - 0.5;
+
+	hGround_ = Model::Load("Model\\Ground.fbx");
+	assert(hGround_ >= 0);
 }
 
 void Stage::Update()
@@ -57,6 +60,7 @@ void Stage::Draw()
 			Model::Draw(mapData_[y][x].tileModel_);
 		}
 	}
+	Model::Draw(hGround_);
 }
 
 void Stage::Release()
