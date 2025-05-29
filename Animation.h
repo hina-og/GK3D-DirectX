@@ -14,6 +14,7 @@ class Animation
 	float addSpeed_;
 
 	bool doLoop_;
+	bool doReverse_;
 	bool doStart_;
 
 	int nowFrame_;//今のフレーム
@@ -45,6 +46,8 @@ public:
 	/// <param name="_nowFrame">アニメーションを始めるフレーム</param>
 	void Start(int _nowFrame);
 	void Start();
+	void ChangeReverse();
+	bool NowReverse();
 	void Stop();
 	void SetSpeed(float _speed);
 	void SetPosition(XMFLOAT3 _pos);

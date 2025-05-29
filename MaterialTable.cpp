@@ -34,11 +34,7 @@ void MaterialTable::Initialize()
 	ftrans.position_ = { csv.GetFloat(1,posX),csv.GetFloat(1,posY),1.0 };
 	ftrans.scale_ = { csv.GetFloat(1,scaleX),csv.GetFloat(1,scaleY),1.0 };
 	Image::SetTransform(hTable_, ftrans);
-	
 
-	hTableFrame_ = Image::Load("Image\\" + csv.GetString(5, name) + ".png");
-	assert(hTableFrame_ >= 0);
-	Image::SetTransform(hTableFrame_, ftrans);
 
 
 	for (int i = 0; i < materialName_.size(); i++)
@@ -55,20 +51,20 @@ void MaterialTable::Initialize()
 		materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y);
 		materialList_[i].num = INIT_MATERIAL_NUM;
 		materialList_[i].text.Initialize();
-		materialList_[i].textX = csv.GetFloat(6, posX);
-		materialList_[i].textY = csv.GetFloat(6, posY);
+		materialList_[i].textX = csv.GetFloat(5, posX);
+		materialList_[i].textY = csv.GetFloat(5, posY);
 	}
 
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
-		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(3, posX);
-		table.material[i].y = csv.GetFloat(3, posY);
+		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(7, posX);
+		table.material[i].y = csv.GetFloat(7, posY);
 		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
 
-		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(3,posX);
-		table.material[i].y = csv.GetFloat(3,posY);
+		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(7,posX);
+		table.material[i].y = csv.GetFloat(7,posY);
 		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
 
 		table.material[i].name = "empty";
@@ -166,8 +162,6 @@ void MaterialTable::Draw()
 	{
 		table.material[i].button.Draw();
 	}
-	
-	Image::Draw(hTableFrame_);
 
 	makeButton_.Draw();
 	addAnim_.Draw();

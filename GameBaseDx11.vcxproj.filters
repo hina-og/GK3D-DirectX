@@ -143,9 +143,6 @@
     <ClCompile Include="SetUp.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Pot.cpp">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClCompile>
     <ClCompile Include="Mushroom.cpp">
       <Filter>Scene\PlayScene\Battle\Puppet</Filter>
     </ClCompile>
@@ -180,6 +177,8 @@
       <Filter>Scene\PlayScene\Battle\Unit</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="SelectStage.cpp" />
+    <ClCompile Include="Calendar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -263,9 +262,6 @@
     <ClInclude Include="MaterialTable.h">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
-    <ClInclude Include="Pot.h">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClInclude>
     <ClInclude Include="PuppetStorage.h">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
@@ -322,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="ImageData.h" />
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="SelectStage.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Calendar.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
@@ -336,5 +335,10 @@
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
       <Filter>02Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3DTank.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

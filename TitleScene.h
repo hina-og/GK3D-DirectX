@@ -1,15 +1,16 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "SelectStage.h"
 #include "Button.h"
+
 class TitleScene :
     public GameObject
 {
     int hPict_;
-    Button easy_;
-    Button normal_;
-    Button hard_;
 
     bool canStart_;
+
+    SelectStage* selectStage_;
 public:
     TitleScene(GameObject* parent);
     void Initialize();

@@ -51,12 +51,10 @@ void PuppetStorage::Release()
 
 void PuppetStorage::LoadImageData(CsvReader _csv)
 {
-	hTable_ = Image::Load("Image\\"+_csv.GetString(7,name) + ".png");
+	hTable_ = Image::Load("Image\\"+_csv.GetString(3,name) + ".png");
 	assert(hTable_ >= 0);
-
-	transform_.scale_ = { 0.8,1.0,1.0 };
-	Image::SeScale(hTable_, transform_.scale_);
-	transform_.position_ = { (float)Direct3D::screenWidth_ - Image::GetImageSize(hTable_).x,(float)Direct3D::screenHeight_ - Image::GetImageSize(hTable_).y,0 };
+	transform_.scale_ = { _csv.GetFloat(3,scaleX),_csv.GetFloat(3,scaleY),0 };
+	transform_.position_ = { _csv.GetFloat(3,posX),_csv.GetFloat(3,posY),0 };
 	Image::SetTransform(hTable_, transform_);
 
 

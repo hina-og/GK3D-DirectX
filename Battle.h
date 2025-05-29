@@ -4,7 +4,6 @@
 #include "Stage.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "Pot.h"
 #include "MaterialTable.h"
 
 class Battle
@@ -37,7 +36,6 @@ class Battle
 	Stage* stage;
 	Player* player;
 	Enemy* enemy;
-	Pot* pot;
 	MaterialTable* material;
 
 	int mouseX;

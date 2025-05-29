@@ -4,7 +4,6 @@
 #include "Puppet.h"
 #include <vector>
 #include "PuppetStorage.h"
-#include "Pot.h"
 #include "Animation.h"
 
 const int TABLE_SIZE{ 5 };
@@ -72,7 +71,6 @@ class MaterialTable
 	std::vector<std::string> materialName_;
 
 	int hTable_;
-	int hTableFrame_;
 
 	int hSelect_;
 

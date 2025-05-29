@@ -14,18 +14,13 @@ void TitleScene::Initialize()
 {
 	hPict_ = Image::Load("Image\\Title.png");
 
-	easy_.Initialize(0, Direct3D::screenHeight_ / 4 * 1, "Image\\Easy.png");
-	normal_.Initialize(0, Direct3D::screenHeight_ / 4 * 2, "Image\\Normal.png");
-	hard_.Initialize(0, Direct3D::screenHeight_ / 4 * 3, "Image\\Hard.png");
-
 	canStart_ = false;
+
+	selectStage_ = Instantiate<SelectStage>(this);
 }
 
 void TitleScene::Update()
 {
-	easy_.Update();
-	normal_.Update();
-	hard_.Update();
 
 	if (Input::IsKey(DIK_D) && Input::IsKey(DIK_I) && Input::IsKey(DIK_E))
 	{
@@ -33,19 +28,25 @@ void TitleScene::Update()
 		canStart_ = true;
 	}
 
-	if (easy_.isPress_)
+	if (selectStage_->decision_)
 	{
-		SetUp::currentDifficulty = Difficulty::Easy;
-		canStart_ = true;
-	}
-	if (normal_.isPress_)
-	{
-		SetUp::currentDifficulty = Difficulty::Normal;
-		canStart_ = true;
-	}
-	if (hard_.isPress_)
-	{
-		SetUp::currentDifficulty = Difficulty::Hard;
+		switch (selectStage_->GetStageNum())
+		{
+		case 0:
+			SetUp::currentDifficulty = Difficulty::Easy;
+			break;
+		case 1:
+			SetUp::currentDifficulty = Difficulty::Normal;
+			break;
+		case 2:
+			SetUp::currentDifficulty = Difficulty::Hard;
+			break;
+		case 3:
+			SetUp::currentDifficulty = Difficulty::Despair;
+			break;
+		default:
+			break;
+		}
 		canStart_ = true;
 	}
 
@@ -60,10 +61,6 @@ void TitleScene::Draw()
 {
 	Image::SetTransform(hPict_, transform_);
 	Image::Draw(hPict_);
-
-	easy_.Draw();
-	normal_.Draw();
-	hard_.Draw();
 }
 
 void TitleScene::Release()

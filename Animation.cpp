@@ -19,6 +19,7 @@ Animation::Animation(std::string _fileName, int _x, int _y, int _w, int _h, bool
 	addSpeed_ = 0;
 	doStart_ = false;
 	isDrawAfterAnimation = _endDraw;
+	doReverse_ = false;
 
 	Image::SetRect(hPict_, 0, 0, rect_.top, rect_.bottom);
 }
@@ -36,36 +37,58 @@ void Animation::Initialize(std::string _fileName, int _x, int _y, int _w, int _h
 	addSpeed_ = 0;
 	doStart_ = false;
 	isDrawAfterAnimation = _endDraw;
-
+	doReverse_ = false;
 	Image::SetRect(hPict_, 0, 0, rect_.top, rect_.bottom);
 }
 
 void Animation::Update()
 {
-	if (nowFrame_ == totalFrame_)
+	if (!doReverse_)
 	{
-		if (doLoop_)
+		if (nowFrame_ == totalFrame_)
 		{
-			nowFrame_ = 0;
+			if (doLoop_)
+			{
+				nowFrame_ = 0;
+			}
+			else
+			{
+				doStart_ = false;
+			}
 		}
-		else
+	}
+	else
+	{
+		if (nowFrame_ == 0)
 		{
-			doStart_ = false;
+			if (doLoop_)
+			{
+				nowFrame_ = totalFrame_;
+			}
+			else
+			{
+				doStart_ = false;
+			}
 		}
 	}
 
 	Image::SetRect(hPict_, rect_.left * nowFrame_, 0, rect_.top, rect_.left);
 
-
-	if(doStart_)
+	if (doStart_)
 	{
 		if (addSpeed_ >= 1.0)
 		{
 			addSpeed_ -= 1.0;
-			nowFrame_ += 1;
+			if (doReverse_)
+				nowFrame_--;
+			else
+				nowFrame_++;
 		}
+
 		addSpeed_ += speed_;
+
 	}
+
 }
 
 void Animation::Draw()
@@ -89,8 +112,21 @@ void Animation::Start(int _nowFrame)
 
 void Animation::Start()
 {
-	nowFrame_ = 0;
+	if (!doReverse_)
+		nowFrame_ = 0;
+	else
+		nowFrame_ = totalFrame_;
 	doStart_ = true;
+}
+
+void Animation::ChangeReverse()
+{
+	doReverse_ = !doReverse_;
+}
+
+bool Animation::NowReverse()
+{
+	return doReverse_;
 }
 
 void Animation::Stop()
