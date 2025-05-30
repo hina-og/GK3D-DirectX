@@ -98,6 +98,9 @@ void Unit::InvaderMove()
 	{
 		if(!puppet_[p]->isAttack_)
 			puppet_[p]->Move(puppet_[p]->dir_);
+
+		if (!puppet_[p]->isAlive_)
+			puppet_[p]->KillMe();
 	}
 }
 

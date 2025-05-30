@@ -8,7 +8,6 @@ class Slime
 public:
 	Slime(GameObject* parent);
 	void Initialize();
-	void Update();
 	void Draw();
 	void Release();
 	void Attack() override;

@@ -5,6 +5,7 @@
 class Calendar
 {
 	Animation hImage_;
+	int hPageSE_;
 	int hNumber_;
 	int day_;
 public:

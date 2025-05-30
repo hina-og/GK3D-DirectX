@@ -72,7 +72,9 @@ class MaterialTable
 
 	int hTable_;
 
+	//‰¹
 	int hSelect_;
+	int hChoise_;
 
 	Material materialList_[MATERIAL_TYPE::MATERIAL_END];
 	Table table;

@@ -1,10 +1,12 @@
 #pragma once
 #include <vector>
+#include <sstream>
 #include "Engine/GameObject.h"
 #include "Engine/Time.h"
 #include "Engine/Input.h"
 #include "Engine/CsvReader.h"
 #include "Engine/Model.h"
+#include "Engine/Audio.h"
 
 enum CHARA_TYPE
 {
@@ -22,6 +24,7 @@ enum CHARA_STATE
 	STAND = 0,
 	RUN,
 	ATTACK,
+	DEAD,
 	STATE_END
 };
 
@@ -55,6 +58,7 @@ public:
 	void ControlHP (int _addNum)
 	{
 		status_.hp_ += _addNum;
+		Audio::Play(hAttackSE_);
 	}
 
 	std::vector<Pos> GetAttackTiles(DIRECTION _dir)
@@ -150,10 +154,13 @@ public:
 	{
 		if (_type == "Mouse") return CHARA_TYPE::MOUSE;
 		if (_type == "Zombie") return CHARA_TYPE::ZOMBIE;
+		if (_type == "Mushrrom") return CHARA_TYPE::MUSHROOM;
+		if (_type == "Slime") return CHARA_TYPE::SLIME;
+		if (_type == "Golem") return CHARA_TYPE::GOLEM;
+		if (_type == "Ghost") return CHARA_TYPE::GHOST;
 	}
 
 	int GetPower() { return status_.power_; }
-
 protected:
 
 	struct AnimationData
@@ -174,6 +181,8 @@ protected:
 	int rangePict_;
 	bool attacked_;
 
+	int hAttackSE_;
+
 	struct Status
 	{
 		//-----ステータス-----
@@ -188,7 +197,35 @@ protected:
 	Status status_;
 
 	void Initialize() {};
-	void Update() {};
+	void Update() 
+	{
+		FacingDirection();
+
+		if (isAttack_)
+		{
+			if (hModel_ != modelList_[ATTACK])
+			{
+				hModel_ = modelList_[ATTACK];
+				Model::SetAnimFrame(hModel_, 1, animData_.totalAttackFrame_, animData_.attackSpeed_);
+			}
+			if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
+				Attack();
+		}
+		else if (hModel_ != modelList_[RUN])
+		{
+			hModel_ = modelList_[RUN];
+			Model::SetAnimFrame(hModel_, 15, animData_.eRun_, animData_.runSpeed_);
+		}
+
+
+		if (hModel_ == modelList_[ATTACK] && Model::GetAnimFrame(hModel_) >= animData_.totalAttackFrame_)
+		{
+			isAttack_ = false;
+			attacked_ = false;
+		}
+
+		Die();
+	};
 	void Draw() {};
 	void Release() {};
 
@@ -203,17 +240,60 @@ protected:
 				SetStatus(csv, line);
 			}
 		}
+
 	}
 
 	void SetStatus(CsvReader _csv, int _line)
 	{
-		status_.name_ = _csv.GetString(_line, 0);
-		status_.hp_ = _csv.GetInt(_line, 1);
-		status_.cost_ = _csv.GetInt(_line, 2);
-		status_.power_ = _csv.GetInt(_line, 3);
-		status_.speed_ = _csv.GetFloat(_line, 4);
-		animData_ = { _csv.GetInt(_line, 5), _csv.GetInt(_line, 6), _csv.GetInt(_line, 7), _csv.GetInt(_line, 8), _csv.GetInt(_line, 9), _csv.GetInt(_line, 10), _csv.GetInt(_line, 11) };
+		enum Read_Data
+		{
+			Name = 0,
+			Hp,
+			Cost,
+			Power,
+			Speed,
+			StartRunFrame,
+			EndRunFrame,
+			RunSpeed,
+			TotalRunFrame,
+			AttackFrame,
+			AttackSpeed,
+			TotalAttackFrame,
+			AttackSE,
+			Range,
+		};
+		status_.name_ = _csv.GetString(_line, Name);
+		status_.hp_ = _csv.GetInt(_line, Hp);
+		status_.cost_ = _csv.GetInt(_line, Cost);
+		status_.power_ = _csv.GetInt(_line, Power);
+		status_.speed_ = _csv.GetFloat(_line, Speed);
+		animData_ = { 
+			_csv.GetInt(_line, StartRunFrame), 
+			_csv.GetInt(_line, EndRunFrame),
+			_csv.GetInt(_line, RunSpeed),
+			_csv.GetInt(_line, TotalRunFrame), 
+			_csv.GetInt(_line, AttackFrame),
+			_csv.GetInt(_line, AttackSpeed),
+			_csv.GetInt(_line, TotalAttackFrame) 
+		};
+		hAttackSE_ = Audio::Load("Sounds\\SE\\" + _csv.GetString(_line, AttackSE) + ".wav",false,5);
+		assert(hAttackSE_ >= 0);
 
+		for (int column = Range;column < _csv.GetColumns(_line);column++)
+		{
+			
+			std::string str = _csv.GetString(_line, column);
+			Pos readRange;
+			char brace1, comma, brace2;
+
+			std::stringstream ss(str);
+			ss >> brace1 >> readRange.x >> comma >> readRange.y >> brace2;
+			if (brace1 == '{' && comma == '|' && brace2 == '}') 
+			{
+				range_.push_back(readRange);
+			}
+
+		}
 
 		modelList_[STAND] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + ".fbx");
 		assert(modelList_[STAND] >= 0);
@@ -238,6 +318,18 @@ protected:
 		}
 	}
 
+	void Die() 
+	{
+		if (status_.hp_ < 1 && isAlive_)
+		{
+			isAlive_ = false;
+			hModel_ = Model::Load("Model\\Garbage.fbx");
+			assert(hModel_ >= 0);
+		}
+		
+	}
+
 	virtual void Attack() {};
+
 };
 

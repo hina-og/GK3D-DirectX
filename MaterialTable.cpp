@@ -76,7 +76,8 @@ void MaterialTable::Initialize()
 	addAnim_.Initialize("Image\\flashAnim.png", 0, 0, 64, 64, false, 3, false);
 	addAnim_.SetSpeed(0.15);
 
-	//hSelect_ = Audio::Load("Sounds\\SE\\add.wav");
+	hSelect_ = Audio::Load("Sounds\\SE\\add.wav");
+	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, 5);
 
 
 	ReadRecipe();
@@ -105,6 +106,7 @@ void MaterialTable::Update()
 			table.material[table.num].button.ChangeImage("Image\\" + table.material[table.num].name + ".png");
 			table.num++;
 			materialList_[i].num--;
+			Audio::Play(hChoise_);
 		}
 	}
 
@@ -136,14 +138,14 @@ void MaterialTable::Update()
 			table.material[table.num].type = MATERIAL_TYPE::EMPTY;
 			table.material[table.num].name = "empty";
 			table.material[table.num].button.ChangeImage("Image\\empty.png");
-
+			Audio::Play(hChoise_);
 		}
 	}
-	if (makeButton_.isPress_)
+	if (makeButton_.isPress_ && table.material[0].name != "empty")
 	{
 		storage->AddStorage(MakePuppet());
 		TableReset();
-		//Audio::Play(hSelect_);
+		Audio::Play(hSelect_);
 	}
 	addAnim_.Update();
 }

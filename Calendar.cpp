@@ -1,5 +1,6 @@
 #include "Calendar.h"
 #include "Engine/Image.h"
+#include "Engine/Audio.h"
 
 Calendar::Calendar()
 {
@@ -14,6 +15,8 @@ void Calendar::Initialize()
 
 	hNumber_ = Image::Load("Image\\CalendarNumber.png");
 	assert(hNumber_ >= 0);
+
+	hPageSE_ = Audio::Load("Sounds\\SE\\page.wav", false, 3);
 
 	day_ = 0;
 }
@@ -45,13 +48,15 @@ void Calendar::Back()
 	if (!hImage_.NowReverse())
 		hImage_.ChangeReverse();
 	hImage_.Start();
+	Audio::Play(hPageSE_);
 }
 
 void Calendar::Next()
 {
 	if (hImage_.NowReverse())
 		hImage_.ChangeReverse();
-	hImage_.Start();
+	hImage_.Start();		
+	Audio::Play(hPageSE_);
 }
 
 void Calendar::SetDay(int _day)

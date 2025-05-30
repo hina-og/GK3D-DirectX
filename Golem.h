@@ -8,7 +8,6 @@ class Golem
 public:
 	Golem(GameObject* parent);
 	void Initialize();
-	void Update();
 	void Draw();
 	void Release();
 	void Attack() override;

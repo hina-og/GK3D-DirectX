@@ -8,6 +8,7 @@ class TitleScene :
 {
     int hPict_;
 
+
     bool canStart_;
 
     SelectStage* selectStage_;
