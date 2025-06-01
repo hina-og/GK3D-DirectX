@@ -1,7 +1,7 @@
 #include "Battle.h"
 #include "Engine/Input.h"
-#include "Time.h"
 #include "Engine/Time.h"
+#include "Engine/Camera.h"
 #include "SetUp.h"
 #include "Engine/CsvReader.h"
 #include "Engine/Text.h"
@@ -15,6 +15,12 @@ Battle::Battle(GameObject* parent)
 
 void Battle::Initialize()
 {
+	XMFLOAT3 INIT_CAMERA_POSITION{ 0, 15, -4 };
+	XMFLOAT3 INIT_CAMERA_TARGET{ 0, 0, -1 };
+
+	Camera::SetPosition(INIT_CAMERA_POSITION);
+	Camera::SetTarget(INIT_CAMERA_TARGET);
+
 	CsvReader levelData;
 
 	switch (SetUp::currentDifficulty)

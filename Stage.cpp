@@ -30,6 +30,8 @@ void Stage::Initialize()
 
 	hGround_ = Model::Load("Model\\Ground.fbx");
 	assert(hGround_ >= 0);
+
+	isZooming_ = false;
 }
 
 void Stage::Update()
@@ -39,6 +41,20 @@ void Stage::Update()
 		for (int x = 0; x < WIDTH; x++)
 		{
 			mapData_[y][x].select_ = false;
+		}
+	}
+
+	if (Input::IsKeyDown(DIK_I))
+	{
+		if (isZooming_)
+		{
+			isZooming_ = false;
+			Camera::ZoomBack(0.1);
+		}
+		else
+		{
+			isZooming_ = true;
+			Camera::Zoom(10.0, 0.1);
 		}
 	}
 }

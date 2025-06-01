@@ -20,6 +20,7 @@ namespace Camera
 
 	//位置を取得
 	XMFLOAT3 GetPosition();
+	XMVECTOR GetPositionXMVECTOR();
 
 	//焦点を取得
 	XMFLOAT3 GetTarget();
@@ -32,4 +33,10 @@ namespace Camera
 
 	//ビルボード用回転行列を取得
 	XMMATRIX GetBillboardMatrix();
+
+	void Zoom(float _dist,float _time);
+
+	void ZoomBack(float _time);
+
+	void StartShake(float magnitude, float duration);
 };

@@ -41,7 +41,7 @@ namespace Direct3D
 	int						screenWidth_ = 0;
 	int						screenHeight_ = 0;
 
-
+	XMFLOAT4 lightPos{ 0, 0.5, 0, 0 };
 
 	//èâä˙âªèàóù
 	HRESULT Direct3D::Initialize(HWND hWnd, int screenWidth, int screenHeight)
@@ -512,4 +512,13 @@ namespace Direct3D
 		}
 	}
 
+	XMFLOAT4 Direct3D::GetLightPos()
+	{
+		return lightPos;
+	}
+
+	void Direct3D::SetLightPos(XMFLOAT4 pos)
+	{
+		lightPos = pos;
+	}
 }

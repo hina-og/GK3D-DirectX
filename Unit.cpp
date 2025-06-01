@@ -1,4 +1,5 @@
 #include "Unit.h"
+#include "Engine/Camera.h"
 
 Unit::Unit()
 {
@@ -151,6 +152,8 @@ void Unit::PastLine(float _z, int& _durability)
 			_durability -= puppet_[p]->GetPower();
 			puppet_[p]->KillMe();
 			puppet_.erase(puppet_.begin() + p);
+
+			Camera::StartShake(0.2, 0.5);
 		}
 	}
 }

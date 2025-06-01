@@ -19,6 +19,8 @@ class Stage
 	MAPCHIP mapData_[HEIGHT][WIDTH];
 	std::vector<std::vector<MAPCHIP>> map_;
 	int hGround_;
+
+	bool isZooming_;
 	
 public:
 	float startLine_;
