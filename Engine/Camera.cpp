@@ -2,12 +2,10 @@
 #include "Direct3D.h"
 #include "./Time.h"
 
-const XMFLOAT3 INIT_POSITION{ 0,10,0 };
-const XMFLOAT3 INIT_TARGET{ 0,0,0 };
-
 XMFLOAT3 _position;
 XMFLOAT3 _initPosition;
 XMFLOAT3 _target;
+XMFLOAT3 _initTarget;
 XMMATRIX _view;
 XMMATRIX _proj;
 XMMATRIX _billBoard;
@@ -15,21 +13,29 @@ XMMATRIX _billBoard;
 bool zooming = false;//ズーム中か
 float zoomElapsed = 0.0f;//ズーム開始からの経過時間
 float zoomDuration = 0.0f;//ズーム完了までの時間
-float zoomTotalDist = 0.0f;//ズームで進む距離
-XMVECTOR zoomStartPos = XMVectorZero();
-XMVECTOR zoomDirection = XMVectorZero();
+
+float positionZoomTotalDist = 0.0f;//ズームで進む距離
+XMVECTOR positionZoomStartPos = XMVectorZero();
+XMVECTOR positionZoomDirection = XMVectorZero();
+
+float targetZoomTotalDist = 0.0f;//ズームで進む距離
+XMVECTOR targetZoomStartPos = XMVectorZero();
+XMVECTOR targetZoomDirection = XMVectorZero();
 
 bool shaking = false;
 float shakeElapsed = 0.0f;
 float shakeDuration = 0.0f;
-float shakeMagnitude = 0.0f;
+float shakePower = 0.0f;
 XMFLOAT3 shakeOffset = { 0, 0, 0 };
 
 //初期化（プロジェクション行列作成）
 void Camera::Initialize()
 {
-	_position = INIT_POSITION;	//カメラの位置
-	_target = INIT_TARGET;	//カメラの焦点
+	_initPosition = ReadInitData("Position");
+	_initTarget = ReadInitData("Target");
+
+	_position = _initPosition;
+	_target = _initTarget;
 
 	//プロジェクション行列
 	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
@@ -39,7 +45,7 @@ void Camera::Initialize()
 void Camera::Update()
 {
 
-	if (zooming)//ズーム中
+	if (zooming)
 	{
 		zoomElapsed += Time::GetDeltaTime();
 		float t = zoomElapsed / zoomDuration;
@@ -50,8 +56,12 @@ void Camera::Update()
 			zooming = false;
 		}
 
-		XMVECTOR movedPos = XMVectorAdd(zoomStartPos, XMVectorScale(zoomDirection, zoomTotalDist * t));
+		XMVECTOR movedPos = XMVectorAdd(positionZoomStartPos, XMVectorScale(positionZoomDirection, positionZoomTotalDist * t));
 		XMStoreFloat3(&_position, movedPos);
+
+		XMVECTOR movedTarget = XMVectorAdd(targetZoomStartPos, XMVectorScale(targetZoomDirection, targetZoomTotalDist * t));
+		XMStoreFloat3(&_target, movedTarget);
+
 	}
 
 	if (shaking)
@@ -66,11 +76,10 @@ void Camera::Update()
 		}
 		else
 		{
-			// 減衰付きノイズ（sinでも可）
 			float decay = 1.0f - t;
-			shakeOffset.x = ((rand() % 200 - 100) / 100.0f) * shakeMagnitude * decay;
-			shakeOffset.y = ((rand() % 200 - 100) / 100.0f) * shakeMagnitude * decay;
-			shakeOffset.z = ((rand() % 200 - 100) / 100.0f) * shakeMagnitude * decay;
+			shakeOffset.x = ((rand() % 200 - 100) / 100.0f) * shakePower * decay;
+			shakeOffset.y = ((rand() % 200 - 100) / 100.0f) * shakePower * decay;
+			shakeOffset.z = ((rand() % 200 - 100) / 100.0f) * shakePower * decay;
 		}
 	}
 
@@ -116,15 +125,16 @@ XMMATRIX Camera::GetBillboardMatrix(){	return _billBoard; }
 void Camera::Zoom(float _dist, float _time)
 {
 	_initPosition = _position;
+	_initTarget = _target;
 
 	zooming = true;
 	zoomElapsed = 0.0f;
-	zoomTotalDist = _dist;
+	positionZoomTotalDist = _dist;
 	zoomDuration = _time;
 
-	zoomStartPos = XMLoadFloat3(&_position);
+	positionZoomStartPos = XMLoadFloat3(&_position);
 	XMVECTOR vecTarget = XMLoadFloat3(&_target);
-	zoomDirection = XMVector3Normalize(XMVectorSubtract(vecTarget, zoomStartPos));
+	positionZoomDirection = XMVector3Normalize(XMVectorSubtract(vecTarget, positionZoomStartPos));
 }
 
 void Camera::ZoomBack(float _time)
@@ -133,21 +143,39 @@ void Camera::ZoomBack(float _time)
 	zoomElapsed = 0.0f;
 	zoomDuration = _time;
 
-	zoomStartPos = XMLoadFloat3(&_position);
+	positionZoomStartPos = XMLoadFloat3(&_position);
 	XMVECTOR initPosVec = XMLoadFloat3(&_initPosition);
-	zoomDirection = XMVector3Normalize(XMVectorSubtract(initPosVec, zoomStartPos));
-
+	positionZoomDirection = XMVector3Normalize(XMVectorSubtract(initPosVec, positionZoomStartPos));
 	//今の位置からズーム前の一までの移動距離を計算
-	XMVECTOR distanceVec = XMVectorSubtract(initPosVec, zoomStartPos);
-	zoomTotalDist = XMVectorGetX(XMVector3Length(distanceVec));
+	XMVECTOR distanceVec = XMVectorSubtract(initPosVec, positionZoomStartPos);
+	positionZoomTotalDist = XMVectorGetX(XMVector3Length(distanceVec));
+
+	targetZoomStartPos = XMLoadFloat3(&_target);
+	XMVECTOR initTargetVec = XMLoadFloat3(&_initTarget);
+	targetZoomDirection = XMVector3Normalize(XMVectorSubtract(initTargetVec, targetZoomStartPos));
+	XMVECTOR targetDistanceVec = XMVectorSubtract(initTargetVec, targetZoomStartPos);
+	targetZoomTotalDist = XMVectorGetX(XMVector3Length(targetDistanceVec));
 }
 
-void Camera::StartShake(float magnitude, float duration)
+void Camera::StartShake(float _power, float _time)
 {
 	shaking = true;
 	shakeElapsed = 0.0f;
-	shakeDuration = duration;
-	shakeMagnitude = magnitude;
+	shakePower = _power;
+	shakeDuration = _time;
 	shakeOffset = { 0, 0, 0 };
+}
+
+XMFLOAT3 Camera::ReadInitData(std::string _key)
+{
+	std::string buffer;
+	buffer.resize(100);
+	DWORD charsRead = GetPrivateProfileString("CAMERA", _key.c_str(), "0.0,10.0,0.0", &buffer[0], static_cast<DWORD>(buffer.size()), ".\\setup.ini");
+	buffer.resize(charsRead);//実際に読み込んだ文字数でサイズ調整
+
+	XMFLOAT3 result;
+	sscanf_s(buffer.c_str(), "%f,%f,%f", &result.x, &result.y, &result.z);
+
+	return result;
 }
 

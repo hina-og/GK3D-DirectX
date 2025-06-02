@@ -153,7 +153,7 @@ void Unit::PastLine(float _z, int& _durability)
 			puppet_[p]->KillMe();
 			puppet_.erase(puppet_.begin() + p);
 
-			Camera::StartShake(0.2, 0.5);
+			Camera::StartShake(0.1, 0.2);
 		}
 	}
 }

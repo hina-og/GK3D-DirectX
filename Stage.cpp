@@ -44,18 +44,43 @@ void Stage::Update()
 		}
 	}
 
-	if (Input::IsKeyDown(DIK_I))
+	if (Input::GetMouseMove().z < 0 && isZooming_)
 	{
-		if (isZooming_)
+		isZooming_ = false;
+		Camera::ZoomBack(0.1);
+	}
+	if (Input::GetMouseMove().z > 0 && !isZooming_)
+	{
+		isZooming_ = true;
+		Camera::Zoom(7.0, 0.1);
+	}
+
+	if (isZooming_)
+	{
+		XMFLOAT3 cameraPos = Camera::GetPosition();
+		XMFLOAT3 targetPos = Camera::GetTarget();
+		if (Input::IsKey(DIK_W))
 		{
-			isZooming_ = false;
-			Camera::ZoomBack(0.1);
+			cameraPos.z += 0.1;
+			targetPos.z += 0.1;
 		}
-		else
+		if (Input::IsKey(DIK_A))
 		{
-			isZooming_ = true;
-			Camera::Zoom(10.0, 0.1);
+			cameraPos.x -= 0.1;
+			targetPos.x -= 0.1;
 		}
+		if (Input::IsKey(DIK_S))
+		{
+			cameraPos.z -= 0.1;
+			targetPos.z -= 0.1;
+		}
+		if (Input::IsKey(DIK_D))
+		{
+			cameraPos.x += 0.1;
+			targetPos.x += 0.1;
+		}
+		Camera::SetPosition(cameraPos);
+		Camera::SetTarget(targetPos);
 	}
 }
 
@@ -129,7 +154,6 @@ XMFLOAT3 Stage::SelectTilePosition(XMFLOAT2 _pos)
 		{
 
 			RayCastData data;
-			//レイの発射位置（マウス位置参照）
 
 			XMStoreFloat3(&data.start, mouseFrontPos);
 			XMStoreFloat3(&data.dir, XMVector3Normalize(mouseBackPos - mouseFrontPos));

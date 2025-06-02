@@ -38,5 +38,7 @@ namespace Camera
 
 	void ZoomBack(float _time);
 
-	void StartShake(float magnitude, float duration);
+	void StartShake(float _power, float _time);
+
+	XMFLOAT3 ReadInitData(std::string _key);
 };
