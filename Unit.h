@@ -13,6 +13,8 @@ class Unit
 {
 	std::vector<Puppet*> puppet_;
 	
+	int shakePower_;
+	float shakeTime_;
 public:
 	Unit();
 	Unit(GameObject* parent);

@@ -25,12 +25,21 @@ void Stage::Initialize()
 			mapData_[y][x].onPlayer_ = false;
 		}
 	}
-	startLine_ = mapData_[HEIGHT-1][0].pos_.z + 1;
-	endLine_ = mapData_[0][0].pos_.z - 0.5;
+
+	beginData_ = mapData_[0][0];
+	endData_ = mapData_[HEIGHT - 1][WIDTH - 1];
+
+	startLine_ = endData_.pos_.z + 1;
+	endLine_ = beginData_.pos_.z - 0.5;
 
 	hGround_ = Model::Load("Model\\Ground.fbx");
 	assert(hGround_ >= 0);
 
+	hWall_ = Model::Load("Model\\Wall.fbx");
+	assert(hWall_);
+	Transform wallTrans;
+	wallTrans.position_ = { 0,0,endLine_ };
+	Model::SetTransform(hWall_, wallTrans);
 	isZooming_ = false;
 }
 
@@ -52,29 +61,29 @@ void Stage::Update()
 	if (Input::GetMouseMove().z > 0 && !isZooming_)
 	{
 		isZooming_ = true;
-		Camera::Zoom(7.0, 0.1);
+		Camera::Zoom(8.0, 0.1);
 	}
 
 	if (isZooming_)
 	{
 		XMFLOAT3 cameraPos = Camera::GetPosition();
 		XMFLOAT3 targetPos = Camera::GetTarget();
-		if (Input::IsKey(DIK_W))
+		if (Input::IsKey(DIK_W) && targetPos.z < endData_.pos_.z)
 		{
 			cameraPos.z += 0.1;
 			targetPos.z += 0.1;
 		}
-		if (Input::IsKey(DIK_A))
+		if (Input::IsKey(DIK_A) && targetPos.x > beginData_.pos_.x)
 		{
 			cameraPos.x -= 0.1;
 			targetPos.x -= 0.1;
 		}
-		if (Input::IsKey(DIK_S))
+		if (Input::IsKey(DIK_S) && targetPos.z > beginData_.pos_.z)
 		{
 			cameraPos.z -= 0.1;
 			targetPos.z -= 0.1;
 		}
-		if (Input::IsKey(DIK_D))
+		if (Input::IsKey(DIK_D) && targetPos.x < endData_.pos_.x)
 		{
 			cameraPos.x += 0.1;
 			targetPos.x += 0.1;
@@ -96,12 +105,12 @@ void Stage::Draw()
 				transform_.position_.y + mapData_[y][x].pos_.y,
 				transform_.position_.z + mapData_[y][x].pos_.z
 			};
-			ftrans.rotate_ = transform_.rotate_;
 			Model::SetTransform(mapData_[y][x].tileModel_, ftrans);
 			Model::Draw(mapData_[y][x].tileModel_);
 		}
 	}
 	Model::Draw(hGround_);
+	Model::Draw(hWall_);
 }
 
 void Stage::Release()

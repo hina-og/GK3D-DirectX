@@ -77,9 +77,9 @@ void Camera::Update()
 		else
 		{
 			float decay = 1.0f - t;
-			shakeOffset.x = ((rand() % 200 - 100) / 100.0f) * shakePower * decay;
-			shakeOffset.y = ((rand() % 200 - 100) / 100.0f) * shakePower * decay;
-			shakeOffset.z = ((rand() % 200 - 100) / 100.0f) * shakePower * decay;
+			shakeOffset.x = ((rand() % 200 - 100) / 100.0f) * shakePower * decay * 0.1;
+			shakeOffset.y = ((rand() % 200 - 100) / 100.0f) * shakePower * decay * 0.1;
+			shakeOffset.z = ((rand() % 200 - 100) / 100.0f) * shakePower * decay * 0.1;
 		}
 	}
 

@@ -85,6 +85,8 @@ class MaterialTable
 
 	std::vector<Recipe> recipeList_;
 
+	int returnProbability_;
+
 	MATERIAL_TYPE StringToMaterialType(const std::string& name);
 	CHARA_TYPE StringToCharaType(const std::string& name);
 public:

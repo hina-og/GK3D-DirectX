@@ -79,6 +79,7 @@ void MaterialTable::Initialize()
 	hSelect_ = Audio::Load("Sounds\\SE\\add.wav");
 	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, 5);
 
+	returnProbability_ = GetPrivateProfileInt("Material", "return_probability ", 100, ".\\config.ini");
 
 	ReadRecipe();
 }
@@ -143,7 +144,7 @@ void MaterialTable::Update()
 	}
 	if (makeButton_.isPress_ && table.material[0].name != "empty")
 	{
-		storage->AddStorage(MakePuppet());
+		
 		TableReset();
 		Audio::Play(hSelect_);
 	}
@@ -191,7 +192,7 @@ void MaterialTable::ReadRecipe()
 
 int MaterialTable::MakePuppet()
 {
-	int resoult = MOUSE;
+	int resoult = -1;
 	int material[MATERIAL_END];
 	for (int i = 0; i < materialName_.size(); i++)
 	{
@@ -223,6 +224,17 @@ int MaterialTable::MakePuppet()
 
 void MaterialTable::TableReset()
 {
+	if(storage->AddStorage(MakePuppet()));
+	{
+		for (int i = 0; i < TABLE_SIZE; i++)
+		{
+			if (table.material[i].name == "empty")
+				break;
+			if (rand() % 100 <= returnProbability_)
+				materialList_[table.material[i].type].num++;
+		}
+	}
+
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		table.material[i].type = MATERIAL_TYPE::EMPTY;

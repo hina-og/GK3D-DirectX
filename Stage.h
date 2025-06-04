@@ -17,11 +17,14 @@ class Stage
 	: public GameObject
 {
 	MAPCHIP mapData_[HEIGHT][WIDTH];
-	std::vector<std::vector<MAPCHIP>> map_;
+	MAPCHIP beginData_, endData_;
+
 	int hGround_;
+	int hWall_;
 
 	bool isZooming_;
-	
+	int zoomdist_;
+
 public:
 	float startLine_;
 	float endLine_;

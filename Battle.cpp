@@ -15,11 +15,6 @@ Battle::Battle(GameObject* parent)
 
 void Battle::Initialize()
 {
-	XMFLOAT3 INIT_CAMERA_POSITION{ 0, 15, -4 };
-	XMFLOAT3 INIT_CAMERA_TARGET{ 0, 0, -1 };
-
-	Camera::SetPosition(INIT_CAMERA_POSITION);
-	Camera::SetTarget(INIT_CAMERA_TARGET);
 
 	CsvReader levelData;
 

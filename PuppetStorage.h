@@ -31,6 +31,6 @@ public:
 	void Release();
 
 	void LoadImageData(CsvReader _csv);
-	void AddStorage(int _type);
+	bool AddStorage(int _type);
 };
 

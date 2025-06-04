@@ -276,6 +276,7 @@ protected:
 			_csv.GetInt(_line, AttackSpeed),
 			_csv.GetInt(_line, TotalAttackFrame) 
 		};
+
 		hAttackSE_ = Audio::Load("Sounds\\SE\\" + _csv.GetString(_line, AttackSE) + ".wav",false,5);
 		assert(hAttackSE_ >= 0);
 

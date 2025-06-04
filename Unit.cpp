@@ -12,6 +12,8 @@ Unit::Unit(GameObject* parent)
 
 void Unit::Initialize()
 {
+	shakePower_ = GetPrivateProfileInt("Unit", "camerashake_power", 1, ".\\config.ini");
+	shakeTime_ = (float)GetPrivateProfileInt("Unit", "camerashake_time", 100, ".\\config.ini") / 1000;//ƒ~ƒŠ•b‚©‚ç•ÏŠ·
 }
 
 void Unit::Update()
@@ -153,7 +155,7 @@ void Unit::PastLine(float _z, int& _durability)
 			puppet_[p]->KillMe();
 			puppet_.erase(puppet_.begin() + p);
 
-			Camera::StartShake(0.1, 0.2);
+			Camera::StartShake(shakePower_, shakeTime_);
 		}
 	}
 }

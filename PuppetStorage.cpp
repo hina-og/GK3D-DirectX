@@ -83,7 +83,12 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 
 }
 
-void PuppetStorage::AddStorage(int _type)
+bool PuppetStorage::AddStorage(int _type)
 {
-	puppetList_[_type].num++;
+	if (_type >= 0)
+	{
+		puppetList_[_type].num++;
+		return true;
+	}
+	return false;
 }
