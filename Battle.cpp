@@ -15,6 +15,13 @@ Battle::Battle(GameObject* parent)
 
 void Battle::Initialize()
 {
+	stage = Instantiate<Stage>(this);
+	player = Instantiate<Player>(this);
+	enemy = Instantiate<Enemy>(this);
+	material = Instantiate<MaterialTable>(this);
+	hud = Instantiate<HUD>(this);
+
+
 
 	CsvReader levelData;
 
@@ -33,7 +40,12 @@ void Battle::Initialize()
 		levelData.Load("GameData\\LevelDespair.csv");
 		break;
 	}
-	for (int line = 0;line < levelData.GetLines();line++)
+
+	time = levelData.GetFloat(0,0);
+	hud->InitHP(levelData.GetInt(0, 1));
+	material->GiveMaterial(levelData.GetInt(0, 2));
+
+	for (int line = 1;line < levelData.GetLines();line++)
 	{
 		SpawnData sData;
 		Puppet p;
@@ -45,22 +57,7 @@ void Battle::Initialize()
 	}
 	spawnedNum = 0;
 
-	stage = Instantiate<Stage>(this);
-	player = Instantiate<Player>(this);
-	enemy = Instantiate<Enemy>(this);
-	
-	
-	//pot = Instantiate<Pot>(this);
-	material = Instantiate<MaterialTable>(this);
-	
-	//pot->SetPosition(material->GetPosition().x, -450, 0);
-
-	time = INIT_BATTLE_TIME;
-	timeText.Initialize();
 	isTimeStert = false;
-
-	durability = MAX_DURABILITY;
-	durabilityText.Initialize();
 
 	getMaterialTime = 0.0;
 
@@ -72,7 +69,7 @@ void Battle::Initialize()
 
 void Battle::Update()
 {
-	if (0 < durability && 0 < time)
+	if (0 < hud->HP_ && 0 < time)
 	{
 		for (int i = spawnedNum; i < spawnList_.size(); i++)
 		{
@@ -131,7 +128,7 @@ void Battle::Update()
 		player->unit_->InRange(enemy->unit_->GetPuppetArray());
 		enemy->unit_->InRange(player->unit_->GetPuppetArray());
 
-		enemy->unit_->PastLine(stage->endLine_, durability);
+		enemy->unit_->PastLine(stage->endLine_, hud->HP_);
 
 		if (1 <= getMaterialTime)
 		{
@@ -166,8 +163,6 @@ void Battle::Draw()
 {
 	timeText.Draw(1280,720,time + 1.0f);
 	isReady = true;
-
-	durabilityText.Draw(640, 980, durability);
 }
 
 void Battle::Release()

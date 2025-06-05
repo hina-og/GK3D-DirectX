@@ -67,7 +67,7 @@ enum IMAGE_DATA//“Ç‚İ‚Ş‰æ‘œƒf[ƒ^‚Ì‡”Ô
 class MaterialTable
 	: public GameObject
 {
-	const int INIT_MATERIAL_NUM{ 5 };
+	int initMaterialNum;
 	std::vector<std::string> materialName_;
 
 	int hTable_;
@@ -102,4 +102,5 @@ public:
 	int GetSelectStragePuppet();
 	bool isNotEmpty();
 	void GetRandomMaterial();
+	void GiveMaterial(int _num);
 };

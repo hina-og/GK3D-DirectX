@@ -167,6 +167,7 @@
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Golem.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="MaterialTable.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Mushroom.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Golem.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="ImageData.h" />
     <ClInclude Include="MaterialTable.h" />
     <ClInclude Include="Mouse.h" />

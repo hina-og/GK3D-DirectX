@@ -16,13 +16,13 @@ void SelectStage::Initialize()
 
 void SelectStage::Update()
 {
-	if (Input::IsKeyDown(DIK_A) && 0 < nowStage_)
+	if ((Input::IsKeyDown(DIK_A) || Input::GetMouseMove().z < 0) && 0 < nowStage_)
 	{
 		nowStage_--;
 		calendar.Back();
 		calendar.SetDay(nowStage_);
 	}
-	if (Input::IsKeyDown(DIK_D) && nowStage_ < STAGE_NUM)
+	if ((Input::IsKeyDown(DIK_D) || Input::GetMouseMove().z > 0) && nowStage_ < STAGE_NUM)
 	{
 		nowStage_++;
 		calendar.Next();

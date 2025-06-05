@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "MaterialTable.h"
+#include "HUD.h"
 
 class Battle
 	: public GameObject
@@ -24,11 +25,6 @@ class Battle
 	Text timeText;
 	bool isTimeStert;
 
-	const int MAX_DURABILITY{ 40 };
-
-	int durability;//‘Ï‹v’l
-	Text durabilityText;
-
 	float getMaterialTime;
 
 	int selectDir;
@@ -37,6 +33,7 @@ class Battle
 	Player* player;
 	Enemy* enemy;
 	MaterialTable* material;
+	HUD* hud;
 
 	int mouseX;
 	int mouseY;

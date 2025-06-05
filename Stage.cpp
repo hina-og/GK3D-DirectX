@@ -13,6 +13,9 @@ Stage::Stage(GameObject* parent)
 
 void Stage::Initialize()
 {
+	Camera::SetPosition(Camera::ReadInitData("Position"));
+	Camera::SetTarget(Camera::ReadInitData("Target"));
+
 	for (int y = 0; y < HEIGHT; y++)
 	{
 		for (int x = 0; x < WIDTH; x++)

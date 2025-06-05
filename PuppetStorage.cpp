@@ -70,15 +70,15 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 
 	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
 	{
-		puppetList_[i].num = 0;
-		puppetList_[i].type = i;
-		puppetList_[i].x = i % 5 * 128 + transform_.position_.x - 256;
-		puppetList_[i].y = i / 5 * 128 - Image::GetImageSize(hTable_).y / 2 - transform_.position_.y;
 		puppetList_[i].name = puppetName_[i];
-		puppetList_[i].numText.Initialize();
-
 		std::string fileName_ = "Image\\" + puppetList_[i].name + ".png";
 		puppetList_[i].button.Initialize(puppetList_[i].x, puppetList_[i].y, fileName_);
+
+		puppetList_[i].num = 0;
+		puppetList_[i].type = i;
+		puppetList_[i].x = i % 5 * puppetList_[i].button.GetSize().x + _csv.GetFloat(7, posX);
+		puppetList_[i].y = i / 5 * puppetList_[i].button.GetSize().y + _csv.GetFloat(7, posY);
+		puppetList_[i].numText.Initialize();
 	}
 
 }

@@ -35,8 +35,6 @@ void MaterialTable::Initialize()
 	ftrans.scale_ = { csv.GetFloat(1,scaleX),csv.GetFloat(1,scaleY),1.0 };
 	Image::SetTransform(hTable_, ftrans);
 
-
-
 	for (int i = 0; i < materialName_.size(); i++)
 	{
 		materialList_[i].type = i;
@@ -49,7 +47,7 @@ void MaterialTable::Initialize()
 		materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x + csv.GetFloat(2, posX);
 		materialList_[i].y = i / TABLE_SIZE * materialList_[i].button.GetSize().y + csv.GetFloat(2, posY);
 		materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y);
-		materialList_[i].num = INIT_MATERIAL_NUM;
+		materialList_[i].num = 0;
 		materialList_[i].text.Initialize();
 		materialList_[i].textX = csv.GetFloat(5, posX);
 		materialList_[i].textY = csv.GetFloat(5, posY);
@@ -69,7 +67,7 @@ void MaterialTable::Initialize()
 
 		table.material[i].name = "empty";
 	}
-
+	
 
 	makeButton_.Initialize(csv.GetFloat(4,posX), csv.GetFloat(4,posY), "Image\\" + csv.GetString(4,name) + ".png");
 
@@ -262,6 +260,14 @@ void MaterialTable::GetRandomMaterial()
 	materialList_[randNum].num++;
 	addAnim_.SetPosition({ (float)materialList_[randNum].x,(float)materialList_[randNum].y,0 });
 	addAnim_.Start();
+}
+
+void MaterialTable::GiveMaterial(int _num)
+{
+	for (int i = 0; i < materialName_.size(); i++)
+	{
+		materialList_[i].num = _num;
+	}
 }
 
 MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)
