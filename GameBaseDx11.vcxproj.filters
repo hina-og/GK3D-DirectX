@@ -177,8 +177,14 @@
       <Filter>Scene\PlayScene\Battle\Unit</Filter>
     </ClCompile>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="SelectStage.cpp" />
-    <ClCompile Include="Calendar.cpp" />
+    <ClCompile Include="SelectStage.cpp">
+      <Filter>Scene\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Calendar.cpp">
+      <Filter>Scene\TitleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Engine\Movie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -318,9 +324,15 @@
     </ClInclude>
     <ClInclude Include="ImageData.h" />
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="SelectStage.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Calendar.h" />
+    <ClInclude Include="SelectStage.h">
+      <Filter>Scene\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Calendar.h">
+      <Filter>Scene\TitleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h" />
+    <ClInclude Include="Engine\Movie.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

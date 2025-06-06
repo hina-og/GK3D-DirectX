@@ -154,6 +154,7 @@
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\Main.cpp" />
     <ClCompile Include="Engine\Model.cpp" />
+    <ClCompile Include="Engine\Movie.cpp" />
     <ClCompile Include="Engine\Time.cpp" />
     <ClCompile Include="Engine\VFX.cpp" />
     <ClCompile Include="Engine\RootObject.cpp" />
@@ -167,6 +168,7 @@
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="Golem.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="MaterialTable.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Mushroom.cpp" />
@@ -203,6 +205,7 @@
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Model.h" />
+    <ClInclude Include="Engine\Movie.h" />
     <ClInclude Include="Engine\Time.h" />
     <ClInclude Include="Engine\VFX.h" />
     <ClInclude Include="Engine\RootObject.h" />
@@ -216,6 +219,7 @@
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Golem.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="ImageData.h" />
     <ClInclude Include="MaterialTable.h" />
     <ClInclude Include="Mouse.h" />

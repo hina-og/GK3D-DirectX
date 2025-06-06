@@ -4,6 +4,7 @@
 #include "Engine/Input.h"
 #include "Engine/SceneManager.h"
 #include "SetUp.h"
+#include "Engine/Movie.h";
 
 TitleScene::TitleScene(GameObject* parent)
 	: GameObject(parent, "TitleScene"), hPict_(-1)
@@ -13,6 +14,8 @@ TitleScene::TitleScene(GameObject* parent)
 void TitleScene::Initialize()
 {
 	hPict_ = Image::Load("Image\\Title.png");
+
+	hMovie_ = Movie::Load("Movie\\Recording.wmv");
 
 	canStart_ = false;
 
@@ -61,6 +64,10 @@ void TitleScene::Draw()
 {
 	Image::SetTransform(hPict_, transform_);
 	Image::Draw(hPict_);
+
+
+	Movie::SetScale(hMovie_, { 0.1,0.1,0.1 });
+	Movie::Play(hMovie_);
 }
 
 void TitleScene::Release()

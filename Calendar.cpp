@@ -16,7 +16,7 @@ void Calendar::Initialize()
 	hNumber_ = Image::Load("Image\\CalendarNumber.png");
 	assert(hNumber_ >= 0);
 
-	hPageSE_ = Audio::Load("Sounds\\SE\\page.wav", false, 3);
+	hPageSE_ = Audio::Load("Sounds\\SE\\page.wav", false, 10);
 
 	day_ = 0;
 }

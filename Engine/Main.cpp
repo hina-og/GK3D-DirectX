@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "Input.h"
 #include "Audio.h"
+#include "Movie.h"
 #include "VFX.h"
 #include "../Engine/Time.h"
 
@@ -57,7 +58,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
 
+	Movie::Initialize();
+	Movie::SetVideoWindowHandle(hWnd);
+
 	Time::Initialize();
+
+
 
 
 	//ルートオブジェクト準備
@@ -162,6 +168,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Audio::AllRelease();
 	Model::AllRelease();
 	Image::AllRelease();
+	Movie::AllRelease();
 	pRootObject->ReleaseSub();
 	SAFE_DELETE(pRootObject);
 	Direct3D::Release();

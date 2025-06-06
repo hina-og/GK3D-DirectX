@@ -1,8 +1,10 @@
 name,positionX,positionY,scaleX,scaleY
-MaterialTable,-872.5,320,0.8,1
+MaterialTable,-872.5,0,0.8,1
 Material,-1125,-550,1,1
-MaterialTable,872.5,320,0.8,1
+MaterialTable,872.5,0,0.8,1
 Make,-872.5,340,1,1
-MaterialNumText,650,390,1,1
-Puppet,1125,-550,1,1
+MaterialNumText,680,390,1,1
+Puppet,616.5,-550,1,1
+PuppetNumText,680,390,1,1
 Table,-1125,-200,1,1
+HP,0,-650,1,1

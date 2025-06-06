@@ -107,13 +107,13 @@ public:
 			transform_.rotate_.y = 180.0;
 			break;
 		case Puppet::LEFT:
-			transform_.rotate_.y = 270.0;
+			transform_.rotate_.y = 90.0;
 			break;
 		case Puppet::DOWN:
 			transform_.rotate_.y = 0.0;
 			break;
 		case Puppet::RIGHT:
-			transform_.rotate_.y = 90.0;
+			transform_.rotate_.y = 270.0;
 			break;
 		default:
 			break;
