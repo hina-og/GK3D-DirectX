@@ -12,6 +12,8 @@ struct Storage
 	Button button;
 	std::string name;
 	Text numText;
+	int textX;
+	int textY;
 };
 
 class PuppetStorage

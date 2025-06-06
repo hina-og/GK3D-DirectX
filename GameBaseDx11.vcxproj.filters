@@ -184,6 +184,7 @@
       <Filter>Scene\TitleScene</Filter>
     </ClCompile>
     <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="Engine\Movie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -331,6 +332,7 @@
       <Filter>Scene\TitleScene</Filter>
     </ClInclude>
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="Engine\Movie.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

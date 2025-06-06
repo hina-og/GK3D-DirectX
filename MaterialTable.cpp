@@ -57,12 +57,12 @@ void MaterialTable::Initialize()
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
-		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(7, posX);
-		table.material[i].y = csv.GetFloat(7, posY);
+		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(8, posX);
+		table.material[i].y = csv.GetFloat(8, posY);
 		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
 
-		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(7,posX);
-		table.material[i].y = csv.GetFloat(7,posY);
+		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(8,posX);
+		table.material[i].y = csv.GetFloat(8,posY);
 		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
 
 		table.material[i].name = "empty";

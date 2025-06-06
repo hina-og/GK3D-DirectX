@@ -8,6 +8,7 @@ class TitleScene :
 {
     int hPict_;
 
+    int hMovie_;
 
     bool canStart_;
 

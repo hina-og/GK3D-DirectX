@@ -154,6 +154,7 @@
     <ClCompile Include="Engine\Input.cpp" />
     <ClCompile Include="Engine\Main.cpp" />
     <ClCompile Include="Engine\Model.cpp" />
+    <ClCompile Include="Engine\Movie.cpp" />
     <ClCompile Include="Engine\Time.cpp" />
     <ClCompile Include="Engine\VFX.cpp" />
     <ClCompile Include="Engine\RootObject.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="Engine\Input.h" />
     <ClInclude Include="Engine\Model.h" />
+    <ClInclude Include="Engine\Movie.h" />
     <ClInclude Include="Engine\Time.h" />
     <ClInclude Include="Engine\VFX.h" />
     <ClInclude Include="Engine\RootObject.h" />
