@@ -6,7 +6,7 @@
 #include "PuppetStorage.h"
 #include "Animation.h"
 
-const int TABLE_SIZE{ 5 };
+const int TABLE_SIZE{ 4 };
 
 enum MATERIAL_TYPE
 {

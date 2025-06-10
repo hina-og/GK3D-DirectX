@@ -141,6 +141,48 @@ namespace Movie
         }
     }
 
+    bool Movie::IsPlaying(int handle)
+    {
+        if (handle < 0 || handle >= _datas.size()) return false;
+        if (_datas[handle] == nullptr || !_datas[handle]->pControl) return false;
+
+        OAFilterState state;
+        if (SUCCEEDED(_datas[handle]->pControl->GetState(0, &state)))
+        {
+            return state == State_Running;
+        }
+        return false;
+    }
+
+    bool Movie::IsEnded(int handle)
+    {
+        if (handle < 0 || handle >= _datas.size()) return true;
+        if (_datas[handle] == nullptr || !_datas[handle]->pEvent) return true;
+
+        long evCode = 0;
+        if (SUCCEEDED(_datas[handle]->pEvent->WaitForCompletion(0, &evCode)))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool Movie::IsAnyMoviePlaying()
+    {
+        for (auto* data : _datas)
+        {
+            if (data && data->pControl)
+            {
+                OAFilterState state;
+                if (SUCCEEDED(data->pControl->GetState(0, &state)) && state == State_Running)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     void Release(int handle)
     {
         if (handle < 0 || handle >= _datas.size()) return;

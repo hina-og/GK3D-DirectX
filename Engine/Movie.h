@@ -52,6 +52,15 @@ namespace Movie
     // 動画の停止
     void Stop(int handle);
 
+    // 再生中かどうかをチェック
+    bool IsPlaying(int handle);
+
+    // 再生終了したかどうかをチェック
+    bool IsEnded(int handle);
+
+    // 再生中の動画が1つでもあれば true を返す
+    bool IsAnyMoviePlaying();
+
     // 動画を解放
     void Release(int handle);
 

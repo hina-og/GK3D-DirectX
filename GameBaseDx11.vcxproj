@@ -180,6 +180,7 @@
     <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="TutorialScene.cpp" />
     <ClCompile Include="Unit.cpp" />
     <ClCompile Include="Zombie.cpp" />
   </ItemGroup>
@@ -220,7 +221,6 @@
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Golem.h" />
     <ClInclude Include="HUD.h" />
-    <ClInclude Include="ImageData.h" />
     <ClInclude Include="MaterialTable.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Mushroom.h" />
@@ -234,6 +234,7 @@
     <ClInclude Include="Slime.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="TutorialScene.h" />
     <ClInclude Include="Unit.h" />
     <ClInclude Include="Zombie.h" />
   </ItemGroup>

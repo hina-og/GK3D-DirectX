@@ -1,5 +1,6 @@
 #include "sceneManager.h"
 #include "../TitleScene.h"
+#include "../TutorialScene.h"
 #include "../PlayScene.h"
 #include "Model.h"
 #include "Image.h"
@@ -39,6 +40,8 @@ void SceneManager::Update()
 		switch (nextSceneID_)
 		{
 		case SCENE_ID_TITLE: Instantiate<TitleScene>(this);
+			break;
+		case SCENE_ID_TUTORIAL: Instantiate<TutorialScene>(this);
 			break;
 		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); 
 			break;

@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include "SelectStage.h"
 #include "Button.h"
+#include "Engine/SceneManager.h"
 
 class TitleScene :
     public GameObject
@@ -18,6 +19,8 @@ class TitleScene :
     float g_alpha = 1.0f;
 
     SelectStage* selectStage_;
+
+    SceneManager* pSM;
 public:
     TitleScene(GameObject* parent);
     void Initialize();
@@ -25,4 +28,3 @@ public:
     void Draw();
     void Release();
 };
-

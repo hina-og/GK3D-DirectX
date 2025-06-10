@@ -64,7 +64,7 @@ void Stage::Update()
 	if (Input::GetMouseMove().z > 0 && !isZooming_)
 	{
 		isZooming_ = true;
-		Camera::Zoom(8.0, 0.1);
+		Camera::Zoom(10.0, 0.1);
 	}
 
 	if (isZooming_)

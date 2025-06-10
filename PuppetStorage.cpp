@@ -76,8 +76,8 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 
 		
 		puppetList_[i].type = i;
-		puppetList_[i].x = i % 5 * puppetList_[i].button.GetSize().x + _csv.GetFloat(6, posX);
-		puppetList_[i].y = i / 5 * puppetList_[i].button.GetSize().y + _csv.GetFloat(6, posY);
+		puppetList_[i].x = i % 4 * puppetList_[i].button.GetSize().x + _csv.GetFloat(6, posX);
+		puppetList_[i].y = i / 4 * puppetList_[i].button.GetSize().y + _csv.GetFloat(6, posY);
 		puppetList_[i].button.Initialize(puppetList_[i].x, puppetList_[i].y, fileName_);
 		puppetList_[i].num = 0;
 		puppetList_[i].numText.Initialize();

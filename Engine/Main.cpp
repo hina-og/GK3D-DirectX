@@ -27,9 +27,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 // エントリーポイント
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-//#if defined(DEBUG) | defined(_DEBUG)
-//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-//#endif
+	//#if defined(DEBUG) | defined(_DEBUG)
+	//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//#endif
 
 	srand((unsigned)time(NULL));
 	SetCurrentDirectory("Assets");
@@ -130,30 +130,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//カメラを更新
 				Camera::Update();
 
-				
+
 
 				//エフェクトの更新
 				VFX::Update();
 
 
-				//このフレームの描画開始
-				Direct3D::BeginDraw();
-
-				//全オブジェクトを描画
-				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-				pRootObject->DrawSub();
-
-				//エフェクトの描画
-				VFX::Draw();
+				// このフレームの描画開始（動画再生中はスキップ）
+				if (!Movie::IsAnyMoviePlaying())
+				{
+					Direct3D::BeginDraw();
+					pRootObject->DrawSub();
+					VFX::Draw();
+					Direct3D::EndDraw();
+				}
 
 				Time::Update();
 
-				//描画終了
-				Direct3D::EndDraw();
 
 
 
-				
 				//ちょっと休ませる
 				Sleep(1);
 			}
@@ -161,7 +157,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	
+
 
 	//いろいろ解放
 	VFX::Release();
@@ -231,12 +227,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
-	//ウィンドウを閉じた
+		//ウィンドウを閉じた
 	case WM_DESTROY:
 		PostQuitMessage(0);	//プログラム終了
 		return 0;
 
-	//マウスが動いた
+		//マウスが動いた
 	case WM_MOUSEMOVE:
 		Input::SetMousePosition(LOWORD(lParam), HIWORD(lParam));
 		return 0;
