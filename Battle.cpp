@@ -7,6 +7,7 @@
 #include "Engine/Text.h"
 #include "GameOver.h"
 #include "GameClear.h"
+#include "Engine/Audio.h"
 
 Battle::Battle(GameObject* parent)
 	: GameObject(parent, "Battle")
@@ -15,6 +16,9 @@ Battle::Battle(GameObject* parent)
 
 void Battle::Initialize()
 {
+	hBGM_ = Audio::Load("Sounds\\BGM\\BGM5.wav");
+	assert(hBGM_ >= 0);
+
 	stage = Instantiate<Stage>(this);
 	player = Instantiate<Player>(this);
 	enemy = Instantiate<Enemy>(this);
@@ -41,7 +45,7 @@ void Battle::Initialize()
 		break;
 	}
 
-	time = levelData.GetFloat(0,0);
+	hud->time_=levelData.GetFloat(0, 0);
 	hud->InitHP(levelData.GetInt(0, 1));
 	material->GiveMaterial(levelData.GetInt(0, 2));
 
@@ -57,7 +61,7 @@ void Battle::Initialize()
 	}
 	spawnedNum = 0;
 
-	isTimeStert = false;
+	isTimeStart = false;
 
 	getMaterialTime = 0.0;
 
@@ -69,11 +73,11 @@ void Battle::Initialize()
 
 void Battle::Update()
 {
-	if (0 < hud->HP_ && 0 < time)
+	if (0 < hud->HP_ && 0 < hud->time_)
 	{
 		for (int i = spawnedNum; i < spawnList_.size(); i++)
 		{
-			if (time < spawnList_[i].time_)
+			if (hud->time_ < spawnList_[i].time_)
 			{
 				XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,stage->startLine_ };
 				enemy->unit_->AddCharacter(pos, spawnList_[i].type_, Puppet::DOWN);
@@ -130,7 +134,7 @@ void Battle::Update()
 
 		enemy->unit_->PastLine(stage->endLine_, hud->HP_);
 
-		if (1 <= getMaterialTime)
+		if (3 <= getMaterialTime)
 		{
 			material->GetRandomMaterial();
 			getMaterialTime--;
@@ -139,15 +143,15 @@ void Battle::Update()
 		getMaterialTime += Time::GetDeltaTime();
 
 
-		if (isTimeStert && time >= 0)
-			time -= Time::GetDeltaTime();
+		if (isTimeStart && hud->time_ >= 0)
+			hud->TimeUpdate();
 
 		if (isReady)
-			isTimeStert = true;
+			isTimeStart = true;
 	}
 	else if(!isBattleEnd)
 	{
-		if (time <= 0)
+		if (hud->time_ <= 0)
 		{
 			Instantiate<GameClear>(this);
 		}
@@ -161,7 +165,6 @@ void Battle::Update()
 
 void Battle::Draw()
 {
-	timeText.Draw(1280,720,time + 1.0f);
 	isReady = true;
 }
 

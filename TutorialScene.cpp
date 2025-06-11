@@ -10,6 +10,7 @@ TutorialScene::TutorialScene(GameObject* parent)
 void TutorialScene::Initialize()
 {
 	hMovie_ = Movie::Load("Movie\\Recording.wmv");
+	assert(hMovie_ >= 0);
 	Movie::Play(hMovie_);
 }
 

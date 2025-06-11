@@ -18,12 +18,10 @@ class Battle
 	};
 	std::vector<SpawnData> spawnList_;
 	int spawnedNum;
-
-	const float INIT_BATTLE_TIME{ 60.0 };
 	
-	float time;
-	Text timeText;
-	bool isTimeStert;
+	int hBGM_;
+
+	bool isTimeStart;
 
 	float getMaterialTime;
 

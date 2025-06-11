@@ -142,7 +142,6 @@ void MaterialTable::Update()
 	}
 	if (makeButton_.isPress_ && table.material[0].name != "empty")
 	{
-		
 		TableReset();
 		Audio::Play(hSelect_);
 	}
@@ -190,7 +189,7 @@ void MaterialTable::ReadRecipe()
 
 int MaterialTable::MakePuppet()
 {
-	int resoult = -1;
+	int result = -1;
 	int material[MATERIAL_END];
 	for (int i = 0; i < materialName_.size(); i++)
 	{
@@ -212,29 +211,27 @@ int MaterialTable::MakePuppet()
 
 			if (materialNum == materialName_.size() - 1)
 			{
-				resoult = recipeNum;
+				result = recipeNum;
 			}
 		}
 	}
 
-	return resoult;
+	return result;
 }
 
 void MaterialTable::TableReset()
 {
-	if(storage->AddStorage(MakePuppet()));
-	{
-		for (int i = 0; i < TABLE_SIZE; i++)
-		{
-			if (table.material[i].name == "empty")
-				break;
-			if (rand() % 100 <= returnProbability_)
-				materialList_[table.material[i].type].num++;
-		}
-	}
+	bool isMade = storage->AddStorage(MakePuppet());
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
+		if (table.material[i].name == "empty")
+			break;
+		if (!isMade)
+		{
+			if (rand() % 100 <= returnProbability_)
+				materialList_[table.material[i].type].num++;
+		}
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
 		table.material[i].name = "empty";
 		table.material[i].button.ChangeImage("Image\\empty.png");
@@ -290,22 +287,4 @@ MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)
 		return EMPTY;
 
 	return EMPTY;
-}
-
-CHARA_TYPE MaterialTable::StringToCharaType(const std::string& name)
-{
-	if (name == "MOUSE") 
-		return MOUSE;
-	if (name == "ZOMBIE") 
-		return ZOMBIE;
-	if (name == "MUSHROOM")
-		return MUSHROOM;
-	if (name == "SLIME")
-		return SLIME;
-	if (name == "GOLEM")
-		return GOLEM;
-	if (name == "GHOST")
-		return GHOST;
-
-	return MOUSE;
 }

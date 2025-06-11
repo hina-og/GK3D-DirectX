@@ -88,7 +88,6 @@ class MaterialTable
 	int returnProbability_;
 
 	MATERIAL_TYPE StringToMaterialType(const std::string& name);
-	CHARA_TYPE StringToCharaType(const std::string& name);
 public:
 	MaterialTable(GameObject* parent);
 	void Initialize();

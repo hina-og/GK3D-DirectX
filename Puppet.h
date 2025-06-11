@@ -201,20 +201,23 @@ protected:
 	{
 		FacingDirection();
 
-		if (isAttack_)
+		if(status_.hp_ > 0)
 		{
-			if (hModel_ != modelList_[ATTACK])
+			if (isAttack_)
 			{
-				hModel_ = modelList_[ATTACK];
-				Model::SetAnimFrame(hModel_, 1, animData_.totalAttackFrame_, animData_.attackSpeed_);
+				if (hModel_ != modelList_[ATTACK])
+				{
+					hModel_ = modelList_[ATTACK];
+					Model::SetAnimFrame(hModel_, 1, animData_.totalAttackFrame_, animData_.attackSpeed_);
+				}
+				if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
+					Attack();
 			}
-			if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
-				Attack();
-		}
-		else if (hModel_ != modelList_[RUN])
-		{
-			hModel_ = modelList_[RUN];
-			Model::SetAnimFrame(hModel_, 15, animData_.eRun_, animData_.runSpeed_);
+			else if (hModel_ != modelList_[RUN])
+			{
+				hModel_ = modelList_[RUN];
+				Model::SetAnimFrame(hModel_, 15, animData_.eRun_, animData_.runSpeed_);
+			}
 		}
 
 
