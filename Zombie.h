@@ -8,7 +8,6 @@ class Zombie
 public:
 	Zombie(GameObject* parent);
 	void Initialize();
-	void Draw();
 	void Release();
 	void Attack() override;
 };

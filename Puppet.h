@@ -31,6 +31,12 @@ enum CHARA_STATE
 class Puppet
 	: public GameObject
 {
+	enum SOUND_TYPE
+	{
+		ATTACK = 0,
+		DEAD,
+		END
+	};
 public:
 	struct Pos
 	{
@@ -213,11 +219,6 @@ protected:
 				if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
 					Attack();
 			}
-			else if (hModel_ != modelList_[RUN])
-			{
-				hModel_ = modelList_[RUN];
-				Model::SetAnimFrame(hModel_, 15, animData_.eRun_, animData_.runSpeed_);
-			}
 		}
 
 
@@ -229,7 +230,11 @@ protected:
 
 		Die();
 	};
-	void Draw() {};
+	void Draw() 
+	{
+		Model::SetTransform(hModel_, transform_);
+		Model::Draw(hModel_);
+	};
 	void Release() {};
 
 	void LoadStatus(int _type)
@@ -244,6 +249,14 @@ protected:
 			}
 		}
 
+		hModel_ = modelList_[STAND];
+		Model::SetAnimFrame(hModel_, 1, animData_.totalRunFrame_, animData_.runSpeed_);
+
+		dir_ = DIRECTION::UP;
+
+		isAlive_ = true;
+		isAttack_ = false;
+		attacked_ = false;
 	}
 
 	void SetStatus(CsvReader _csv, int _line)

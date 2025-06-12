@@ -3,6 +3,7 @@
 #include "Engine/GameObject.h"
 
 const int WIDTH{ 7 }, HEIGHT{ 11 };
+const float TILE_SIZE{ 1.0f };
 
 struct MAPCHIP
 {

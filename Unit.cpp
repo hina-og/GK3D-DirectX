@@ -1,5 +1,6 @@
 #include "Unit.h"
 #include "Engine/Camera.h"
+#include "Stage.h"
 
 Unit::Unit()
 {
@@ -130,9 +131,11 @@ void Unit::InRange(std::vector<Puppet*> _puppet)
 					0
 				};
 
-				float x = abs(attackPos.x - enemyPos.x), y = abs(attackPos.y - enemyPos.z);
-				if (x < 1.0 &&
-					y < 1.0)
+				float x = abs(attackPos.x - enemyPos.x),
+					  y = abs(attackPos.y - enemyPos.z);
+
+				if (x < TILE_SIZE / 2 &&
+					y < TILE_SIZE / 2)
 				{
 					puppet_[my]->isAttack_ = true;
 					puppet_[my]->inRangeChara_.push_back(_puppet[enemy]);

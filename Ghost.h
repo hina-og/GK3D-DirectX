@@ -8,7 +8,6 @@ class Ghost
 public:
 	Ghost(GameObject* parent);
 	void Initialize();
-	void Draw();
 	void Release();
 	void Attack() override;
 };
