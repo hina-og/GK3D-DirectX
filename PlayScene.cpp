@@ -25,4 +25,5 @@ void PlayScene::Draw()
 
 void PlayScene::Release()
 {
+	Image::AllRelease();
 }

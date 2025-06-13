@@ -60,8 +60,8 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	Image::SetTransform(hPict_, transform_);
-	Image::Draw(hPict_);
+	//Image::SetTransform(hPict_, transform_);
+	//Image::Draw(hPict_);
 }
 
 void TitleScene::Release()

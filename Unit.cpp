@@ -106,6 +106,8 @@ void Unit::InvaderMove()
 		if (!puppet_[p]->isAlive_)
 			puppet_[p]->KillMe();
 	}
+
+	
 }
 
 void Unit::InRange(std::vector<Puppet*> _puppet)

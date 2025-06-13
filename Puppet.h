@@ -7,6 +7,7 @@
 #include "Engine/CsvReader.h"
 #include "Engine/Model.h"
 #include "Engine/Audio.h"
+#include "Engine/VFX.h"
 
 enum CHARA_TYPE
 {
@@ -55,6 +56,10 @@ public:
 	DIRECTION dir_;
 
 	std::vector<Pos> range_;
+	std::vector<XMFLOAT3> rangePos_;
+	std::vector<EmitterData> particle_;
+
+
 	
 	bool isAttack_;
 	bool isAlive_;//ê∂Ç´ÇƒÇ¢ÇÈÇ©
@@ -69,19 +74,24 @@ public:
 
 	std::vector<Pos> GetAttackTiles(DIRECTION _dir)
 	{
-		std::vector<Pos> result;
-		for (int i = 0; i < range_.size(); i++)
-		{
-			Pos rotated = rotate(range_[i], _dir);
-			Pos target = { rotated.x, rotated.y };
-			result.push_back(target);
-		}
-		return result;
+		//std::vector<Pos> result;
+		//for (int i = 0; i < range_.size(); i++)
+		//{
+		//	Pos rotated = rotate(range_[i], _dir);
+		//	result.push_back(rotated);
+		//}
+		//return result;
+		return range_;
 	}
 
 	void SetDirection(DIRECTION _dir)
 	{
 		dir_ = _dir;
+
+		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
+		{
+			range_[rangeNum] = rotate(range_[rangeNum], dir_);
+		}
 	}
 
 	void SetDirection(int _dir)
@@ -102,6 +112,10 @@ public:
 			break;
 		default:
 			break;
+		}
+		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
+		{
+			rotate(range_[rangeNum], dir_);
 		}
 	}
 
@@ -228,6 +242,11 @@ protected:
 			attacked_ = false;
 		}
 
+		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
+		{
+			rangePos_[rangeNum] = { transform_.position_.x + range_[rangeNum].x,0,transform_.position_.z + range_[rangeNum].y};
+		}
+
 		Die();
 	};
 	void Draw() 
@@ -257,6 +276,24 @@ protected:
 		isAlive_ = true;
 		isAttack_ = false;
 		attacked_ = false;
+
+		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
+		{
+			EmitterData data;
+
+			data.textureFileName = "Particle\\Others\\bite.png";
+			data.delay = 0;
+			data.gravity = -0.003f;
+			data.direction = { 0, 1, 0 };
+			data.speed = 0.0f;
+			data.sizeRnd = { 0.4, 0.4 };
+			data.color = { 1, 1, 0, 0.8 };
+			data.deltaColor = { 0, -0.03, 0, -0.02 };
+
+			particle_.push_back(data);
+		}
+
+
 	}
 
 	void SetStatus(CsvReader _csv, int _line)
@@ -305,9 +342,18 @@ protected:
 
 			std::stringstream ss(str);
 			ss >> brace1 >> readRange.x >> comma >> readRange.y >> brace2;
+			if (range_.size() > 0)
+			{
+				if (range_.back().x == readRange.x && range_.back().y == readRange.y)
+				{
+					break;
+				}
+			}
+
 			if (brace1 == '{' && comma == '|' && brace2 == '}') 
 			{
 				range_.push_back(readRange);
+				rangePos_.push_back({ transform_.position_.x + readRange.x,0,transform_.position_.z + readRange.y });
 			}
 
 		}
