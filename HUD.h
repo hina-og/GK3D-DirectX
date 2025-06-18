@@ -12,11 +12,13 @@ class HUD
 	int hBaseHitPoint_;
 	Transform transformHP_;
 	
-
 	int hTimeBase_;
 	Text* timeText;
 	Transform transformTime_;
 	Transform transformTimeText_;
+
+	int hModelDirection_;
+	Transform transformArrow_;
 public:
 	int HP_;
 	float time_;
@@ -30,5 +32,6 @@ public:
 	void InitHP(int _hp);
 	void TimeUpdate();
 	std::string ToMinutesString();
+	void SetDirection(int _dir);
 };
 

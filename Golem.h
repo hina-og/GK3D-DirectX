@@ -7,7 +7,7 @@ class Golem
 {
 public:
 	Golem(GameObject* parent);
-	void Initialize();
+	void Initialize() override;
 	void Release();
 	void Attack() override;
 };

@@ -91,22 +91,27 @@ void Battle::Update()
 
 		Input::GetMousePosition(mouseX, mouseY);
 
-		if (Input::IsKeyDown(DIK_W))
+		if (!stage->IsZooming())
 		{
-			selectDir = Puppet::UP;
+			if (Input::IsKeyDown(DIK_S))
+			{
+				selectDir = Puppet::DOWN;
+			}
+			else if (Input::IsKeyDown(DIK_A))
+			{
+				selectDir = Puppet::LEFT;
+			}
+			else if (Input::IsKeyDown(DIK_W))
+			{
+				selectDir = Puppet::UP;
+			}
+			else if (Input::IsKeyDown(DIK_D))
+			{
+				selectDir = Puppet::RIGHT;
+			}
 		}
-		else if (Input::IsKeyDown(DIK_A))
-		{
-			selectDir = Puppet::LEFT;
-		}
-		else if (Input::IsKeyDown(DIK_S))
-		{
-			selectDir = Puppet::DOWN;
-		}
-		else if (Input::IsKeyDown(DIK_D))
-		{
-			selectDir = Puppet::RIGHT;
-		}
+		
+		hud->SetDirection(selectDir);
 
 		//ƒ}ƒEƒX¶‚ğ‰Ÿ‚µ‚Ä‚¢‚é‚Æ‚«
 		if (Input::IsMouseButtonDown(LEFT_CLICK))

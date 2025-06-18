@@ -7,7 +7,7 @@ class Mouse
 {
 public:
 	Mouse(GameObject* parent);
-	void Initialize();
+	void Initialize() override;
 	void Release();
 	void Attack() override;
 };

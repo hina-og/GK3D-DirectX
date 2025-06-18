@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include <sstream>
 #include "Engine/GameObject.h"
 #include "Engine/Time.h"
 #include "Engine/Input.h"
@@ -38,6 +37,8 @@ class Puppet
 		DEAD,
 		END
 	};
+
+	const float effectPosY = 0.5;
 public:
 	struct Pos
 	{
@@ -47,9 +48,9 @@ public:
 
 	enum DIRECTION
 	{
-		UP = 0,
+		DOWN = 0,
 		LEFT,
-		DOWN,
+		UP,
 		RIGHT
 	};
 
@@ -99,13 +100,13 @@ public:
 		switch (_dir)
 		{
 		case 0:
-			dir_ = UP;
+			dir_ = DOWN;
 			break;
 		case 1:
 			dir_ = LEFT;
 			break;
 		case 2:
-			dir_ = DOWN;
+			dir_ = UP;
 			break;
 		case 3:
 			dir_ = RIGHT;
@@ -115,13 +116,14 @@ public:
 		}
 		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
 		{
-			rotate(range_[rangeNum], dir_);
+			range_[rangeNum] = rotate(range_[rangeNum], dir_);
 		}
 	}
 
 	void FacingDirection()
 	{
-		switch (dir_)
+		transform_.rotate_.y = dir_ * 90;
+		/*switch (dir_)
 		{
 		case Puppet::UP:
 			transform_.rotate_.y = 180.0;
@@ -137,14 +139,14 @@ public:
 			break;
 		default:
 			break;
-		}
+		}*/
 	}
 
 	void Move(DIRECTION _dir)
 	{
 		if (hModel_ != modelList_[RUN])
 		{
-			hModel_ = hModel_ = modelList_[RUN];
+			hModel_ = modelList_[RUN];
 			Model::SetAnimFrame(hModel_, 0, animData_.totalRunFrame_, animData_.runSpeed_);
 		}
 		else if (animData_.eRun_ <= Model::GetAnimFrame(hModel_))
@@ -196,7 +198,7 @@ protected:
 
 	AnimationData animData_;
 	int hModel_;
-	int modelList_[STATE_END];
+	int modelList_[CHARA_STATE::STATE_END];
 	int hPict_;
 	int rangePict_;
 	bool attacked_;
@@ -216,18 +218,19 @@ protected:
 	};
 	Status status_;
 
-	void Initialize() {};
+	virtual void Initialize() {};
 	void Update() 
 	{
 		FacingDirection();
+
 
 		if(status_.hp_ > 0)
 		{
 			if (isAttack_)
 			{
-				if (hModel_ != modelList_[ATTACK])
+				if (hModel_ != modelList_[CHARA_STATE::ATTACK])
 				{
-					hModel_ = modelList_[ATTACK];
+					hModel_ = modelList_[CHARA_STATE::ATTACK];
 					Model::SetAnimFrame(hModel_, 1, animData_.totalAttackFrame_, animData_.attackSpeed_);
 				}
 				if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
@@ -236,7 +239,7 @@ protected:
 		}
 
 
-		if (hModel_ == modelList_[ATTACK] && Model::GetAnimFrame(hModel_) >= animData_.totalAttackFrame_)
+		if (hModel_ == modelList_[CHARA_STATE::ATTACK] && Model::GetAnimFrame(hModel_) >= animData_.totalAttackFrame_)
 		{
 			isAttack_ = false;
 			attacked_ = false;
@@ -244,7 +247,7 @@ protected:
 
 		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
 		{
-			rangePos_[rangeNum] = { transform_.position_.x + range_[rangeNum].x,0,transform_.position_.z + range_[rangeNum].y};
+			rangePos_[rangeNum] = { transform_.position_.x + range_[rangeNum].x,effectPosY,transform_.position_.z + range_[rangeNum].y};
 		}
 
 		Die();
@@ -280,16 +283,6 @@ protected:
 		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
 		{
 			EmitterData data;
-
-			data.textureFileName = "Particle\\Others\\bite.png";
-			data.delay = 0;
-			data.gravity = -0.003f;
-			data.direction = { 0, 1, 0 };
-			data.speed = 0.0f;
-			data.sizeRnd = { 0.4, 0.4 };
-			data.color = { 1, 1, 0, 0.8 };
-			data.deltaColor = { 0, -0.03, 0, -0.02 };
-
 			particle_.push_back(data);
 		}
 
@@ -335,35 +328,29 @@ protected:
 
 		for (int column = Range;column < _csv.GetColumns(_line);column++)
 		{
-			
-			std::string str = _csv.GetString(_line, column);
-			Pos readRange;
-			char brace1, comma, brace2;
-
-			std::stringstream ss(str);
-			ss >> brace1 >> readRange.x >> comma >> readRange.y >> brace2;
+			XMFLOAT2 readRange;
+			readRange = _csv.GetFloat2(_line, column);
+			Pos pushData;
+			pushData = { (int)readRange.x,(int)readRange.y };
 			if (range_.size() > 0)
 			{
-				if (range_.back().x == readRange.x && range_.back().y == readRange.y)
+				if (range_.back().x == pushData.x && range_.back().y == pushData.y)
 				{
 					break;
 				}
 			}
 
-			if (brace1 == '{' && comma == '|' && brace2 == '}') 
-			{
-				range_.push_back(readRange);
-				rangePos_.push_back({ transform_.position_.x + readRange.x,0,transform_.position_.z + readRange.y });
-			}
+			range_.push_back(pushData);
+			rangePos_.push_back({ transform_.position_.x + pushData.x,effectPosY,transform_.position_.z + pushData.y });
 
 		}
 
-		modelList_[STAND] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + ".fbx");
-		assert(modelList_[STAND] >= 0);
-		modelList_[RUN] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + "_Run.fbx");
-		assert(modelList_[RUN] >= 0);
-		modelList_[ATTACK] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + "_Attack.fbx");
-		assert(modelList_[ATTACK] >= 0);
+		modelList_[CHARA_STATE::STAND] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + ".fbx");
+		assert(modelList_[CHARA_STATE::STAND] >= 0);
+		modelList_[CHARA_STATE::RUN] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + "_Run.fbx");
+		assert(modelList_[CHARA_STATE::RUN] >= 0);
+		modelList_[CHARA_STATE::ATTACK] = Model::Load("Model\\" + status_.name_ + "\\" + status_.name_ + "_Attack.fbx");
+		assert(modelList_[CHARA_STATE::ATTACK] >= 0);
 	}
 
 	Pos rotate(Pos _pos, int _dir)
@@ -373,11 +360,11 @@ protected:
 		case DIRECTION::UP:
 			return { _pos.x,  _pos.y };
 		case DIRECTION::RIGHT:
-			return { -_pos.y, _pos.x };
+			return { _pos.y,  -_pos.x };
 		case DIRECTION::DOWN:
 			return { -_pos.x, -_pos.y };
 		case DIRECTION::LEFT:
-			return { _pos.y,  -_pos.x };
+			return { -_pos.y, _pos.x };
 		}
 	}
 

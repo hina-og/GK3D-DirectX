@@ -2,7 +2,7 @@ name,positionX,positionY,scaleX,scaleY
 MaterialTable,-930,0,0.7,1
 Material,-1125,-550,1,1
 MaterialTable,930,0,0.7,1
-Make,-872.5,340,1,1
+Make,-930,340,1,1
 MaterialNumText,680,390,1,1
 Puppet,740,-550,1,1
 PuppetNumText,680,390,1,1
@@ -10,3 +10,4 @@ Table,-1125,-200,1,1
 HP,0,-650,1,1
 TimeBase,0,655,1,1
 TimeText,615,-290,1,1
+ModelDirection,930,-340,1,1

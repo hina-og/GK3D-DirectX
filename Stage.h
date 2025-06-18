@@ -42,5 +42,6 @@ public:
 	XMFLOAT2 SelectTileNumber(XMFLOAT2 _pos);
 	bool SelectTile(XMFLOAT2 _screenPos, XMFLOAT2& _outNum, XMFLOAT3& _outPos);
 	void PlaceCharacter(XMFLOAT2 _num);
+	bool IsZooming() { return isZooming_; }
 };
 

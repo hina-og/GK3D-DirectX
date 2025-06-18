@@ -1,6 +1,7 @@
 #include "csvReader.h"
 #include <fstream>
 #include <assert.h>
+#include <sstream>
 
 CsvReader::CsvReader(std::string filename)
 {
@@ -161,4 +162,37 @@ float CsvReader::GetFloat(int line, int column)
 {
 	std::string str = GetString(line, column);
 	return std::stof(str);
+}
+
+DirectX::XMFLOAT2 CsvReader::GetFloat2(int line, int column)
+{
+	std::string str = GetString(line, column);
+	DirectX::XMFLOAT2 returnVal;
+	char brace1, comma, brace2;
+	std::stringstream ss(str);
+	ss >> brace1 >> returnVal.x >> comma >> returnVal.y >> brace2;
+
+	return returnVal;
+}
+
+DirectX::XMFLOAT3 CsvReader::GetFloat3(int line, int column)
+{
+	std::string str = GetString(line, column);
+	DirectX::XMFLOAT3 returnVal;
+	char brace1, comma, brace2;
+	std::stringstream ss(str);
+	ss >> brace1 >> returnVal.x >> comma >> returnVal.y >> comma >> returnVal.z >> brace2;
+
+	return returnVal;
+}
+
+DirectX::XMFLOAT4 CsvReader::GetFloat4(int line, int column)
+{
+	std::string str = GetString(line, column);
+	DirectX::XMFLOAT4 returnVal;
+	char brace1, comma, brace2;
+	std::stringstream ss(str);
+	ss >> brace1 >> returnVal.w >> comma >> returnVal.x >> comma >> returnVal.y >> comma >> returnVal.z >> brace2;
+
+	return returnVal;
 }

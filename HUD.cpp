@@ -25,6 +25,9 @@ void HUD::Initialize()
 	timeText = new Text;
 	timeText->Initialize();
 
+	hModelDirection_ = Image::Load("Image\\ModelDirection.png");
+	assert(hModelDirection_ >= 0);
+
 	for (int line = 1;line < ImageData.GetLines();line++)
 	{
 
@@ -43,6 +46,13 @@ void HUD::Initialize()
 		{
 			transformTimeText_.position_ = { ImageData.GetFloat(line,1),ImageData.GetFloat(line,2),0 };
 		}
+		if (ImageData.GetString(line, 0) == "ModelDirection")
+		{
+			Transform fTrans;
+			fTrans.position_ = { ImageData.GetFloat(line,1),ImageData.GetFloat(line,2),0 };
+			fTrans.scale_ = { ImageData.GetFloat(line, 3), ImageData.GetFloat(line, 4), 1.0 };
+			Image::SetTransform(hModelDirection_, fTrans);
+		}
 	}
 
 	HP_ = maxHP;
@@ -55,6 +65,9 @@ void HUD::Update()
 	hpTransfofm_.position_.x = hpTransfofm_.position_.x + Image::GetImageSize(hHitPoint_).x - Image::GetImageSize(hBaseHitPoint_).x;
 	hpTransfofm_.scale_.x = (float)HP_ / (float)maxHP;
 	Image::SetTransform(hHitPoint_, hpTransfofm_);
+
+	Transform fTrans;
+	fTrans.rotate_.y += 1;
 }
 
 void HUD::Draw()
@@ -64,6 +77,8 @@ void HUD::Draw()
 	Image::Draw(hTimeBase_);
 
 	timeText->Draw((int)transformTimeText_.position_.x, transformTimeText_.position_.y, ToMinutesString().c_str());
+
+	Image::Draw(hModelDirection_);
 }
 
 void HUD::Release()
@@ -87,14 +102,20 @@ std::string HUD::ToMinutesString()
 	int seconds = (int)time_ % 60;
 
 	std::string secStr;
-	if (seconds < 10) {
-		// —á‚¦‚Î•b‚ª5‚È‚ç "05" ‚É‚·‚é
+	if (seconds < 10) 
+	{
 		secStr = "0" + std::to_string(seconds);
 	}
-	else {
-		// —á‚¦‚Î•b‚ª12‚È‚ç "12" ‚Ì‚Ü‚Ü
+	else 
+	{
 		secStr = std::to_string(seconds);
 	}
 
 	return std::to_string(minutes) + ":" + secStr;
+}
+
+void HUD::SetDirection(int _dir)
+{
+	int imageSize = Image::GetImageSize(hModelDirection_).y;//³•ûŒ`‚¾‚©‚çc•‚¾‚¯Žæ“¾‚·‚é
+	Image::SetRect(hModelDirection_, _dir * imageSize, 0, imageSize, imageSize);
 }

@@ -80,7 +80,6 @@ namespace Image
 	void SetAlpha(int handle, int alpha);
 
 	void SetPosition(int handle, XMFLOAT3 _pos);
-	void SetScale(int handle, XMFLOAT3 _sca);
 
 	//ワールド行列を設定
 	//引数：handle	設定したい画像の番号
