@@ -1,17 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-enum class Difficulty
+namespace SetUp
 {
-    Easy,
-    Normal,
-    Hard,
-    Despair
-};
-
-class SetUp
-{
-public:
-    static Difficulty currentDifficulty;
+    extern  std::string currentDifficulty;
 };
 

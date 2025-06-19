@@ -19,6 +19,9 @@ void Calendar::Initialize()
 	hPageSE_ = Audio::Load("Sounds\\SE\\page.wav", false, 10);
 
 	day_ = 0;
+
+	tutoerialText_ = new Text;
+	tutoerialText_->Initialize();
 }
 
 void Calendar::Update()
@@ -41,6 +44,9 @@ void Calendar::Draw()
 		Image::Draw(hNumber_);
 	}
 	hImage_.Update();
+
+	if(day_ == 0)
+		tutoerialText_->Draw(550, 650, "Tutorial");
 }
 
 void Calendar::Back()

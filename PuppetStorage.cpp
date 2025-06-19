@@ -11,6 +11,17 @@ PuppetStorage::PuppetStorage(GameObject* parent)
 void PuppetStorage::Initialize()
 {
 	selectPuppetNumber = 0;
+
+	addAnim_.Initialize("Image\\flashAnim.png", 0, 0, 64, 64, false, 3, false);
+	addAnim_.SetSpeed(0.15);
+
+	selectFrame_ = Image::Load("Image\\frame.png");
+	assert(selectFrame_ >= 0);
+
+	hpText_ = new Text;
+	powerText_ = new Text;
+	speedText_ = new Text;
+
 }
 
 void PuppetStorage::Update()
@@ -18,16 +29,17 @@ void PuppetStorage::Update()
 	for (int i = 0;i < CHARA_TYPE::CHARA_END;i++)
 	{
 		puppetList_[i].button.Update();
-	}
 
-	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
-	{
 		if (puppetList_[i].button.isPress_)
 		{
+			Image::SetPosition(selectFrame_, { (float)puppetList_[i].x / Direct3D::screenWidth_,(float)puppetList_[i].y / -Direct3D::screenHeight_ ,0 });
+
 			selectPuppetNumber = i;
-			break;
 		}
 	}
+
+
+	addAnim_.Update();
 }
 
 void PuppetStorage::Draw()
@@ -43,6 +55,12 @@ void PuppetStorage::Draw()
 			int i = 0;
 		}
 	}
+
+	addAnim_.Draw();
+	Image::Draw(selectFrame_);
+	Image::Draw(hStatusBase_);
+
+	//hpText_->Draw(0,0,puppetList_[0].)
 }
 
 void PuppetStorage::Release()
@@ -85,12 +103,20 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 		puppetList_[i].textY = _csv.GetFloat(7, posY);
 	}
 
+	hStatusBase_ = Image::Load("Image\\" + _csv.GetString(13, name) + ".png");
+	assert(hStatusBase_ >= 0);
+	Image::SetPosition(hStatusBase_, { _csv.GetFloat(13,posX) / Direct3D::screenWidth_,_csv.GetFloat(13,posY) / Direct3D::screenHeight_,0 });
+
+	Image::SetPosition(selectFrame_, { (float)puppetList_[0].x / Direct3D::screenWidth_,(float)puppetList_[0].y / -Direct3D::screenHeight_ ,0 });
 }
 
 bool PuppetStorage::AddStorage(int _type)
 {
 	if (_type >= 0)
 	{
+		addAnim_.SetPosition({ (float)puppetList_[_type].x,(float)puppetList_[_type].y,0 });
+		addAnim_.Start();
+
 		puppetList_[_type].num++;
 		return true;
 	}

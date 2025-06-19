@@ -11,9 +11,9 @@ GameClear::GameClear(GameObject* parent)
 
 void GameClear::Initialize()
 {
-	hBlack_ = Image::Load("Image\\Black.png");
-	assert(hBlack_ >= 0);
-	Image::SetAlpha(hBlack_, 120);
+	//hBlack_ = Image::Load("Image\\Black.png");
+	//assert(hBlack_ >= 0);
+	//Image::SetAlpha(hBlack_, 120);
 
 	hBord_ = Image::Load("Image\\GameClear.png");
 	assert(hBord_ >= 0);
@@ -39,7 +39,7 @@ void GameClear::Update()
 
 void GameClear::Draw()
 {
-	Image::Draw(hBlack_);
+	//Image::Draw(hBlack_);
 	Image::SetPosition(hBord_, transform_.position_);
 	Image::Draw(hBord_);
 }

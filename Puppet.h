@@ -213,7 +213,7 @@ protected:
 		int hp_;//体力
 		int cost_;//召喚コスト
 		int power_;//攻撃力
-		float speed_;//移動速度や攻撃速度
+		float speed_;//移動速度
 		//--------------------
 	};
 	Status status_;

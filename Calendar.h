@@ -1,6 +1,7 @@
 #pragma once
 #include "Animation.h"
 #include "Button.h"
+#include "Engine/Text.h"
 
 class Calendar
 {
@@ -8,6 +9,8 @@ class Calendar
 	int hPageSE_;
 	int hNumber_;
 	int day_;
+
+	Text* tutoerialText_;
 public:
 	Button calendar_;
 

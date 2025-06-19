@@ -22,7 +22,7 @@ void SelectStage::Update()
 		calendar.Back();
 		calendar.SetDay(nowStage_);
 	}
-	if ((Input::IsKeyDown(DIK_D) || Input::GetMouseMove().z > 0) && nowStage_ < STAGE_NUM)
+	if ((Input::IsKeyDown(DIK_D) || Input::GetMouseMove().z > 0) && nowStage_ < stageNum_)
 	{
 		nowStage_++;
 		calendar.Next();
@@ -43,6 +43,11 @@ void SelectStage::Draw()
 
 void SelectStage::Release()
 {
+}
+
+void SelectStage::SetStageNum(int _num)
+{
+	stageNum_ = _num;
 }
 
 int SelectStage::GetStageNum()

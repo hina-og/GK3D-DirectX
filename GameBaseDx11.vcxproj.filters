@@ -42,6 +42,9 @@
     <Filter Include="Scene\PlayScene\Battle\Unit">
       <UniqueIdentifier>{43e62ef0-103b-4b50-ae24-ce87732e09bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene\TutorialScene">
+      <UniqueIdentifier>{f9b5365c-1456-4f90-bc2f-6602c84d3792}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -140,9 +143,6 @@
     <ClCompile Include="Button.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="SetUp.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Mushroom.cpp">
       <Filter>Scene\PlayScene\Battle\Puppet</Filter>
     </ClCompile>
@@ -176,18 +176,30 @@
     <ClCompile Include="Unit.cpp">
       <Filter>Scene\PlayScene\Battle\Unit</Filter>
     </ClCompile>
-    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="SelectStage.cpp">
       <Filter>Scene\TitleScene</Filter>
     </ClCompile>
     <ClCompile Include="Calendar.cpp">
       <Filter>Scene\TitleScene</Filter>
     </ClCompile>
-    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Engine\Movie.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialScene.cpp" />
+    <ClCompile Include="Animation.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SetUp.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Scene\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialScene.cpp">
+      <Filter>Scene\TutorialScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -325,7 +337,6 @@
     <ClInclude Include="Unit.h">
       <Filter>Scene\PlayScene\Battle\Unit</Filter>
     </ClInclude>
-    <ClInclude Include="Animation.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SelectStage.h">
       <Filter>Scene\TitleScene</Filter>
@@ -333,11 +344,21 @@
     <ClInclude Include="Calendar.h">
       <Filter>Scene\TitleScene</Filter>
     </ClInclude>
-    <ClInclude Include="HUD.h" />
     <ClInclude Include="Engine\Movie.h">
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialScene.h" />
+    <ClInclude Include="Animation.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Scene\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialScene.h">
+      <Filter>Scene\TutorialScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

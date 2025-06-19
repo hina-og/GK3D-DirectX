@@ -23,6 +23,9 @@ class Stage
 
 	int hGround_;
 	int hWall_;
+	int hTileSign_;
+
+	bool isSelect_;
 
 	bool isZooming_;
 	int zoomdist_;

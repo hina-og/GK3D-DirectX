@@ -5,7 +5,7 @@
 class SelectStage
 	: public GameObject
 {
-	const int STAGE_NUM{ 3 };
+	int stageNum_;
 	int nowStage_;
 
 	Calendar calendar;
@@ -18,6 +18,7 @@ public:
 	void Draw();
 	void Release();
 
+	void SetStageNum(int _num);
 	int GetStageNum();
 };
 

@@ -59,13 +59,13 @@ void MaterialTable::Initialize()
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
 		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(8, posX);
 		table.material[i].y = csv.GetFloat(8, posY);
-		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\empty.png");
+		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\frame.png");
 
 		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(8,posX);
 		table.material[i].y = csv.GetFloat(8,posY);
 		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
 
-		table.material[i].name = "empty";
+		table.material[i].name = "frame";
 	}
 	
 
@@ -113,7 +113,7 @@ void MaterialTable::Update()
 	//選択したテーブルの素材を戻す
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
-		if (table.material[i].button.isPress_ && 0 < table.num && table.material[i].name != "empty")
+		if (table.material[i].button.isPress_ && 0 < table.num && table.material[i].name != "frame")
 		{
 
 			for (int j = 0; j < materialName_.size(); j++)
@@ -135,12 +135,12 @@ void MaterialTable::Update()
 			table.num--;
 
 			table.material[table.num].type = MATERIAL_TYPE::EMPTY;
-			table.material[table.num].name = "empty";
-			table.material[table.num].button.ChangeImage("Image\\empty.png");
+			table.material[table.num].name = "frame";
+			table.material[table.num].button.ChangeImage("Image\\frame.png");
 			Audio::Play(hChoise_);
 		}
 	}
-	if (makeButton_.isPress_ && table.material[0].name != "empty")
+	if (makeButton_.isPress_ && table.material[0].name != "frame")
 	{
 		TableReset();
 		Audio::Play(hSelect_);
@@ -225,7 +225,7 @@ void MaterialTable::TableReset()
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
-		if (table.material[i].name == "empty")
+		if (table.material[i].name == "frame")
 			break;
 		if (!isMade)
 		{
@@ -233,8 +233,8 @@ void MaterialTable::TableReset()
 				materialList_[table.material[i].type].num++;
 		}
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
-		table.material[i].name = "empty";
-		table.material[i].button.ChangeImage("Image\\empty.png");
+		table.material[i].name = "frame";
+		table.material[i].button.ChangeImage("Image\\frame.png");
 		table.num = 0;
 	}
 }

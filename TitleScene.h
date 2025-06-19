@@ -11,8 +11,6 @@ class TitleScene :
 
     int hMovie_;
 
-    bool canStart_;
-
     bool isFading = false;
     float fadeTimer = 0.0f;
     const float fadeDuration = 1.0f;

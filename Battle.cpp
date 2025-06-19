@@ -8,6 +8,7 @@
 #include "GameOver.h"
 #include "GameClear.h"
 #include "Engine/Audio.h"
+#include "File.h"
 
 Battle::Battle(GameObject* parent)
 	: GameObject(parent, "Battle")
@@ -28,22 +29,9 @@ void Battle::Initialize()
 
 
 	CsvReader levelData;
-
-	switch (SetUp::currentDifficulty)
-	{
-	case Difficulty::Easy:
-		levelData.Load("GameData\\LevelEasy.csv");
-		break;
-	case Difficulty::Normal:
-		levelData.Load("GameData\\LevelNormal.csv");
-		break;
-	case Difficulty::Hard:
-		levelData.Load("GameData\\LevelHard.csv");
-		break;
-	case Difficulty::Despair:
-		levelData.Load("GameData\\LevelDespair.csv");
-		break;
-	}
+	
+	std::string str = SetUp::currentDifficulty;
+	levelData.Load(str);
 
 	hud->time_=levelData.GetFloat(0, 0);
 	hud->InitHP(levelData.GetInt(0, 1));
@@ -73,6 +61,9 @@ void Battle::Initialize()
 
 void Battle::Update()
 {
+	XMFLOAT2 mousePos = { (float)mouseX, (float)mouseY };
+	stage->SelectTilePosition(mousePos);
+
 	if (0 < hud->HP_ && 0 < hud->time_)
 	{
 		for (int i = spawnedNum; i < spawnList_.size(); i++)
@@ -116,7 +107,7 @@ void Battle::Update()
 		//ƒ}ƒEƒX¶‚ð‰Ÿ‚µ‚Ä‚¢‚é‚Æ‚«
 		if (Input::IsMouseButtonDown(LEFT_CLICK))
 		{
-			XMFLOAT2 mousePos = { (float)mouseX, (float)mouseY };
+
 			XMFLOAT2 tileNum = { -1, -1 };
 			XMFLOAT3 tilePos = {};
 

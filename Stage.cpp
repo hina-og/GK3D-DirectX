@@ -39,10 +39,18 @@ void Stage::Initialize()
 	assert(hGround_ >= 0);
 
 	hWall_ = Model::Load("Model\\Wall.fbx");
-	assert(hWall_);
+	assert(hWall_ >= 0);
 	Transform wallTrans;
 	wallTrans.position_ = { 0,0,endLine_ };
 	Model::SetTransform(hWall_, wallTrans);
+
+	hTileSign_ = Model::Load("Model\\TileSign.fbx");
+	assert(hTileSign_ >= 0);
+	Transform signTrans;
+	signTrans.position_ = mapData_[0]->pos_ ;
+	Model::SetTransform(hTileSign_, signTrans);
+
+	isSelect_ = false;
 	isZooming_ = false;
 }
 
@@ -114,6 +122,10 @@ void Stage::Draw()
 	}
 	Model::Draw(hGround_);
 	Model::Draw(hWall_);
+	if (isSelect_)
+	{
+		Model::Draw(hTileSign_);
+	}
 }
 
 void Stage::Release()
@@ -176,11 +188,16 @@ XMFLOAT3 Stage::SelectTilePosition(XMFLOAT2 _pos)
 			{
 				mapData_[y][x].select_ = true;
 				returnValue = mapData_[y][x].pos_;
+
+				Transform signTrans;
+				signTrans.position_ = returnValue;
+				Model::SetTransform(hTileSign_, signTrans);
+				isSelect_ = true;
 				return returnValue;
 			}
 		}
 	}
-
+	isSelect_ = false;
 	return returnValue;
 }
 

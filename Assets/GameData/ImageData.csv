@@ -10,4 +10,5 @@ Table,-1125,-200,1,1
 HP,0,-650,1,1
 TimeBase,0,655,1,1
 TimeText,615,-290,1,1
-ModelDirection,930,-340,1,1
+ModelDirection,450,600,1,1
+StatusBase,930,-300,1,1
