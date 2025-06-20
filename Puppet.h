@@ -73,15 +73,8 @@ public:
 		Audio::Play(hAttackSE_);
 	}
 
-	std::vector<Pos> GetAttackTiles(DIRECTION _dir)
+	std::vector<Pos> GetAttackTiles()
 	{
-		//std::vector<Pos> result;
-		//for (int i = 0; i < range_.size(); i++)
-		//{
-		//	Pos rotated = rotate(range_[i], _dir);
-		//	result.push_back(rotated);
-		//}
-		//return result;
 		return range_;
 	}
 
@@ -123,23 +116,6 @@ public:
 	void FacingDirection()
 	{
 		transform_.rotate_.y = dir_ * 90;
-		/*switch (dir_)
-		{
-		case Puppet::UP:
-			transform_.rotate_.y = 180.0;
-			break;
-		case Puppet::LEFT:
-			transform_.rotate_.y = 90.0;
-			break;
-		case Puppet::DOWN:
-			transform_.rotate_.y = 0.0;
-			break;
-		case Puppet::RIGHT:
-			transform_.rotate_.y = 270.0;
-			break;
-		default:
-			break;
-		}*/
 	}
 
 	void Move(DIRECTION _dir)
@@ -176,13 +152,57 @@ public:
 	{
 		if (_type == "Mouse") return CHARA_TYPE::MOUSE;
 		if (_type == "Zombie") return CHARA_TYPE::ZOMBIE;
-		if (_type == "Mushrrom") return CHARA_TYPE::MUSHROOM;
+		if (_type == "Mushrom") return CHARA_TYPE::MUSHROOM;
 		if (_type == "Slime") return CHARA_TYPE::SLIME;
 		if (_type == "Golem") return CHARA_TYPE::GOLEM;
 		if (_type == "Ghost") return CHARA_TYPE::GHOST;
 	}
 
 	int GetPower() { return status_.power_; }
+	int GetHitPoint() { return status_.hp_; }
+	float GetSpeed() { return status_.speed_; }
+
+
+	virtual void Initialize() {};
+	void Update()
+	{
+		FacingDirection();
+
+
+		if (status_.hp_ > 0)
+		{
+			if (isAttack_)
+			{
+				if (hModel_ != modelList_[CHARA_STATE::ATTACK])
+				{
+					hModel_ = modelList_[CHARA_STATE::ATTACK];
+					Model::SetAnimFrame(hModel_, 1, animData_.totalAttackFrame_, animData_.attackSpeed_);
+				}
+				if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
+					Attack();
+			}
+		}
+
+
+		if (hModel_ == modelList_[CHARA_STATE::ATTACK] && Model::GetAnimFrame(hModel_) >= animData_.totalAttackFrame_)
+		{
+			isAttack_ = false;
+			attacked_ = false;
+		}
+
+		for (int rangeNum = 0; rangeNum < range_.size(); rangeNum++)
+		{
+			rangePos_[rangeNum] = { transform_.position_.x + range_[rangeNum].x,effectPosY,transform_.position_.z + range_[rangeNum].y };
+		}
+
+		Die();
+	};
+	void Draw()
+	{
+		Model::SetTransform(hModel_, transform_);
+		Model::Draw(hModel_);
+	};
+	void Release() {};
 protected:
 
 	struct AnimationData
@@ -218,46 +238,7 @@ protected:
 	};
 	Status status_;
 
-	virtual void Initialize() {};
-	void Update() 
-	{
-		FacingDirection();
-
-
-		if(status_.hp_ > 0)
-		{
-			if (isAttack_)
-			{
-				if (hModel_ != modelList_[CHARA_STATE::ATTACK])
-				{
-					hModel_ = modelList_[CHARA_STATE::ATTACK];
-					Model::SetAnimFrame(hModel_, 1, animData_.totalAttackFrame_, animData_.attackSpeed_);
-				}
-				if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
-					Attack();
-			}
-		}
-
-
-		if (hModel_ == modelList_[CHARA_STATE::ATTACK] && Model::GetAnimFrame(hModel_) >= animData_.totalAttackFrame_)
-		{
-			isAttack_ = false;
-			attacked_ = false;
-		}
-
-		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
-		{
-			rangePos_[rangeNum] = { transform_.position_.x + range_[rangeNum].x,effectPosY,transform_.position_.z + range_[rangeNum].y};
-		}
-
-		Die();
-	};
-	void Draw() 
-	{
-		Model::SetTransform(hModel_, transform_);
-		Model::Draw(hModel_);
-	};
-	void Release() {};
+	
 
 	void LoadStatus(int _type)
 	{

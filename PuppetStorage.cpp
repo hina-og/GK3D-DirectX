@@ -2,6 +2,7 @@
 #include "Char.h"
 #include "Engine/Direct3D.h"
 #include "MaterialTable.h"
+#include "PuppetFactory.h"
 
 PuppetStorage::PuppetStorage(GameObject* parent)
 	:GameObject(parent, "PuppetStorage")
@@ -19,9 +20,13 @@ void PuppetStorage::Initialize()
 	assert(selectFrame_ >= 0);
 
 	hpText_ = new Text;
+	hpText_->Initialize();
 	powerText_ = new Text;
+	powerText_->Initialize();
 	speedText_ = new Text;
+	speedText_->Initialize();
 
+	
 }
 
 void PuppetStorage::Update()
@@ -32,9 +37,8 @@ void PuppetStorage::Update()
 
 		if (puppetList_[i].button.isPress_)
 		{
-			Image::SetPosition(selectFrame_, { (float)puppetList_[i].x / Direct3D::screenWidth_,(float)puppetList_[i].y / -Direct3D::screenHeight_ ,0 });
-
 			selectPuppetNumber = i;
+			Image::SetPosition(selectFrame_, { (float)puppetList_[selectPuppetNumber].x / Direct3D::screenWidth_,(float)puppetList_[selectPuppetNumber].y / -Direct3D::screenHeight_ ,0 });
 		}
 	}
 
@@ -54,13 +58,18 @@ void PuppetStorage::Draw()
 		{
 			int i = 0;
 		}
+
+		puppetList_[i].puppet = CreatePuppetByName(puppetList_[i].name, this);
+		puppetList_[i].puppet->Initialize();
 	}
 
 	addAnim_.Draw();
 	Image::Draw(selectFrame_);
 	Image::Draw(hStatusBase_);
-
-	//hpText_->Draw(0,0,puppetList_[0].)
+	
+	hpText_->Draw(1700, 500, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
+	powerText_->Draw(1700, 560, puppetList_[selectPuppetNumber].puppet->GetPower());
+	speedText_->Draw(1700, 620, puppetList_[selectPuppetNumber].puppet->GetSpeed());
 }
 
 void PuppetStorage::Release()

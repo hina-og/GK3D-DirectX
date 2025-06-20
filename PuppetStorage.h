@@ -20,6 +20,7 @@ class PuppetStorage
 		Text numText;
 		int textX;
 		int textY;
+		Puppet* puppet;
 	};
 	
 	int hTable_;

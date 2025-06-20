@@ -231,6 +231,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Puppet.h" />
+    <ClInclude Include="PuppetFactory.h" />
     <ClInclude Include="PuppetStorage.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SelectStage.h" />

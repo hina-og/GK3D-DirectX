@@ -359,6 +359,7 @@
     <ClInclude Include="TutorialScene.h">
       <Filter>Scene\TutorialScene</Filter>
     </ClInclude>
+    <ClInclude Include="PuppetFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

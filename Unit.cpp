@@ -116,7 +116,7 @@ void Unit::InRange(std::vector<Puppet*> _puppet)
 	{
 		puppet_[my]->inRangeChara_.clear();
 		puppet_[my]->isAttack_ = false;
-		std::vector<Puppet::Pos> attackTiles = puppet_[my]->GetAttackTiles(puppet_[my]->dir_);
+		std::vector<Puppet::Pos> attackTiles = puppet_[my]->GetAttackTiles();
 
 		for (int enemy = 0; enemy < _puppet.size(); enemy++)
 		{
