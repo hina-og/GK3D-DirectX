@@ -1,7 +1,7 @@
 name,bone,meat,soul,bacteria,rock,brain,water
 Mouse,0,1,0,0,0,0,0
-Zombie,1,1,0,0,0,1,0
-Mushroom,0,0,0,1,0,0,1
-Slime,0,0,0,0,0,0,2
-Golem,0,0,0,0,3,0,0
-Ghost,0,0,2,0,0,0,0
+Zombie,1,0,0,0,0,1,0
+Mushroom,0,0,0,1,0,0,0
+Slime,0,0,0,0,0,0,1
+Golem,0,0,0,0,1,0,0
+Ghost,0,0,1,0,0,0,0

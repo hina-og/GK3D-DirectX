@@ -5,40 +5,11 @@
 #include <vector>
 #include "PuppetStorage.h"
 #include "Animation.h"
+#include "Recipe.h"
 
 const int TABLE_SIZE{ 4 };
 
-enum MATERIAL_TYPE
-{
-	BONE = 0,
-	MEAT,
-	SOUL,
-	BACTERIA,
-	ROCK,
-	BRAIN,
-	WATER,
-	MATERIAL_END,
-	EMPTY,
-};
 
-enum MATERIAL_TAG
-{
-	
-};
-
-struct Material
-{
-	int type;
-	std::vector<int> tag_;
-	int x;
-	int y;
-	Button button;
-	std::string name;
-	int num;
-	Text text;
-	int textX;
-	int textY;
-};
 
 struct Table
 {
@@ -47,12 +18,6 @@ struct Table
 	int y;
 
 	int num;
-};
-
-struct Recipe
-{
-	int ratio[MATERIAL_END];//素材の割合
-	int puppetType;//作れるキャラ
 };
 
 enum IMAGE_DATA//読み込む画像データの順番
@@ -88,6 +53,8 @@ class MaterialTable
 	int returnProbability_;
 
 	MATERIAL_TYPE StringToMaterialType(const std::string& name);
+
+	QuickRecipe* quickRecipe;
 public:
 	MaterialTable(GameObject* parent);
 	void Initialize();

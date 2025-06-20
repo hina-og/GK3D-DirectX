@@ -178,6 +178,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PuppetStorage.cpp" />
+    <ClCompile Include="Recipe.cpp" />
     <ClCompile Include="SelectStage.cpp" />
     <ClCompile Include="SetUp.cpp" />
     <ClCompile Include="Slime.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Puppet.h" />
     <ClInclude Include="PuppetFactory.h" />
     <ClInclude Include="PuppetStorage.h" />
+    <ClInclude Include="Recipe.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SelectStage.h" />
     <ClInclude Include="SetUp.h" />

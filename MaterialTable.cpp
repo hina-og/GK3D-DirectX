@@ -18,14 +18,7 @@ void MaterialTable::Initialize()
 	storage = Instantiate<PuppetStorage>(this);
 	storage->LoadImageData(csv);
 
-
-
-	CsvReader csvMaterial("GameData\\Recipe.csv");
-	materialName_.resize(csvMaterial.GetColumns(0) - 1);
-	for (int column = 1; column < csvMaterial.GetColumns(0); column++)
-	{
-		materialName_[column - 1] += csvMaterial.GetString(0, column);
-	}
+	ReadRecipe();
 
 
 	hTable_ = Image::Load("Image\\" + csv.GetString(1, name) + ".png");
@@ -79,7 +72,7 @@ void MaterialTable::Initialize()
 
 	returnProbability_ = GetPrivateProfileInt("Material", "return_probability ", 100, ".\\config.ini");
 
-	ReadRecipe();
+	quickRecipe = Instantiate<QuickRecipe>(this);
 }
 
 void MaterialTable::Update()
@@ -175,12 +168,18 @@ void MaterialTable::ReadRecipe()
 {
 	CsvReader csv("GameData\\Recipe.csv");
 	
+	materialName_.resize(csv.GetColumns(0) - 1);
+	for (int column = 1; column < csv.GetColumns(0); column++)
+	{
+		materialName_[column - 1] += csv.GetString(0, column);
+	}
+
 	for (int line = 1;line < csv.GetLines();line++)
 	{
 		Recipe r;
 		for (int column = 1;column < csv.GetColumns(line);column++)
 		{
-			r.ratio[column - 1] = csv.GetInt(line, column);
+			r.ratio.push_back(csv.GetInt(line, column));
 		}
 		r.puppetType = line - 1;
 		recipeList_.push_back(r);
@@ -221,7 +220,9 @@ int MaterialTable::MakePuppet()
 
 void MaterialTable::TableReset()
 {
-	bool isMade = storage->AddStorage(MakePuppet());
+	int makePuppetType = MakePuppet();
+	bool isMade = storage->AddStorage(makePuppetType);
+	
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
@@ -232,6 +233,7 @@ void MaterialTable::TableReset()
 			if (rand() % 100 <= returnProbability_)
 				materialList_[table.material[i].type].num++;
 		}
+
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
 		table.material[i].name = "frame";
 		table.material[i].button.ChangeImage("Image\\frame.png");
