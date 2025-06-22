@@ -35,7 +35,7 @@ void PuppetStorage::Update()
 	{
 		puppetList_[i].button.Update();
 
-		if (puppetList_[i].button.isPress_)
+		if (puppetList_[i].button.isDown_)
 		{
 			selectPuppetNumber = i;
 			Image::SetPosition(selectFrame_, { (float)puppetList_[selectPuppetNumber].x / Direct3D::screenWidth_,(float)puppetList_[selectPuppetNumber].y / -Direct3D::screenHeight_ ,0 });
@@ -65,11 +65,19 @@ void PuppetStorage::Draw()
 
 	addAnim_.Draw();
 	Image::Draw(selectFrame_);
-	Image::Draw(hStatusBase_);
+	//Image::Draw(hStatusBase_);
 	
-	hpText_->Draw(1700, 500, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
-	powerText_->Draw(1700, 560, puppetList_[selectPuppetNumber].puppet->GetPower());
-	speedText_->Draw(1700, 620, puppetList_[selectPuppetNumber].puppet->GetSpeed());
+	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
+	{
+		if (puppetList_[i].button.isPress_)
+		{
+			hpText_->Draw(1700, 500, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
+			powerText_->Draw(1700, 560, puppetList_[selectPuppetNumber].puppet->GetPower());
+			speedText_->Draw(1700, 620, puppetList_[selectPuppetNumber].puppet->GetSpeed());
+		}
+	}
+
+
 }
 
 void PuppetStorage::Release()

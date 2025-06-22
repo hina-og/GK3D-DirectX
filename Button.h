@@ -19,9 +19,13 @@ class Button
 	int mouseX;
 	int mouseY;
 	bool prevLeftClick;
-public:
-	bool isPress_;
+
 	bool isSelect_;
+public:
+	bool isDown_;//âüÇµÇΩèuä‘
+	bool isPress_;//âüÇµë±ÇØÇƒÇ¢ÇÈ
+
+
 
 	Button();
 	void Initialize(int _x, int _y, std::string _fileName);
@@ -34,7 +38,7 @@ public:
 	void SetPosition(XMFLOAT3 _pos);
 	XMFLOAT3 GetPosition();
 	XMFLOAT3 GetSize();
-	bool IsMouseInButton(XMFLOAT3 _mousePos);
+	bool IsMouseInButton();
 	void ChangeImage(std::string _fileName);
 };
 

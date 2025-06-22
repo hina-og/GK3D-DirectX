@@ -50,8 +50,10 @@ class QuickRecipe
 	Button saveRecipeBtn;
 	int charaIcon;
 	std::vector<int>recipeIcon;
-public:
+	std::vector<int>material;
 	bool inData;
+public:
+
 	QuickRecipe(GameObject* parent);
 	void Initialize();
 	void Update();

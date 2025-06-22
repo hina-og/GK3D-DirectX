@@ -73,6 +73,7 @@ void MaterialTable::Initialize()
 	returnProbability_ = GetPrivateProfileInt("Material", "return_probability ", 100, ".\\config.ini");
 
 	quickRecipe = Instantiate<QuickRecipe>(this);
+	quickRecipe->Initialize();
 }
 
 void MaterialTable::Update()
@@ -91,7 +92,7 @@ void MaterialTable::Update()
 	//素材を選択したらテーブルに置く
 	for (int i = 0; i < materialName_.size(); i++)
 	{
-		if (materialList_[i].button.isPress_ && table.num < TABLE_SIZE && 0 < materialList_[i].num)
+		if (materialList_[i].button.isDown_ && table.num < TABLE_SIZE && 0 < materialList_[i].num)
 		{
 			table.material[table.num].type = materialList_[i].type;
 			table.material[table.num].name = materialList_[i].name;
@@ -106,7 +107,7 @@ void MaterialTable::Update()
 	//選択したテーブルの素材を戻す
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
-		if (table.material[i].button.isPress_ && 0 < table.num && table.material[i].name != "frame")
+		if (table.material[i].button.isDown_ && 0 < table.num && table.material[i].name != "frame")
 		{
 
 			for (int j = 0; j < materialName_.size(); j++)
@@ -133,7 +134,7 @@ void MaterialTable::Update()
 			Audio::Play(hChoise_);
 		}
 	}
-	if (makeButton_.isPress_ && table.material[0].name != "frame")
+	if (makeButton_.isDown_ && table.material[0].name != "frame")
 	{
 		TableReset();
 		Audio::Play(hSelect_);
@@ -158,6 +159,8 @@ void MaterialTable::Draw()
 
 	makeButton_.Draw();
 	addAnim_.Draw();
+
+	quickRecipe->Draw();
 }
 
 void MaterialTable::Release()
@@ -222,7 +225,22 @@ void MaterialTable::TableReset()
 {
 	int makePuppetType = MakePuppet();
 	bool isMade = storage->AddStorage(makePuppetType);
-	
+
+	// ★キャラ作成できた場合、現在のテーブル状態を保存して QuickRecipe に追加
+	if (isMade)
+	{
+		std::vector<int> currentRecipe(MATERIAL_TYPE::MATERIAL_END, 0);
+		for (int i = 0; i < TABLE_SIZE; i++)
+		{
+			if (table.material[i].name == "frame")
+				break;
+			if (table.material[i].type >= 0 && table.material[i].type < MATERIAL_TYPE::MATERIAL_END)
+			{
+				currentRecipe[table.material[i].type]++;
+			}
+		}
+		quickRecipe->AddRecipe(makePuppetType, currentRecipe);
+	}
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
@@ -237,8 +255,8 @@ void MaterialTable::TableReset()
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
 		table.material[i].name = "frame";
 		table.material[i].button.ChangeImage("Image\\frame.png");
-		table.num = 0;
 	}
+	table.num = 0;
 }
 
 int MaterialTable::GetSelectStragePuppet()
@@ -269,24 +287,3 @@ void MaterialTable::GiveMaterial(int _num)
 	}
 }
 
-MATERIAL_TYPE MaterialTable::StringToMaterialType(const std::string& name)
-{
-	if (name == "BONE") 
-		return BONE;
-	if (name == "MEAT") 
-		return MEAT;
-	if (name == "SOUL") 
-		return SOUL;
-	if (name == "BACTERIA") 
-		return BACTERIA;
-	if (name == "ROCK") 
-		return ROCK;
-	if (name == "BRAIN") 
-		return BRAIN;
-	if (name == "WATER")
-		return WATER;
-	if (name == "EMPTY") 
-		return EMPTY;
-
-	return EMPTY;
-}

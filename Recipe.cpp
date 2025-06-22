@@ -1,5 +1,6 @@
 #include "Recipe.h"
 #include "Engine/CsvReader.h"
+#include "PuppetFactory.h"
 
 QuickRecipe::QuickRecipe(GameObject* parent)
 	: GameObject(parent, "QuickRecipe")
@@ -30,6 +31,7 @@ void QuickRecipe::Draw()
 	if (inData)
 	{
 		saveRecipeBtn.Draw();
+		Image::Draw(charaIcon);
 	}
 }
 
@@ -50,7 +52,11 @@ XMFLOAT3 QuickRecipe::GetSize()
 
 void QuickRecipe::AddRecipe(int _charaType, std::vector<int> _recipe)
 {
-	charaIcon = _charaType;
+
+	charaIcon = Image::Load("Image\\" + GetCharacterNameFromType(_charaType) + ".png");
+	XMFLOAT3 ftrans = saveRecipeBtn.GetPosition();
+	ftrans.x += Image::GetImageSize(charaIcon).x / Direct3D::screenWidth_ - saveRecipeBtn.GetSize().x / 2 / Direct3D::screenWidth_;
+	Image::SetPosition(charaIcon, ftrans);
 	recipeIcon = _recipe;
 	inData = true;
 }

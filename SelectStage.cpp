@@ -30,7 +30,7 @@ void SelectStage::Update()
 	}
 	calendar.Update();
 
-	if (calendar.calendar_.isPress_ || Input::IsKeyDown(DIK_RETURN))
+	if (calendar.calendar_.isDown_ || Input::IsKeyDown(DIK_RETURN))
 	{
 		decision_ = true;
 	}

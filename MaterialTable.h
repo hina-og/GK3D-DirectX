@@ -52,7 +52,6 @@ class MaterialTable
 
 	int returnProbability_;
 
-	MATERIAL_TYPE StringToMaterialType(const std::string& name);
 
 	QuickRecipe* quickRecipe;
 public:
