@@ -26,7 +26,8 @@ void PuppetStorage::Initialize()
 	speedText_ = new Text;
 	speedText_->Initialize();
 
-	
+	rangeView_ = new RangeView();
+	rangeView_->Initialize({0.5,-0.5,0});
 }
 
 void PuppetStorage::Update()
@@ -37,8 +38,11 @@ void PuppetStorage::Update()
 
 		if (puppetList_[i].button.isDown_)
 		{
-			selectPuppetNumber = i;
 			Image::SetPosition(selectFrame_, { (float)puppetList_[selectPuppetNumber].x / Direct3D::screenWidth_,(float)puppetList_[selectPuppetNumber].y / -Direct3D::screenHeight_ ,0 });
+		}
+		if (puppetList_[i].button.isPress_)
+		{
+			selectPuppetNumber = i;
 		}
 	}
 
@@ -74,6 +78,9 @@ void PuppetStorage::Draw()
 			hpText_->Draw(1700, 500, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
 			powerText_->Draw(1700, 560, puppetList_[selectPuppetNumber].puppet->GetPower());
 			speedText_->Draw(1700, 620, puppetList_[selectPuppetNumber].puppet->GetSpeed());
+
+			rangeView_->SetData(puppetList_[selectPuppetNumber].puppet->range_);
+			rangeView_->Draw();
 		}
 	}
 

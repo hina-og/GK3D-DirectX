@@ -40,11 +40,6 @@ class Puppet
 
 	const float effectPosY = 0.5;
 public:
-	struct Pos
-	{
-		int x;
-		int y;
-	};
 
 	enum DIRECTION
 	{
@@ -56,7 +51,7 @@ public:
 
 	DIRECTION dir_;
 
-	std::vector<Pos> range_;
+	std::vector<XMINT2> range_;
 	std::vector<XMFLOAT3> rangePos_;
 	std::vector<EmitterData> particle_;
 
@@ -73,7 +68,7 @@ public:
 		Audio::Play(hAttackSE_);
 	}
 
-	std::vector<Pos> GetAttackTiles()
+	std::vector<XMINT2> GetAttackTiles()
 	{
 		return range_;
 	}
@@ -311,7 +306,7 @@ protected:
 		{
 			XMFLOAT2 readRange;
 			readRange = _csv.GetFloat2(_line, column);
-			Pos pushData;
+			XMINT2 pushData;
 			pushData = { (int)readRange.x,(int)readRange.y };
 			if (range_.size() > 0)
 			{
@@ -334,7 +329,7 @@ protected:
 		assert(modelList_[CHARA_STATE::ATTACK] >= 0);
 	}
 
-	Pos rotate(Pos _pos, int _dir)
+	XMINT2 rotate(XMINT2 _pos, int _dir)
 	{
 		switch (_dir)
 		{

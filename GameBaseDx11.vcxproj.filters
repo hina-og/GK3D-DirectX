@@ -200,6 +200,8 @@
     <ClCompile Include="TutorialScene.cpp">
       <Filter>Scene\TutorialScene</Filter>
     </ClCompile>
+    <ClCompile Include="Recipe.cpp" />
+    <ClCompile Include="RangeView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -360,6 +362,8 @@
       <Filter>Scene\TutorialScene</Filter>
     </ClInclude>
     <ClInclude Include="PuppetFactory.h" />
+    <ClInclude Include="Recipe.h" />
+    <ClInclude Include="RangeView.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

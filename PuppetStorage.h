@@ -4,6 +4,7 @@
 #include "Engine/Text.h"
 #include "Animation.h"
 #include "Puppet.h"
+#include "RangeView.h"
 
 
 
@@ -32,6 +33,8 @@ class PuppetStorage
 	Text* hpText_;
 	Text* powerText_;
 	Text* speedText_;
+
+	RangeView* rangeView_;
 
 public:
 	Storage puppetList_[CHARA_TYPE::CHARA_END];
