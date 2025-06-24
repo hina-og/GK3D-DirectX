@@ -11,6 +11,14 @@
 class PuppetStorage
 	: public GameObject
 {
+	enum IMAGE_ROW
+	{
+		TABLE = 1,
+		PUPPET,
+		PUPPETNUM,
+		STATUS,
+	};
+
 	struct Storage
 	{
 		int num;

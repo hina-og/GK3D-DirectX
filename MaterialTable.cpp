@@ -1,8 +1,10 @@
 #include "MaterialTable.h"
-#include "Engine/CsvReader.h"
 #include "Engine/Image.h"
 #include "Engine/Audio.h"
 #include "Engine/Direct3D.h"
+#include "ImageDataUtil.h"
+
+
 
 MaterialTable::MaterialTable(GameObject* parent)
 	: GameObject(parent, "MaterialTable"), hSelect_(-1)
@@ -12,57 +14,24 @@ MaterialTable::MaterialTable(GameObject* parent)
 void MaterialTable::Initialize()
 {
 
-	CsvReader csv("GameData\\ImageData.csv");
-
+	CsvReader csv("ImageData\\MaterialTableData.csv");
 
 	storage = Instantiate<PuppetStorage>(this);
-	storage->LoadImageData(csv);
 
 	ReadRecipe();
 
-
-	hTable_ = Image::Load("Image\\" + csv.GetString(1, name) + ".png");
-	assert(hTable_ >= 0);
-	Transform ftrans;
-	ftrans.position_ = { csv.GetFloat(1,posX),csv.GetFloat(1,posY),1.0 };
-	ftrans.scale_ = { csv.GetFloat(1,scaleX),csv.GetFloat(1,scaleY),1.0 };
-	Image::SetTransform(hTable_, ftrans);
-
-	for (int i = 0; i < materialName_.size(); i++)
-	{
-		materialList_[i].type = i;
-
-		materialList_[i].name = materialName_[i];
-
-		std::string fileName = "Image\\" + materialList_[i].name + ".png";
-		materialList_[i].button.LoadButtonImage(fileName);
-
-		materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x + csv.GetFloat(2, posX);
-		materialList_[i].y = i / TABLE_SIZE * materialList_[i].button.GetSize().y + csv.GetFloat(2, posY);
-		materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y);
-		materialList_[i].num = 0;
-		materialList_[i].text.Initialize();
-		materialList_[i].textX = csv.GetFloat(5, posX);
-		materialList_[i].textY = csv.GetFloat(5, posY);
-	}
+	InitFrameTable(TABLE, csv);
+	InitMaterialList(MATERIAL, csv);
+	InitMakeButton(MAKE, csv);
+	InitSlotFrames(MATERIAL_TABLE, csv);
 
 
-	for (int i = 0; i < TABLE_SIZE; i++)
-	{
-		table.material[i].type = MATERIAL_TYPE::EMPTY;
-		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(8, posX);
-		table.material[i].y = csv.GetFloat(8, posY);
-		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\frame.png");
 
-		table.material[i].x = i * table.material[i].button.GetSize().x + csv.GetFloat(8,posX);
-		table.material[i].y = csv.GetFloat(8,posY);
-		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
 
-		table.material[i].name = "frame";
-	}
+
 	
 
-	makeButton_.Initialize(csv.GetFloat(4,posX), csv.GetFloat(4,posY), "Image\\" + csv.GetString(4,name) + ".png");
+
 
 	addAnim_.Initialize("Image\\flashAnim.png", 0, 0, 64, 64, false, 3, false);
 	addAnim_.SetSpeed(0.15);
@@ -73,7 +42,7 @@ void MaterialTable::Initialize()
 	returnProbability_ = GetPrivateProfileInt("Material", "return_probability ", 100, ".\\config.ini");
 
 	quickRecipe = Instantiate<QuickRecipe>(this);
-	quickRecipe->Initialize();
+	quickRecipe->SetPosition(QUICK_RECIPE, csv);
 }
 
 void MaterialTable::Update()
@@ -287,3 +256,55 @@ void MaterialTable::GiveMaterial(int _num)
 	}
 }
 
+void MaterialTable::InitFrameTable(int _row, CsvReader _csv)
+{
+	hTable_ = Image::Load("Image\\" + _csv.GetString(_row, NAME) + ".png");
+	assert(hTable_ >= 0);
+	Transform ftrans;
+	ftrans.position_ = { _csv.GetFloat(_row,POSITION_X),_csv.GetFloat(_row,POSITION_Y),1.0 };
+	ftrans.scale_ = { _csv.GetFloat(_row,SCALE_X),_csv.GetFloat(_row,SCALE_Y),1.0 };
+	Image::SetTransform(hTable_, ftrans);
+}
+
+void MaterialTable::InitMaterialList(int _row, CsvReader _csv)
+{
+	for (int i = 0; i < materialName_.size(); i++)
+	{
+		materialList_[i].type = i;
+
+		materialList_[i].name = materialName_[i];
+
+		std::string fileName = "Image\\" + materialList_[i].name + ".png";
+		materialList_[i].button.LoadButtonImage(fileName);
+
+		materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
+		materialList_[i].y = i / TABLE_SIZE * materialList_[i].button.GetSize().y + _csv.GetFloat(_row, POSITION_Y);
+		materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y);
+		materialList_[i].num = 0;
+		materialList_[i].text.Initialize();
+		materialList_[i].textX = _csv.GetFloat(MATERIAL_NUM, POSITION_X);
+		materialList_[i].textY = _csv.GetFloat(MATERIAL_NUM, POSITION_Y);
+	}
+}
+
+void MaterialTable::InitMakeButton(int _row, CsvReader _csv)
+{
+	makeButton_.Initialize(_csv.GetFloat(_row, POSITION_X), _csv.GetFloat(_row, POSITION_Y), "Image\\" + _csv.GetString(_row, NAME) + ".png");
+}
+
+void MaterialTable::InitSlotFrames(int _row, CsvReader _csv)
+{
+	for (int i = 0; i < TABLE_SIZE; i++)
+	{
+		table.material[i].type = MATERIAL_TYPE::EMPTY;
+		table.material[i].x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
+		table.material[i].y = _csv.GetFloat(_row, POSITION_Y);
+		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\frame.png");
+
+		table.material[i].x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
+		table.material[i].y = _csv.GetFloat(_row, POSITION_Y);
+		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
+
+		table.material[i].name = "frame";
+	}
+}

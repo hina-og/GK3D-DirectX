@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include "Engine/CsvReader.h"
 #include "Button.h"
 #include "Puppet.h"
 #include <vector>
@@ -20,18 +21,19 @@ struct Table
 	int num;
 };
 
-enum IMAGE_DATA//ì«Ç›çûÇﬁâÊëúÉfÅ[É^ÇÃèáî‘
-{
-	name = 0,
-	posX,
-	posY,
-	scaleX,
-	scaleY,
-};
-
 class MaterialTable
 	: public GameObject
 {
+	enum IMAGE_ROW
+	{
+		TABLE = 1,
+		MATERIAL,
+		MATERIAL_NUM,
+		MATERIAL_TABLE,
+		MAKE,
+		QUICK_RECIPE,
+	};
+
 	int initMaterialNum;
 	std::vector<std::string> materialName_;
 
@@ -54,6 +56,12 @@ class MaterialTable
 
 
 	QuickRecipe* quickRecipe;
+
+
+	void InitFrameTable(int _row, CsvReader _csv);
+	void InitMaterialList(int _row, CsvReader _csv);
+	void InitMakeButton(int _row, CsvReader _csv);
+	void InitSlotFrames(int _row, CsvReader _csv);
 public:
 	MaterialTable(GameObject* parent);
 	void Initialize();

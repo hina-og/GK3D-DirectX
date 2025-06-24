@@ -2,6 +2,7 @@
 #include <vector>
 #include "Button.h"
 #include "Engine/Text.h"
+#include "Engine/CsvReader.h"
 
 enum MATERIAL_TYPE
 {
@@ -59,7 +60,7 @@ public:
 	void Update();
 	void Draw();
 	void Release();
-	void SetPosition(int _x, int _y);
+	void SetPosition(int _row, CsvReader _csv);
 	XMFLOAT3 GetSize();
 	void AddRecipe(int _charaType,std::vector<int> _recipe);
 };

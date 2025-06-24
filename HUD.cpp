@@ -2,6 +2,7 @@
 #include "Engine/Image.h"
 #include "Engine/CsvReader.h"
 #include "Engine/Time.h"
+#include "ImageDataUtil.h"
 
 HUD::HUD(GameObject* parent)
 	: GameObject(parent, "HUD")
@@ -10,50 +11,34 @@ HUD::HUD(GameObject* parent)
 
 void HUD::Initialize()
 {
-	CsvReader ImageData;
-	ImageData.Load("GameData\\ImageData.csv");
+	CsvReader csv;
+	csv.Load("ImageData\\HUDData.csv");
 
-	hBaseHitPoint_ = Image::Load("Image\\BaseHitPoint.png");
+	hBaseHitPoint_ = Image::Load("Image\\" + csv.GetString(BASE_HP, NAME) + ".png");
 	assert(hBaseHitPoint_ >= 0);
-
-	hHitPoint_ = Image::Load("Image\\HitPoint.png");
+	hHitPoint_ = Image::Load("Image\\" + csv.GetString(HP, NAME) + ".png");
 	assert(hHitPoint_ >= 0);
+	transformHP_.position_ = { csv.GetFloat(BASE_HP,POSITION_X),csv.GetFloat(BASE_HP,POSITION_Y),0 };
+	Image::SetTransform(hBaseHitPoint_, transformHP_);
+	Image::SetTransform(hHitPoint_, transformHP_);
 
-	hTimeBase_ = Image::Load("Image\\TimeBase.png");
+
+	hTimeBase_ = Image::Load("Image\\" + csv.GetString(BASE_TIME, NAME) + ".png");
 	assert(hTimeBase_ >= 0);
+	transformTime_.position_ = { csv.GetFloat(BASE_TIME,POSITION_X),csv.GetFloat(BASE_TIME,POSITION_Y),0 };
+	Image::SetTransform(hTimeBase_, transformTime_);
 
 	timeText = new Text;
 	timeText->Initialize();
+	transformTimeText_.position_ = { csv.GetFloat(TIME,POSITION_X),csv.GetFloat(TIME,POSITION_Y),0 };
 
 	hModelDirection_ = Image::Load("Image\\ModelDirection.png");
 	assert(hModelDirection_ >= 0);
 
-	for (int line = 1;line < ImageData.GetLines();line++)
-	{
-
-		if (ImageData.GetString(line, 0) == "HP")
-		{
-			transformHP_.position_ = { ImageData.GetFloat(line,1),ImageData.GetFloat(line,2),0 };
-			Image::SetTransform(hBaseHitPoint_, transformHP_);
-			Image::SetTransform(hHitPoint_, transformHP_);
-		}
-		if (ImageData.GetString(line, 0) == "TimeBase")
-		{
-			transformTime_.position_ = { ImageData.GetFloat(line,1),ImageData.GetFloat(line,2),0 };
-			Image::SetTransform(hTimeBase_, transformTime_);
-		}
-		if (ImageData.GetString(line, 0) == "TimeText")
-		{
-			transformTimeText_.position_ = { ImageData.GetFloat(line,1),ImageData.GetFloat(line,2),0 };
-		}
-		if (ImageData.GetString(line, 0) == "ModelDirection")
-		{
-			Transform fTrans;
-			fTrans.position_ = { ImageData.GetFloat(line,1),ImageData.GetFloat(line,2),0 };
-			fTrans.scale_ = { ImageData.GetFloat(line, 3), ImageData.GetFloat(line, 4), 1.0 };
-			Image::SetTransform(hModelDirection_, fTrans);
-		}
-	}
+	Transform fTrans;
+	fTrans.position_ = { csv.GetFloat(DIRECTION,POSITION_X),csv.GetFloat(DIRECTION,POSITION_Y),0 };
+	fTrans.scale_ = { csv.GetFloat(DIRECTION, SCALE_X), csv.GetFloat(DIRECTION, SCALE_Y), 1.0 };
+	Image::SetTransform(hModelDirection_, fTrans);
 
 	HP_ = maxHP;
 }

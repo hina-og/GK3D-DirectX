@@ -6,6 +6,15 @@
 class HUD
 	: public GameObject
 {
+	enum IMAGE_ROW
+	{
+		BASE_HP = 1,
+		HP,
+		BASE_TIME,
+		TIME,
+		DIRECTION,
+	};
+
 	int maxHP;//ëœãvÇÃç≈ëÂíl
 
 	int hHitPoint_;

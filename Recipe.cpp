@@ -1,6 +1,6 @@
 #include "Recipe.h"
-#include "Engine/CsvReader.h"
 #include "PuppetFactory.h"
+#include "ImageDataUtil.h"
 
 QuickRecipe::QuickRecipe(GameObject* parent)
 	: GameObject(parent, "QuickRecipe")
@@ -10,12 +10,12 @@ QuickRecipe::QuickRecipe(GameObject* parent)
 
 void QuickRecipe::Initialize()
 {
-	CsvReader csv;
-	csv.Load("GameData\\IMageData.csv");
-	XMINT2 position = { csv.GetInt(14,1),csv.GetInt(14,2) };
+	//CsvReader csv;
+	//csv.Load("GameData\\IMageData.csv");
+	//XMINT2 position = { csv.GetInt(14,1),csv.GetInt(14,2) };
 
 
-	saveRecipeBtn.LoadButtonImage("Image\\" + csv.GetString(14, 0) + ".png");
+	//saveRecipeBtn.LoadButtonImage("Image\\" + csv.GetString(14, 0) + ".png");
 }
 
 void QuickRecipe::Update()
@@ -40,9 +40,10 @@ void QuickRecipe::Release()
 	saveRecipeBtn.Release();
 }
 
-void QuickRecipe::SetPosition(int _x, int _y)
+void QuickRecipe::SetPosition(int _row, CsvReader _csv)
 {
-	saveRecipeBtn.Initialize(_x,_y);
+	saveRecipeBtn.LoadButtonImage("Image\\" + _csv.GetString(_row, NAME) + ".png");
+	saveRecipeBtn.Initialize(_csv.GetInt(_row, POSITION_X), _csv.GetInt(_row, POSITION_Y));
 }
 
 XMFLOAT3 QuickRecipe::GetSize()

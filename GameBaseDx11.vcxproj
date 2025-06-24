@@ -227,6 +227,7 @@
     <ClInclude Include="Ghost.h" />
     <ClInclude Include="Golem.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="ImageDataUtil.h" />
     <ClInclude Include="MaterialTable.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="Mushroom.h" />

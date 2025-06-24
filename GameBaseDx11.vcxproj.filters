@@ -364,6 +364,7 @@
     <ClInclude Include="PuppetFactory.h" />
     <ClInclude Include="Recipe.h" />
     <ClInclude Include="RangeView.h" />
+    <ClInclude Include="ImageDataUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
