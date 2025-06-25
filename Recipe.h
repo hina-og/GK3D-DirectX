@@ -3,6 +3,7 @@
 #include "Button.h"
 #include "Engine/Text.h"
 #include "Engine/CsvReader.h"
+#include <unordered_map>
 
 enum MATERIAL_TYPE
 {
@@ -17,10 +18,36 @@ enum MATERIAL_TYPE
 	EMPTY,
 };
 
-enum MATERIAL_TAG
+inline int GetMaterialTypeFromName(const std::string& name)
 {
+	static const std::unordered_map<std::string, int> map = {
+		{"Bone", MATERIAL_TYPE::BONE},
+		{"Meat", MATERIAL_TYPE::MEAT},
+		{"Soul", MATERIAL_TYPE::SOUL},
+		{"Bacteria", MATERIAL_TYPE::BACTERIA},
+		{"Rock", MATERIAL_TYPE::ROCK},
+		{"Brain", MATERIAL_TYPE::BRAIN},
+		{"Water", MATERIAL_TYPE::WATER}
+	};
+	auto it = map.find(name);
+	return (it != map.end()) ? it->second : -1;
+}
 
-};
+inline std::string GetMaterialNameFromType(int type)
+{
+	static const std::string names[] = {
+		"Bone",
+		"Meat",
+		"Soul",
+		"Bacteria",
+		"Rock",
+		"Brain",
+		"Water"
+	};
+	if (type >= 0 && type < MATERIAL_TYPE::MATERIAL_END)
+		return names[type];
+	return "Unknown";
+}
 
 struct Material
 {
@@ -48,11 +75,18 @@ const int saveNum{ 3 };
 class QuickRecipe
 	: public GameObject
 {
-	Button saveRecipeBtn;
-	int charaIcon;
-	std::vector<int>recipeIcon;
-	std::vector<int>material;
-	bool inData;
+	struct QuickRecipeButton
+	{
+		Button saveRecipeBtn;
+		int charaIcon;
+		std::vector<int>recipeIcon;
+		std::vector<int>material;
+		bool inData;
+	};
+
+	QuickRecipeButton qButton[saveNum];
+
+	XMFLOAT3 position_;
 public:
 
 	QuickRecipe(GameObject* parent);

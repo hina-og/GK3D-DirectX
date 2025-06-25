@@ -32,8 +32,8 @@ void Stage::Initialize()
 	beginData_ = mapData_[0][0];
 	endData_ = mapData_[HEIGHT - 1][WIDTH - 1];
 
-	startLine_ = endData_.pos_.z + 1;
-	endLine_ = beginData_.pos_.z - 0.5;
+	startLine_ = endData_.pos_.z + TILE_SIZE;
+	endLine_ = beginData_.pos_.z - TILE_SIZE / 2;
 
 	hGround_ = Model::Load("Model\\Ground.fbx");
 	assert(hGround_ >= 0);
@@ -72,32 +72,34 @@ void Stage::Update()
 	if (Input::GetMouseMove().z > 0 && !isZooming_)
 	{
 		isZooming_ = true;
-		Camera::Zoom(10.0, 0.1);
+		float zoomDist = 10.0, zoomTime = 0.1;
+		Camera::Zoom(zoomDist, zoomTime);
 	}
 
 	if (isZooming_)
 	{
 		XMFLOAT3 cameraPos = Camera::GetPosition();
 		XMFLOAT3 targetPos = Camera::GetTarget();
+		float cameraMoveDist = 0.1;
 		if (Input::IsKey(DIK_W) && targetPos.z < endData_.pos_.z)
 		{
-			cameraPos.z += 0.1;
-			targetPos.z += 0.1;
+			cameraPos.z += cameraMoveDist;
+			targetPos.z += cameraMoveDist;
 		}
 		if (Input::IsKey(DIK_A) && targetPos.x > beginData_.pos_.x)
 		{
-			cameraPos.x -= 0.1;
-			targetPos.x -= 0.1;
+			cameraPos.x -= cameraMoveDist;
+			targetPos.x -= cameraMoveDist;
 		}
 		if (Input::IsKey(DIK_S) && targetPos.z > beginData_.pos_.z)
 		{
-			cameraPos.z -= 0.1;
-			targetPos.z -= 0.1;
+			cameraPos.z -= cameraMoveDist;
+			targetPos.z -= cameraMoveDist;
 		}
 		if (Input::IsKey(DIK_D) && targetPos.x < endData_.pos_.x)
 		{
-			cameraPos.x += 0.1;
-			targetPos.x += 0.1;
+			cameraPos.x += cameraMoveDist;
+			targetPos.x += cameraMoveDist;
 		}
 		Camera::SetPosition(cameraPos);
 		Camera::SetTarget(targetPos);

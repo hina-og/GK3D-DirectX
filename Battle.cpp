@@ -33,17 +33,17 @@ void Battle::Initialize()
 	std::string str = SetUp::currentDifficulty;
 	levelData.Load(str);
 
-	hud->time_=levelData.GetFloat(0, 0);
-	hud->InitHP(levelData.GetInt(0, 1));
-	material->GiveMaterial(levelData.GetInt(0, 2));
+	hud->time_=levelData.GetFloat(STAGE_DATA, TIME);
+	hud->InitHP(levelData.GetInt(STAGE_DATA, HP));
+	material->GiveMaterial(levelData.GetInt(STAGE_DATA, GIVE_MATERIAL_NUM));
 
 	for (int line = 1;line < levelData.GetLines();line++)
 	{
 		SpawnData sData;
 		Puppet p;
-		sData.type_ = p.CharacterType(levelData.GetString(line, 0));
-		sData.time_ = levelData.GetFloat(line, 1);
-		sData.line_ = levelData.GetInt(line, 2);
+		sData.type_ = p.CharacterType(levelData.GetString(line, SPAWN_NAME));
+		sData.time_ = levelData.GetFloat(line, SPAWN_TIME);
+		sData.line_ = levelData.GetInt(line, SPAWN_LINE);
 
 		spawnList_.push_back(sData);
 	}
@@ -130,10 +130,10 @@ void Battle::Update()
 
 		enemy->unit_->PastLine(stage->endLine_, hud->HP_);
 
-		if (3 <= getMaterialTime)
+		if (GiveMaterialTime <= getMaterialTime)
 		{
 			material->GetRandomMaterial();
-			getMaterialTime--;
+			getMaterialTime -= GiveMaterialTime;
 		}
 
 		getMaterialTime += Time::GetDeltaTime();

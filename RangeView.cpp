@@ -2,6 +2,7 @@
 
 void RangeView::Initialize(XMFLOAT3 _position)
 {
+	_position = { _position.x / Direct3D::screenWidth_, _position.y / ::Direct3D::screenHeight_, 0 };
 	for (int y = 0; y < MAX_TILE_Y; y++)
 	{
 		for (int x = 0; x < MAX_TILE_X; x++)
@@ -16,10 +17,10 @@ void RangeView::Initialize(XMFLOAT3 _position)
 				tile[y][x].type_ = DEFAULT;
 			}
 			tile[y][x].hRangeTile_ = Image::Load("Image\\rangeTile.png");
-			imageSize = Image::GetImageSize(tile[y][x].hRangeTile_).y;
+			imageSize_ = Image::GetImageSize(tile[y][x].hRangeTile_).y;
 
-			XMFLOAT3 tempPosition = { _position.x + imageSize * 2 * x / Direct3D::screenWidth_,_position.y + imageSize * 2 * y / Direct3D::screenHeight_,0 };
-			Image::SetPosition(tile[y][x].hRangeTile_, tempPosition);
+			XMFLOAT3 tempPos = { _position.x + imageSize_ * 2 * x / Direct3D::screenWidth_,_position.y + imageSize_ * 2 * y / Direct3D::screenHeight_,0 };
+			Image::SetPosition(tile[y][x].hRangeTile_, tempPos);
 
 
 		}
@@ -32,7 +33,7 @@ void RangeView::Draw()
 	{
 		for (int x = 0; x < MAX_TILE_X; x++)
 		{
-			Image::SetRect(tile[y][x].hRangeTile_, imageSize * tile[y][x].type_, 0, imageSize, imageSize);//タイルは正方形のためサイズはy参照
+			Image::SetRect(tile[y][x].hRangeTile_, imageSize_ * tile[y][x].type_, 0, imageSize_, imageSize_);//タイルは正方形のためサイズはy参照
 			Image::Draw(tile[y][x].hRangeTile_);
 		}
 	}

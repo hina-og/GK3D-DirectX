@@ -10,8 +10,6 @@
 
 const int TABLE_SIZE{ 4 };
 
-
-
 struct Table
 {
 	Material material[TABLE_SIZE];

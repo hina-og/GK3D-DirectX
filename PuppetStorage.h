@@ -15,8 +15,22 @@ class PuppetStorage
 	{
 		TABLE = 1,
 		PUPPET,
-		PUPPETNUM,
+		PUPPET_NUM,
 		STATUS,
+		HP,
+		POWER,
+		SPEED,
+		RANGE_VIEW
+	};
+
+	struct statusViewPosition
+	{
+		XMFLOAT3
+			base,
+			hp,
+			power,
+			speed,
+			rangeView;
 	};
 
 	struct Storage
@@ -37,6 +51,8 @@ class PuppetStorage
 
 	int selectFrame_;
 	int hStatusBase_;
+
+	statusViewPosition viewPos_;
 
 	Text* hpText_;
 	Text* powerText_;

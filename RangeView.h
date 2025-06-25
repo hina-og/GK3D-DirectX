@@ -28,7 +28,7 @@ class RangeView
 
 	RangeTile tile[MAX_TILE_Y][MAX_TILE_X];
 
-	float imageSize;
+	float imageSize_;
 
 public:
 	void Initialize(XMFLOAT3 _position);

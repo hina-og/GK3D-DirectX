@@ -1,5 +1,4 @@
 #include "PuppetStorage.h"
-#include "Char.h"
 #include "Engine/Direct3D.h"
 #include "MaterialTable.h"
 #include "PuppetFactory.h"
@@ -25,7 +24,8 @@ void PuppetStorage::Initialize()
 		3,         // ƒtƒŒ[ƒ€”
 		false      // I—¹Œã‚à•`‰æ‚·‚é‚©
 	);	
-	addAnim_.SetSpeed(0.15);
+	float animationSpeed = 0.15;
+	addAnim_.SetSpeed(animationSpeed);
 
 	selectFrame_ = Image::Load("Image\\frame.png");
 	assert(selectFrame_ >= 0);
@@ -51,12 +51,9 @@ void PuppetStorage::Update()
 	{
 		puppetList_[i].button.Update();
 
-		if (puppetList_[i].button.isDown_)
-		{
-			Image::SetPosition(selectFrame_, { (float)puppetList_[selectPuppetNumber].x / Direct3D::screenWidth_,(float)puppetList_[selectPuppetNumber].y / -Direct3D::screenHeight_ ,0 });
-		}
 		if (puppetList_[i].button.isPress_)
 		{
+			Image::SetPosition(selectFrame_, { (float)puppetList_[selectPuppetNumber].x / Direct3D::screenWidth_,(float)puppetList_[selectPuppetNumber].y / -Direct3D::screenHeight_ ,0 });
 			selectPuppetNumber = i;
 		}
 	}
@@ -84,18 +81,18 @@ void PuppetStorage::Draw()
 
 	addAnim_.Draw();
 	Image::Draw(selectFrame_);
-	//Image::Draw(hStatusBase_);
+
 	
 	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
 	{
 		if (puppetList_[i].button.isPress_)
 		{
-			hpText_->Draw(1700, 500, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
-			powerText_->Draw(1700, 560, puppetList_[selectPuppetNumber].puppet->GetPower());
-			speedText_->Draw(1700, 620, puppetList_[selectPuppetNumber].puppet->GetSpeed());
-
+			Image::Draw(hStatusBase_);
 			rangeView_->SetData(puppetList_[selectPuppetNumber].puppet->range_);
 			rangeView_->Draw();
+			hpText_->Draw(viewPos_.hp.x, viewPos_.hp.y, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
+			powerText_->Draw(viewPos_.power.x, viewPos_.power.y, puppetList_[selectPuppetNumber].puppet->GetPower());
+			speedText_->Draw(viewPos_.speed.x, viewPos_.speed.y, puppetList_[selectPuppetNumber].puppet->GetSpeed());
 		}
 	}
 
@@ -114,40 +111,37 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 	transform_.position_ = { _csv.GetFloat(TABLE,POSITION_X),_csv.GetFloat(TABLE,POSITION_Y),0 };
 	Image::SetTransform(hTable_, transform_);
 
-
-	std::string puppetName_[CHARA_TYPE::CHARA_END]
-	{
-		"Mouse",
-		"Zombie",
-		"Mushroom",
-		"Slime",
-		"Golem",
-		"Ghost",
-	};
+	std::string puppetName_[CHARA_TYPE::CHARA_END];
 
 	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
 	{
+		puppetName_[i] = GetCharacterNameFromType(i);
 		puppetList_[i].name = puppetName_[i];
 		std::string fileName_ = "Image\\" + puppetList_[i].name + ".png";
 		puppetList_[i].button.LoadButtonImage(fileName_);
 
-		
+		int expansionNum = 4;
 		puppetList_[i].type = i;
-		puppetList_[i].x = i % 4 * puppetList_[i].button.GetSize().x + _csv.GetFloat(PUPPET, POSITION_X);
-		puppetList_[i].y = i / 4 * puppetList_[i].button.GetSize().y + _csv.GetFloat(PUPPET, POSITION_Y);
+		puppetList_[i].x = i % expansionNum * puppetList_[i].button.GetSize().x + _csv.GetFloat(PUPPET, POSITION_X);
+		puppetList_[i].y = i / expansionNum * puppetList_[i].button.GetSize().y + _csv.GetFloat(PUPPET, POSITION_Y);
 		puppetList_[i].button.Initialize(puppetList_[i].x, puppetList_[i].y, fileName_);
 		puppetList_[i].num = 0;
 		puppetList_[i].numText.Initialize();
-		puppetList_[i].textX = _csv.GetFloat(PUPPETNUM, POSITION_X);
-		puppetList_[i].textY = _csv.GetFloat(PUPPETNUM, POSITION_Y);
+		puppetList_[i].textX = _csv.GetFloat(PUPPET_NUM, POSITION_X);
+		puppetList_[i].textY = _csv.GetFloat(PUPPET_NUM, POSITION_Y);
 	}
 
 	hStatusBase_ = Image::Load("Image\\" + _csv.GetString(STATUS, NAME) + ".png");
 	assert(hStatusBase_ >= 0);
-	XMFLOAT3 statusPos = { _csv.GetFloat(STATUS,POSITION_X) / Direct3D::screenWidth_,_csv.GetFloat(STATUS,POSITION_Y) / Direct3D::screenHeight_,0 };
-	Image::SetPosition(hStatusBase_, statusPos);
-	rangeView_->Initialize(statusPos);
+	viewPos_.base = { _csv.GetFloat(STATUS,POSITION_X) / Direct3D::screenWidth_,_csv.GetFloat(STATUS,POSITION_Y) / Direct3D::screenHeight_,0 };
+	Image::SetPosition(hStatusBase_, viewPos_.base);
 
+	viewPos_.hp = { _csv.GetFloat(HP,POSITION_X),_csv.GetFloat(HP,POSITION_Y),0 };
+	viewPos_.power = { _csv.GetFloat(POWER,POSITION_X),_csv.GetFloat(POWER,POSITION_Y),0 };
+	viewPos_.speed = { _csv.GetFloat(SPEED,POSITION_X),_csv.GetFloat(SPEED,POSITION_Y),0 };
+
+	viewPos_.rangeView = { _csv.GetFloat(RANGE_VIEW,POSITION_X),_csv.GetFloat(RANGE_VIEW,POSITION_Y),0 };
+	rangeView_->Initialize(viewPos_.rangeView);
 
 	Image::SetPosition(selectFrame_, { (float)puppetList_[0].x / Direct3D::screenWidth_,(float)puppetList_[0].y / -Direct3D::screenHeight_ ,0 });
 

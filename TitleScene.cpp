@@ -15,6 +15,8 @@ void TitleScene::Initialize()
 {
 	hPict_ = Image::Load("Image\\Title.png");
 
+	hOperationButton_ = Image::Load("Image\\OperationButton.png");
+
 	selectStage_ = Instantiate<SelectStage>(this);
 	selectStage_->SetStageNum(File::GetFileNum("GameData\\StageData"));
 
@@ -36,14 +38,15 @@ void TitleScene::Update()
 			pSM->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
 		}
 	}
-
-
 }
 
 void TitleScene::Draw()
 {
 	Image::SetTransform(hPict_, transform_);
 	Image::Draw(hPict_);
+	XMFLOAT3 tamPos = { 0,-1 + Image::GetImageSize(hOperationButton_).y / Direct3D::screenHeight_,0};
+	Image::SetPosition(hOperationButton_, tamPos);
+	Image::Draw(hOperationButton_);
 }
 
 void TitleScene::Release()

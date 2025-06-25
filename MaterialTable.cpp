@@ -25,24 +25,24 @@ void MaterialTable::Initialize()
 	InitMakeButton(MAKE, csv);
 	InitSlotFrames(MATERIAL_TABLE, csv);
 
-
-
-
-
-	
-
-
-
-	addAnim_.Initialize("Image\\flashAnim.png", 0, 0, 64, 64, false, 3, false);
+	addAnim_.Initialize(
+		"Image\\flashAnim.png",
+		0, 0,      // 開始位置
+		64, 64,    // サイズ
+		false,     // 繰り返すか
+		3,         // フレーム数
+		false      // 終了後も描画するか
+	);
 	addAnim_.SetSpeed(0.15);
 
 	hSelect_ = Audio::Load("Sounds\\SE\\add.wav");
-	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, 5);
+	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, TABLE_SIZE);
 
-	returnProbability_ = GetPrivateProfileInt("Material", "return_probability ", 100, ".\\config.ini");
+	int defaultReturnProbability = 100;
+	returnProbability_ = GetPrivateProfileInt("Material", "return_probability ", defaultReturnProbability, ".\\config.ini");
 
-	quickRecipe = Instantiate<QuickRecipe>(this);
-	quickRecipe->SetPosition(QUICK_RECIPE, csv);
+	//quickRecipe = Instantiate<QuickRecipe>(this);
+	//quickRecipe->SetPosition(QUICK_RECIPE, csv);
 }
 
 void MaterialTable::Update()
@@ -129,7 +129,7 @@ void MaterialTable::Draw()
 	makeButton_.Draw();
 	addAnim_.Draw();
 
-	quickRecipe->Draw();
+	//quickRecipe->Draw();
 }
 
 void MaterialTable::Release()
@@ -195,7 +195,6 @@ void MaterialTable::TableReset()
 	int makePuppetType = MakePuppet();
 	bool isMade = storage->AddStorage(makePuppetType);
 
-	// ★キャラ作成できた場合、現在のテーブル状態を保存して QuickRecipe に追加
 	if (isMade)
 	{
 		std::vector<int> currentRecipe(MATERIAL_TYPE::MATERIAL_END, 0);
@@ -208,7 +207,7 @@ void MaterialTable::TableReset()
 				currentRecipe[table.material[i].type]++;
 			}
 		}
-		quickRecipe->AddRecipe(makePuppetType, currentRecipe);
+		//quickRecipe->AddRecipe(makePuppetType, currentRecipe);
 	}
 
 	for (int i = 0; i < TABLE_SIZE; i++)
@@ -261,8 +260,8 @@ void MaterialTable::InitFrameTable(int _row, CsvReader _csv)
 	hTable_ = Image::Load("Image\\" + _csv.GetString(_row, NAME) + ".png");
 	assert(hTable_ >= 0);
 	Transform ftrans;
-	ftrans.position_ = { _csv.GetFloat(_row,POSITION_X),_csv.GetFloat(_row,POSITION_Y),1.0 };
-	ftrans.scale_ = { _csv.GetFloat(_row,SCALE_X),_csv.GetFloat(_row,SCALE_Y),1.0 };
+	ftrans.position_ = { _csv.GetFloat(_row,POSITION_X),_csv.GetFloat(_row,POSITION_Y),0 };
+	ftrans.scale_ = { _csv.GetFloat(_row,SCALE_X),_csv.GetFloat(_row,SCALE_Y),0 };
 	Image::SetTransform(hTable_, ftrans);
 }
 

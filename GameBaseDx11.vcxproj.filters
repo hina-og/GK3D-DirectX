@@ -122,9 +122,6 @@
     <ClCompile Include="Battle.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
-    <ClCompile Include="Char.cpp">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClCompile>
     <ClCompile Include="MaterialTable.cpp">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClCompile>
@@ -277,9 +274,6 @@
       <Filter>Scene\PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Battle.h">
-      <Filter>Scene\PlayScene\Battle</Filter>
-    </ClInclude>
-    <ClInclude Include="Char.h">
       <Filter>Scene\PlayScene\Battle</Filter>
     </ClInclude>
     <ClInclude Include="MaterialTable.h">

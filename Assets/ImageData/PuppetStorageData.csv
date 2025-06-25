@@ -2,4 +2,8 @@ name,positionX,positionY,scaleX,scaleY
 Table,930,0,0.7,1
 Puppet,740,-550,1,1
 PuppetNumText,680,390,1,1
-StatusBase,740,-560,1,1
+StatusBase,830,40,1,1
+Hp,1500,210,1,1
+Power,1500,320,1,1
+Speed,1500,430,1,1
+RangeView,740,-560,1,1

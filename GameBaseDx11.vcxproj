@@ -139,7 +139,6 @@
     <ClCompile Include="Battle.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Calendar.cpp" />
-    <ClCompile Include="Char.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
@@ -194,7 +193,6 @@
     <ClInclude Include="Battle.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Calendar.h" />
-    <ClInclude Include="Char.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />

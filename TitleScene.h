@@ -8,13 +8,8 @@ class TitleScene :
     public GameObject
 {
     int hPict_;
-
     int hMovie_;
-
-    bool isFading = false;
-    float fadeTimer = 0.0f;
-    const float fadeDuration = 1.0f;
-    float g_alpha = 1.0f;
+    int hOperationButton_;
 
     SelectStage* selectStage_;
 

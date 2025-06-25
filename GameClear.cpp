@@ -11,10 +11,6 @@ GameClear::GameClear(GameObject* parent)
 
 void GameClear::Initialize()
 {
-	//hBlack_ = Image::Load("Image\\Black.png");
-	//assert(hBlack_ >= 0);
-	//Image::SetAlpha(hBlack_, 120);
-
 	hBord_ = Image::Load("Image\\GameClear.png");
 	assert(hBord_ >= 0);
 	transform_.position_.y = 1 + (Image::GetImageSize(hBord_).y / 2 / Direct3D::screenHeight_);
@@ -24,7 +20,8 @@ void GameClear::Update()
 {
 	if (transform_.position_.y > 1 - (Image::GetImageSize(hBord_).y / Direct3D::screenHeight_))
 	{
-		transform_.position_.y -= 15.0 / Direct3D::screenHeight_;
+		float downSpeed = 15.0;
+		transform_.position_.y -= downSpeed / Direct3D::screenHeight_;
 	}
 	else
 	{

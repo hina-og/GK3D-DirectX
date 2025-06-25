@@ -37,7 +37,7 @@ void HUD::Initialize()
 
 	Transform fTrans;
 	fTrans.position_ = { csv.GetFloat(DIRECTION,POSITION_X),csv.GetFloat(DIRECTION,POSITION_Y),0 };
-	fTrans.scale_ = { csv.GetFloat(DIRECTION, SCALE_X), csv.GetFloat(DIRECTION, SCALE_Y), 1.0 };
+	fTrans.scale_ = { csv.GetFloat(DIRECTION, SCALE_X), csv.GetFloat(DIRECTION, SCALE_Y), 0 };
 	Image::SetTransform(hModelDirection_, fTrans);
 
 	HP_ = maxHP;

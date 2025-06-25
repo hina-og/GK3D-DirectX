@@ -9,7 +9,14 @@ Calendar::Calendar()
 void Calendar::Initialize()
 {
 	calendar_.Initialize(0, 0, "Image\\Calendar.png");
-	hImage_.Initialize("Image\\CalendarAnim.png", 0, 0, 512, 512, false, 8, true);
+	hImage_.Initialize(
+		"Image\\CalendarAnim.png",//画像のパス
+		0, 0,//画像切り取りの左上 (x,y)
+		512, 512,//画像切り取りサイズ (w,h)
+		false,//終わったら繰り返すか
+		8,//フレーム数
+		true//終わっても描画するか
+	);
 	hImage_.SetSpeed(0.8);
 	hImage_.ChangeReverse();
 
@@ -26,7 +33,11 @@ void Calendar::Initialize()
 
 void Calendar::Update()
 {
-	Image::SetRect(hNumber_, 0, day_ * 270, 256, 270);
+	Image::SetRect(
+		hNumber_,//画像ハンドル
+		0, day_ * 270,//切り取り開始位置
+		256,270//切り抜き範囲
+	);
 	calendar_.Update();
 }
 
@@ -45,8 +56,11 @@ void Calendar::Draw()
 	}
 	hImage_.Update();
 
-	if(day_ == 0)
-		tutoerialText_->Draw(550, 650, "Tutorial");
+	if (day_ == 0)
+	{
+		XMINT2 textPos = { 550,650 };
+		tutoerialText_->Draw(textPos.x, textPos.y, "Tutorial");
+	}
 }
 
 void Calendar::Back()
