@@ -1,5 +1,6 @@
 #include "Ghost.h"
 #include "Engine/Model.h"
+#include "PuppetFactory.h"
 
 Ghost::Ghost(GameObject* parent)
 {
@@ -7,20 +8,8 @@ Ghost::Ghost(GameObject* parent)
 
 void Ghost::Initialize()
 {
-	LoadStatus(GHOST);
-
-	EmitterData data;
-
-	data.textureFileName = "Particle\\Others\\face.png";
-	data.delay = 0;
-	data.gravity = -0.003f;
-	data.direction = { 0, 1, 0 };
-	data.speed = 0.0f;
-	data.color = { 1, 0, 0, 0.6 };
-	for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
-	{
-		particle_[rangeNum] = data;
-	}
+	LoadStatus(CHARA_TYPE::GHOST);
+	LoadParticle(CHARA_TYPE::GHOST);
 }
 
 void Ghost::Release()

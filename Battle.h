@@ -10,7 +10,7 @@
 class Battle
 	: public GameObject
 {
-	const int GiveMaterialTime{ 3 };
+	const float GiveMaterialTime{ 3.0f };
 
 	enum StageDataLine
 	{

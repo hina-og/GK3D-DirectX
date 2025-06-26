@@ -4,21 +4,19 @@
 #include "Engine/Direct3D.h"
 #include "ImageDataUtil.h"
 
-
-
 MaterialTable::MaterialTable(GameObject* parent)
-	: GameObject(parent, "MaterialTable"), hSelect_(-1)
+	: GameObject(parent, "MaterialTable"), hSelect_(-1), totalProbability_(0)
 {
 }
 
 void MaterialTable::Initialize()
 {
-
 	CsvReader csv("ImageData\\MaterialTableData.csv");
 
 	storage = Instantiate<PuppetStorage>(this);
 
 	ReadRecipe();
+	ReadMaterialProbability();
 
 	InitFrameTable(TABLE, csv);
 	InitMaterialList(MATERIAL, csv);
@@ -27,11 +25,11 @@ void MaterialTable::Initialize()
 
 	addAnim_.Initialize(
 		"Image\\flashAnim.png",
-		0, 0,      // 開始位置
-		64, 64,    // サイズ
-		false,     // 繰り返すか
-		3,         // フレーム数
-		false      // 終了後も描画するか
+		0, 0,
+		64, 64,
+		false,
+		3,
+		false
 	);
 	addAnim_.SetSpeed(0.15);
 
@@ -39,10 +37,7 @@ void MaterialTable::Initialize()
 	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, TABLE_SIZE);
 
 	int defaultReturnProbability = 100;
-	returnProbability_ = GetPrivateProfileInt("Material", "return_probability ", defaultReturnProbability, ".\\config.ini");
-
-	//quickRecipe = Instantiate<QuickRecipe>(this);
-	//quickRecipe->SetPosition(QUICK_RECIPE, csv);
+	returnProbability_ = GetPrivateProfileInt("Material", "return_probability", defaultReturnProbability, ".\\config.ini");
 }
 
 void MaterialTable::Update()
@@ -57,8 +52,7 @@ void MaterialTable::Update()
 	}
 	makeButton_.Update();
 
-
-	//素材を選択したらテーブルに置く
+	// 素材追加
 	for (int i = 0; i < materialName_.size(); i++)
 	{
 		if (materialList_[i].button.isDown_ && table.num < TABLE_SIZE && 0 < materialList_[i].num)
@@ -72,13 +66,11 @@ void MaterialTable::Update()
 		}
 	}
 
-
-	//選択したテーブルの素材を戻す
+	// 素材戻し
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		if (table.material[i].button.isDown_ && 0 < table.num && table.material[i].name != "frame")
 		{
-
 			for (int j = 0; j < materialName_.size(); j++)
 			{
 				if (table.material[i].type == materialList_[j].type)
@@ -89,25 +81,25 @@ void MaterialTable::Update()
 
 			for (int j = i; j < TABLE_SIZE - 1; j++)
 			{
-				table.material[j].type = table.material[j + 1].type;
-				table.material[j].name = table.material[j + 1].name;
+				table.material[j] = table.material[j + 1];
 				table.material[j].button.ChangeImage("Image\\" + table.material[j].name + ".png");
 			}
 
-			
 			table.num--;
-
 			table.material[table.num].type = MATERIAL_TYPE::EMPTY;
 			table.material[table.num].name = "frame";
 			table.material[table.num].button.ChangeImage("Image\\frame.png");
 			Audio::Play(hChoise_);
 		}
 	}
+
+	// 作成ボタン
 	if (makeButton_.isDown_ && table.material[0].name != "frame")
 	{
 		TableReset();
 		Audio::Play(hSelect_);
 	}
+
 	addAnim_.Update();
 }
 
@@ -128,8 +120,6 @@ void MaterialTable::Draw()
 
 	makeButton_.Draw();
 	addAnim_.Draw();
-
-	//quickRecipe->Draw();
 }
 
 void MaterialTable::Release()
@@ -139,17 +129,17 @@ void MaterialTable::Release()
 void MaterialTable::ReadRecipe()
 {
 	CsvReader csv("GameData\\Recipe.csv");
-	
+
 	materialName_.resize(csv.GetColumns(0) - 1);
 	for (int column = 1; column < csv.GetColumns(0); column++)
 	{
-		materialName_[column - 1] += csv.GetString(0, column);
+		materialName_[column - 1] = csv.GetString(0, column);
 	}
 
-	for (int line = 1;line < csv.GetLines();line++)
+	for (int line = 1; line < csv.GetLines(); line++)
 	{
 		Recipe r;
-		for (int column = 1;column < csv.GetColumns(line);column++)
+		for (int column = 1; column < csv.GetColumns(line); column++)
 		{
 			r.ratio.push_back(csv.GetInt(line, column));
 		}
@@ -158,32 +148,50 @@ void MaterialTable::ReadRecipe()
 	}
 }
 
+void MaterialTable::ReadMaterialProbability()
+{
+	CsvReader csv("GameData\\MaterialProbability.csv");
+	materialProbability_.resize(materialName_.size(), 0);
+	totalProbability_ = 0;
+
+	for (int i = 0; i < csv.GetLines(); i++)
+	{
+		std::string materialName = csv.GetString(i, 0);
+		int probability = csv.GetInt(i, 1);
+
+		int type = GetMaterialTypeFromName(materialName);
+		if (type >= 0 && type < MATERIAL_TYPE::MATERIAL_END)
+		{
+			materialProbability_[type] = probability;
+			totalProbability_ += probability;
+		}
+	}
+}
+
 int MaterialTable::MakePuppet()
 {
 	int result = -1;
-	int material[MATERIAL_END];
-	for (int i = 0; i < materialName_.size(); i++)
-	{
-		material[i] = 0;
-	}
+	int material[MATERIAL_END] = { 0 };
 
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
-		material[table.material[i].type] += 1;
+		material[table.material[i].type]++;
 	}
+
 	for (int recipeNum = 0; recipeNum < recipeList_.size(); recipeNum++)
 	{
+		bool matched = true;
 		for (int materialNum = 0; materialNum < materialName_.size(); materialNum++)
 		{
 			if (material[materialNum] < recipeList_[recipeNum].ratio[materialNum])
 			{
+				matched = false;
 				break;
 			}
-
-			if (materialNum == materialName_.size() - 1)
-			{
-				result = recipeNum;
-			}
+		}
+		if (matched)
+		{
+			result = recipeNum;
 		}
 	}
 
@@ -207,9 +215,7 @@ void MaterialTable::TableReset()
 				currentRecipe[table.material[i].type]++;
 			}
 		}
-		//quickRecipe->AddRecipe(makePuppetType, currentRecipe);
 	}
-
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		if (table.material[i].name == "frame")
@@ -230,7 +236,6 @@ void MaterialTable::TableReset()
 int MaterialTable::GetSelectStragePuppet()
 {
 	storage->puppetList_[storage->selectPuppetNumber].num--;
-	
 	return storage->selectPuppetNumber;
 }
 
@@ -241,10 +246,26 @@ bool MaterialTable::isNotEmpty()
 
 void MaterialTable::GetRandomMaterial()
 {
-	int randNum = rand() % materialName_.size();
-	materialList_[randNum].num++;
-	addAnim_.SetPosition({ (float)materialList_[randNum].x,(float)materialList_[randNum].y,0 });
-	addAnim_.Start();
+	int randNum = rand() % totalProbability_;
+	int cumulative = 0;
+	int selectedType = -1;
+
+	for (int i = 0; i < materialProbability_.size(); i++)
+	{
+		cumulative += materialProbability_[i];
+		if (randNum < cumulative)
+		{
+			selectedType = i;
+			break;
+		}
+	}
+
+	if (selectedType >= 0 && selectedType < materialName_.size())
+	{
+		materialList_[selectedType].num++;
+		addAnim_.SetPosition({ (float)materialList_[selectedType].x, (float)materialList_[selectedType].y, 0 });
+		addAnim_.Start();
+	}
 }
 
 void MaterialTable::GiveMaterial(int _num)
@@ -260,8 +281,8 @@ void MaterialTable::InitFrameTable(int _row, CsvReader _csv)
 	hTable_ = Image::Load("Image\\" + _csv.GetString(_row, NAME) + ".png");
 	assert(hTable_ >= 0);
 	Transform ftrans;
-	ftrans.position_ = { _csv.GetFloat(_row,POSITION_X),_csv.GetFloat(_row,POSITION_Y),0 };
-	ftrans.scale_ = { _csv.GetFloat(_row,SCALE_X),_csv.GetFloat(_row,SCALE_Y),0 };
+	ftrans.position_ = { _csv.GetFloat(_row, POSITION_X),_csv.GetFloat(_row, POSITION_Y),0 };
+	ftrans.scale_ = { _csv.GetFloat(_row, SCALE_X),_csv.GetFloat(_row, SCALE_Y),0 };
 	Image::SetTransform(hTable_, ftrans);
 }
 
@@ -270,7 +291,6 @@ void MaterialTable::InitMaterialList(int _row, CsvReader _csv)
 	for (int i = 0; i < materialName_.size(); i++)
 	{
 		materialList_[i].type = i;
-
 		materialList_[i].name = materialName_[i];
 
 		std::string fileName = "Image\\" + materialList_[i].name + ".png";
@@ -299,11 +319,7 @@ void MaterialTable::InitSlotFrames(int _row, CsvReader _csv)
 		table.material[i].x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
 		table.material[i].y = _csv.GetFloat(_row, POSITION_Y);
 		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\frame.png");
-
-		table.material[i].x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
-		table.material[i].y = _csv.GetFloat(_row, POSITION_Y);
-		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
-
+		table.material[i].button.SetPosition({ (float)table.material[i].x, (float)table.material[i].y, 0 });
 		table.material[i].name = "frame";
 	}
 }

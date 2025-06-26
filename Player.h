@@ -5,13 +5,9 @@
 #include "Unit.h"
 #include <vector>
 
-const float START_TIME{ 3.0 };
-
 class Player
 	: public GameObject
 {
-	
-
 	XMFLOAT3 selectPos_;
 	int HP;
 public:

@@ -55,11 +55,15 @@ class MaterialTable
 
 	QuickRecipe* quickRecipe;
 
+	std::vector<int> materialProbability_;
+	int totalProbability_;
 
 	void InitFrameTable(int _row, CsvReader _csv);
 	void InitMaterialList(int _row, CsvReader _csv);
 	void InitMakeButton(int _row, CsvReader _csv);
 	void InitSlotFrames(int _row, CsvReader _csv);
+
+	void ReadMaterialProbability();
 public:
 	MaterialTable(GameObject* parent);
 	void Initialize();

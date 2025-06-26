@@ -7,18 +7,8 @@ Mouse::Mouse(GameObject* parent)
 
 void Mouse::Initialize()
 {
-	LoadStatus(MOUSE);
-
-	EmitterData data;
-	data.textureFileName = "Particle\\Others\\bite.png";
-	data.delay = 0;
-	data.speed = 0.0f;
-	data.color = { 0.7, 0, 0, 0.8 };
-	data.deltaColor = { -0.01, 0, 0, -0.02 };
-	for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
-	{
-		particle_[rangeNum] = data;
-	}
+	LoadStatus(CHARA_TYPE::MOUSE);
+	LoadParticle(CHARA_TYPE::MOUSE);
 }
 
 void Mouse::Release()

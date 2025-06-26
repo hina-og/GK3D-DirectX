@@ -83,10 +83,12 @@ void HUD::TimeUpdate()
 
 std::string HUD::ToMinutesString()
 {
-	int minutes = (int)time_ / 60;
-	int seconds = (int)time_ % 60;
+	int minutes = (int)time_ / 60;//•b
+	int seconds = (int)time_ % 60;//•ª
 
 	std::string secStr;
+
+	//10•ª–¢–‚Ìê‡‚Í10‚ÌˆÊ‚É0‚ğ“ü‚ê‚é
 	if (seconds < 10) 
 	{
 		secStr = "0" + std::to_string(seconds);

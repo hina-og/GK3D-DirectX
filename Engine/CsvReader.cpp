@@ -192,7 +192,7 @@ DirectX::XMFLOAT4 CsvReader::GetFloat4(int line, int column)
 	DirectX::XMFLOAT4 returnVal;
 	char brace1, comma, brace2;
 	std::stringstream ss(str);
-	ss >> brace1 >> returnVal.w >> comma >> returnVal.x >> comma >> returnVal.y >> comma >> returnVal.z >> brace2;
+	ss >> brace1 >> returnVal.x >> comma >> returnVal.y >> comma >> returnVal.z >> comma >> returnVal.w >> brace2;
 
 	return returnVal;
 }

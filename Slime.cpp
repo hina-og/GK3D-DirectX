@@ -1,5 +1,6 @@
 #include "Slime.h"
 #include "Engine/Model.h"
+#include "PuppetFactory.h"
 
 Slime::Slime(GameObject* parent)
 {
@@ -7,21 +8,8 @@ Slime::Slime(GameObject* parent)
 
 void Slime::Initialize()
 {
-	LoadStatus(SLIME);
-
-	EmitterData data;
-	data.textureFileName = "Particle\\Water\\vortex.png";
-	data.delay = 0;
-	data.gravity = 0.0f;
-	data.direction = { 0, 1, 0 };
-	data.speed = 0.0f;
-	data.color = { 1, 1, 1, 1 };
-	data.deltaColor = { 0, 0, 0, -0.02 };
-	data.spin = { 0,0,5 };
-	for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
-	{
-		particle_[rangeNum] = data;
-	}
+	LoadStatus(CHARA_TYPE::SLIME);
+	LoadParticle(CHARA_TYPE::SLIME);
 }
 
 void Slime::Release()

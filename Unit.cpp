@@ -14,6 +14,7 @@ Unit::Unit(GameObject* parent)
 void Unit::Initialize()
 {
 	shakePower_ = GetPrivateProfileInt("Unit", "camerashake_power", 1, ".\\config.ini");
+	const float defaultShakeTime = 100;
 	shakeTime_ = (float)GetPrivateProfileInt("Unit", "camerashake_time", 100, ".\\config.ini") / 1000;//ƒ~ƒŠ•b‚©‚ç•ÏŠ·
 }
 
@@ -133,11 +134,11 @@ void Unit::InRange(std::vector<Puppet*> _puppet)
 					0
 				};
 
-				float x = abs(attackPos.x - enemyPos.x),
-					  y = abs(attackPos.y - enemyPos.z);
+				float distx = abs(attackPos.x - enemyPos.x),
+					  disty = abs(attackPos.y - enemyPos.z);
 
-				if (x < TILE_SIZE / 2 &&
-					y < TILE_SIZE / 2)
+				if (distx < TILE_SIZE / 2 &&
+					disty < TILE_SIZE / 2)
 				{
 					puppet_[my]->isAttack_ = true;
 					puppet_[my]->inRangeChara_.push_back(_puppet[enemy]);

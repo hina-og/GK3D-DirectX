@@ -171,10 +171,14 @@ public:
 				if (hModel_ != modelList_[CHARA_STATE::ATTACK])
 				{
 					hModel_ = modelList_[CHARA_STATE::ATTACK];
-					Model::SetAnimFrame(hModel_, 1, animData_.totalAttackFrame_, animData_.attackSpeed_);
+					Model::SetAnimFrame(hModel_, 0, animData_.totalAttackFrame_, animData_.attackSpeed_);
 				}
 				if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
 					Attack();
+			}
+			else if (hModel_ != modelList_[CHARA_STATE::RUN])
+			{
+				hModel_ = modelList_[CHARA_STATE::STAND];
 			}
 		}
 
@@ -239,9 +243,11 @@ protected:
 	{
 		CsvReader csv("GameData\\PuppetData.csv");
 
-		for (int line = 1;line < csv.GetLines();line++)
+		for (int line = 0;line < csv.GetLines();line++)
 		{
-			if (_type + 1 == line)
+			//1行目説明のデータがあるから+1
+			if (csv.GetString(line, 0) != "name" &&
+				_type + 1 == line)
 			{
 				SetStatus(csv, line);
 			}
@@ -263,6 +269,22 @@ protected:
 		}
 
 
+	}
+
+	void LoadParticle(int _type)
+	{
+		CsvReader csv("Particle\\PuppetParticleData.csv");
+
+		for (int line = 0;line < csv.GetLines();line++)
+		{
+			//1行目説明、2行目デフォルトのデータがあるから+2
+			if (csv.GetString(line,0) != "name"   &&
+				csv.GetString(line,0) != "default"&& 
+				_type + 2 == line)
+			{
+				SetParticle(csv, line);
+			}
+		}
 	}
 
 	void SetStatus(CsvReader _csv, int _line)
@@ -329,6 +351,65 @@ protected:
 		assert(modelList_[CHARA_STATE::ATTACK] >= 0);
 	}
 
+	void SetParticle(CsvReader _csv, int _line)
+	{
+		enum Read_Data
+		{
+			Name = 0,
+			Folder,
+			File,
+			Position,
+			PositionRand,
+			Delay,
+			Number,
+			LifeTime,
+			Gravity,
+			Direction,
+			DirectionRand,
+			Speed,
+			SpeedRand,
+			Accel,
+			Size,
+			SizeRand,
+			Scale,
+			Color,
+			DeltaColor,
+			Spin,
+			Rotate,
+			RotateRand,
+			IsBillBoard,
+		};
+
+		EmitterData data;
+		data.textureFileName = "Particle\\" + _csv.GetString(_line, Folder) + "\\" + _csv.GetString(_line, File) + ".png";
+		data.position = _csv.GetFloat3(_line, Position);
+		data.positionRnd = _csv.GetFloat3(_line, PositionRand);
+		data.delay = _csv.GetInt(_line, Delay);
+		data.number = _csv.GetInt(_line, Number);
+		data.lifeTime = _csv.GetInt(_line, LifeTime);
+		data.gravity = _csv.GetFloat(_line, Gravity);
+		data.direction = _csv.GetFloat3(_line, Direction);
+		data.directionRnd = _csv.GetFloat3(_line, DirectionRand);
+		data.speed = _csv.GetFloat(_line, Speed);
+		data.speedRnd = _csv.GetFloat(_line, SpeedRand);
+		data.accel = _csv.GetFloat(_line, Accel);
+		data.size = _csv.GetFloat2(_line, Size);
+		data.sizeRnd = _csv.GetFloat2(_line, SizeRand);
+		data.scale = _csv.GetFloat2(_line, Scale);
+		data.color = _csv.GetFloat4(_line, Color);
+		data.deltaColor = _csv.GetFloat4(_line, DeltaColor);
+		data.spin = _csv.GetFloat3(_line, Spin);
+		data.rotate = _csv.GetFloat3(_line, Rotate);
+		data.rotateRnd = _csv.GetFloat3(_line, RotateRand);
+		data.isBillBoard = _csv.GetInt(_line, IsBillBoard);
+
+
+		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
+		{
+			particle_[rangeNum] = data;
+		}
+	}
+
 	XMINT2 rotate(XMINT2 _pos, int _dir)
 	{
 		switch (_dir)
@@ -355,6 +436,8 @@ protected:
 		
 	}
 
+
+	//キャラごとに変えられるようにしている（バフ・デバフなど）
 	virtual void Attack() {};
 
 };

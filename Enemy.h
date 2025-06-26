@@ -5,8 +5,6 @@
 #include "Unit.h"
 #include <vector>
 
-const float ENEMY_START_TIME{ 3.0 };
-
 class Enemy
 	: public GameObject
 {

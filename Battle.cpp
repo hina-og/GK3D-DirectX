@@ -9,6 +9,7 @@
 #include "GameClear.h"
 #include "Engine/Audio.h"
 #include "File.h"
+#include "PuppetFactory.h"
 
 Battle::Battle(GameObject* parent)
 	: GameObject(parent, "Battle")
@@ -41,7 +42,7 @@ void Battle::Initialize()
 	{
 		SpawnData sData;
 		Puppet p;
-		sData.type_ = p.CharacterType(levelData.GetString(line, SPAWN_NAME));
+		sData.type_ = GetCharacterTypeFromName(levelData.GetString(line, SPAWN_NAME));
 		sData.time_ = levelData.GetFloat(line, SPAWN_TIME);
 		sData.line_ = levelData.GetInt(line, SPAWN_LINE);
 
