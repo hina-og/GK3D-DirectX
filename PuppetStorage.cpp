@@ -85,14 +85,14 @@ void PuppetStorage::Draw()
 	
 	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
 	{
-		if (puppetList_[i].button.isPress_)
+		if (puppetList_[i].button.isPress_ && puppetList_[i].isMade)
 		{
 			Image::Draw(hStatusBase_);
 			rangeView_->SetData(puppetList_[selectPuppetNumber].puppet->range_);
 			rangeView_->Draw();
 			hpText_->Draw(viewPos_.hp.x, viewPos_.hp.y, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
 			powerText_->Draw(viewPos_.power.x, viewPos_.power.y, puppetList_[selectPuppetNumber].puppet->GetPower());
-			speedText_->Draw(viewPos_.speed.x, viewPos_.speed.y, puppetList_[selectPuppetNumber].puppet->GetSpeed() * 10);
+			speedText_->Draw(viewPos_.speed.x, viewPos_.speed.y, puppetList_[selectPuppetNumber].puppet->GetSpeed(),2);
 		}
 	}
 
@@ -153,7 +153,7 @@ bool PuppetStorage::AddStorage(int _type)
 	{
 		addAnim_.SetPosition({ (float)puppetList_[_type].x,(float)puppetList_[_type].y,0 });
 		addAnim_.Start();
-
+		puppetList_[_type].isMade = true;
 		puppetList_[_type].num++;
 		return true;
 	}

@@ -86,6 +86,17 @@ void Text::Draw(int x, int y, int value)
 	Draw(x, y, str);
 }
 
+void Text::Draw(int x, int y, float value, int precision)
+{
+	char format[16];
+	sprintf_s(format, "%%.%df", precision);
+
+	char str[256];
+	sprintf_s(str, format, value);
+
+	Draw(x, y, str);
+}
+
 //‰ð•ú
 void Text::Release()
 {

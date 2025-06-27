@@ -34,9 +34,14 @@ public:
 
 	//描画（整数値）
 	//引数：x, y	表示位置（左上）
-	//引数：value	表示したい値
+	//引数：value	表示したい値（整数）
 	void Draw(int x, int y, int value);
 
+	//描画（整数値）
+	//引数：x, y	　表示位置（左上）
+	//引数：value	　表示したい値（少数）
+	//引数：precision 表示したい桁数
+	void Draw(int x, int y, float value, int precision);
 	//解放
 	void Release();
 };

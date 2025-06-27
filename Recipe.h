@@ -15,7 +15,7 @@ enum MATERIAL_TYPE
 	BRAIN,
 	WATER,
 	MATERIAL_END,
-	EMPTY,
+	EMPTY = -1,
 };
 
 inline int GetMaterialTypeFromName(const std::string& name)

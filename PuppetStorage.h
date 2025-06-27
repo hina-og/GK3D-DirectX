@@ -44,6 +44,7 @@ class PuppetStorage
 		int textX;
 		int textY;
 		Puppet* puppet;
+		bool isMade;//1‚Â‚Å‚àì‚Á‚½‚©
 	};
 	
 	int hTable_;

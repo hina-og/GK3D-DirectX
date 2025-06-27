@@ -23,6 +23,8 @@ void MaterialTable::Initialize()
 	InitMakeButton(MAKE, csv);
 	InitSlotFrames(MATERIAL_TABLE, csv);
 
+	float addAnimSpeed = 0.15;
+
 	addAnim_.Initialize(
 		"Image\\flashAnim.png",
 		0, 0,
@@ -31,7 +33,7 @@ void MaterialTable::Initialize()
 		3,
 		false
 	);
-	addAnim_.SetSpeed(0.15);
+	addAnim_.SetSpeed(addAnimSpeed);
 
 	hSelect_ = Audio::Load("Sounds\\SE\\add.wav");
 	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, TABLE_SIZE);
@@ -52,7 +54,7 @@ void MaterialTable::Update()
 	}
 	makeButton_.Update();
 
-	// ëfçﬁí«â¡
+	//ëfçﬁí«â¡
 	for (int i = 0; i < materialName_.size(); i++)
 	{
 		if (materialList_[i].button.isDown_ && table.num < TABLE_SIZE && 0 < materialList_[i].num)
@@ -66,7 +68,7 @@ void MaterialTable::Update()
 		}
 	}
 
-	// ëfçﬁñﬂÇµ
+	//ëfçﬁñﬂÇµ
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		if (table.material[i].button.isDown_ && 0 < table.num && table.material[i].name != "frame")
@@ -93,7 +95,7 @@ void MaterialTable::Update()
 		}
 	}
 
-	// çÏê¨É{É^Éì
+	//Ç¬Ç≠ÇÈÉ{É^Éì
 	if (makeButton_.isDown_ && table.material[0].name != "frame")
 	{
 		TableReset();
@@ -203,7 +205,7 @@ void MaterialTable::TableReset()
 	int makePuppetType = MakePuppet();
 	bool isMade = storage->AddStorage(makePuppetType);
 
-	if (isMade)
+	/*if (isMade)
 	{
 		std::vector<int> currentRecipe(MATERIAL_TYPE::MATERIAL_END, 0);
 		for (int i = 0; i < TABLE_SIZE; i++)
@@ -215,7 +217,7 @@ void MaterialTable::TableReset()
 				currentRecipe[table.material[i].type]++;
 			}
 		}
-	}
+	}*/
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		if (table.material[i].name == "frame")
@@ -316,9 +318,9 @@ void MaterialTable::InitSlotFrames(int _row, CsvReader _csv)
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
+		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\frame.png");
 		table.material[i].x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
 		table.material[i].y = _csv.GetFloat(_row, POSITION_Y);
-		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\frame.png");
 		table.material[i].button.SetPosition({ (float)table.material[i].x, (float)table.material[i].y, 0 });
 		table.material[i].name = "frame";
 	}
