@@ -1,0 +1,28 @@
+#けいなんポップ体
+
+Hiragana
+file = Font/keinan_pop/hiragana_table.png
+type = unicode
+start = あ
+end = ん
+cellWidth = 100
+cellHeight = 100
+rowLength = 5
+
+Katakana
+file = Font/keinan_pop/katakana_table.png
+type = unicode
+start = ア
+end = ン
+cellWidth = 100
+cellHeight = 100
+rowLength = 5
+
+Kanji
+file = Font/keinan_pop/kanji_table.png
+type = unicode
+start = 一
+end = 龥
+cellWidth = 64
+cellHeight = 64
+rowLength = 50

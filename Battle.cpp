@@ -18,8 +18,10 @@ Battle::Battle(GameObject* parent)
 
 void Battle::Initialize()
 {
-	hBGM_ = Audio::Load("Sounds\\BGM\\BGM5.wav");
+	hBGM_ = Audio::Load("Sounds\\BGM\\BGM.wav");
 	assert(hBGM_ >= 0);
+
+	Audio::Play(hBGM_);
 
 	stage = Instantiate<Stage>(this);
 	player = Instantiate<Player>(this);
@@ -62,10 +64,24 @@ void Battle::Initialize()
 
 void Battle::Update()
 {
+	if (!Audio::IsPlaying(hBGM_))
+	{
+		Audio::Play(hBGM_);
+	}
+
 	XMFLOAT2 mousePos = { (float)mouseX, (float)mouseY };
 	stage->SelectTilePosition(mousePos);
 
-	if (0 < hud->HP_ && 0 < hud->time_)
+
+	//勝利条件
+	bool winCondition[WIN_CONDITIONS::END] =
+	{ 
+		(spawnedNum < spawnList_.size() || enemy->unit_->GetPuppetArray().size() > 0),//敵がすべて出現して、全滅したか
+		(hud->HP_ > 0 && hud->time_ <= 0)											  //HPが残っていて時間が0になったか
+	};
+
+	if ((spawnedNum < spawnList_.size() || enemy->unit_->GetPuppetArray().size() > 0) &&
+		(hud->HP_ > 0 && hud->time_ > 0))
 	{
 		for (int i = spawnedNum; i < spawnList_.size(); i++)
 		{
@@ -105,7 +121,7 @@ void Battle::Update()
 		
 		hud->SetDirection(selectDir);
 
-		//マウス左を押しているとき
+		//マウス左を押したらキャラ配置
 		if (Input::IsMouseButtonDown(LEFT_CLICK))
 		{
 
@@ -146,7 +162,7 @@ void Battle::Update()
 		if (isReady)
 			isTimeStart = true;
 	}
-	else if(!isBattleEnd)
+	else if(!isBattleEnd)//バトルが終わったらシーン遷移する
 	{
 		if (hud->time_ <= 0)
 		{

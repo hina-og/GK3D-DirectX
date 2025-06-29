@@ -1,0 +1,9 @@
+# けいなんポップ体
+Hiragana
+file=Font/keinan_pop/hiragana_table.png
+type=unicode
+start=U+3041
+end=U+3094
+cellWidth=100
+cellHeight=100
+rowLength=10

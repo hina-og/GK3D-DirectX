@@ -18,12 +18,16 @@ namespace Audio
 	int Load(std::string fileName, bool isLoop = false, int svNum = 1);
 
 	//再生
-	//引数：handle	鳴らしたいサウンドの番号
+	//引数：ID	鳴らしたいサウンドの番号
 	void Play(int ID);
 
 	//停止
-	//引数：handle	止めたいサウンドの番号
+	//引数：ID	止めたいサウンドの番号
 	void Stop(int ID);
+
+	//サウンドが鳴っているか（終了していたらfalse）
+	//引数：ID 調べたいサウンドの番号
+	bool IsPlaying(int ID);
 
 	//シーンごとの解放（ロードしたサウンドを解放）
 	void Release();

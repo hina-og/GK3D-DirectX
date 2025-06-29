@@ -33,6 +33,13 @@ class Battle
 		SPAWN_LINE,
 	};
 
+	enum WIN_CONDITIONS
+	{
+		All_Kill,
+		Time_Up,
+		END,
+	};
+
 	struct SpawnData
 	{
 		int type_;//o‚Ä‚­‚éƒLƒƒƒ‰‚Ìí—Ş

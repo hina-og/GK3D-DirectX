@@ -176,6 +176,21 @@ void Audio::Stop(int ID)
 	}
 }
 
+bool Audio::IsPlaying(int ID)
+{
+	for (int i = 0; i < audioDatas[ID].svNum; i++)
+	{
+		XAUDIO2_VOICE_STATE state;
+		audioDatas[ID].pSourceVoice[i]->GetState(&state);
+
+		if (state.BuffersQueued != 0)
+		{
+			return true; // 1‚Â‚Å‚à–Â‚Á‚Ä‚¢‚ê‚Îtrue
+		}
+	}
+	return false; // ‘S‚Ä–Â‚Á‚Ä‚¢‚È‚¯‚ê‚Îfalse
+}
+
 //ƒV[ƒ“‚²‚Æ‚Ì‰ğ•ú
 void Audio::Release()
 {

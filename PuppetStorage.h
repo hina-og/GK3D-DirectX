@@ -11,6 +11,7 @@
 class PuppetStorage
 	: public GameObject
 {
+	float x;
 	enum IMAGE_ROW
 	{
 		TABLE = 1,

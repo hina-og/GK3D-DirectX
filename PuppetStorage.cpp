@@ -3,6 +3,7 @@
 #include "MaterialTable.h"
 #include "PuppetFactory.h"
 #include "ImageDataUtil.h"
+#include "Font.h"
 
 PuppetStorage::PuppetStorage(GameObject* parent)
 	:GameObject(parent, "PuppetStorage")
@@ -41,7 +42,8 @@ void PuppetStorage::Initialize()
 	speedText_ = new Text;
 	speedText_->Initialize();
 
-	
+	Font::Initialize("Font/keinan_pop/FontConfig.txt");
+	x = 0;
 
 }
 
@@ -92,10 +94,13 @@ void PuppetStorage::Draw()
 			rangeView_->Draw();
 			hpText_->Draw(viewPos_.hp.x, viewPos_.hp.y, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
 			powerText_->Draw(viewPos_.power.x, viewPos_.power.y, puppetList_[selectPuppetNumber].puppet->GetPower());
-			speedText_->Draw(viewPos_.speed.x, viewPos_.speed.y, puppetList_[selectPuppetNumber].puppet->GetSpeed(),2);
+			speedText_->Draw(viewPos_.speed.x, viewPos_.speed.y, puppetList_[selectPuppetNumber].puppet->GetSpeed(), 1);
 		}
 	}
-
+	
+	XMFLOAT3 textSize = { 0.3f,0.3f,1.0f };
+	Font::Draw("Hiragana", 690, 0, L"のう　が　ういるす　に　おかされている", textSize , 8);
+	x -= 1;
 
 }
 
