@@ -11,7 +11,8 @@
 class PuppetStorage
 	: public GameObject
 {
-	float x;
+	const int CHARA_TEXT_WIDTH_NUM{ 8 };
+
 	enum IMAGE_ROW
 	{
 		TABLE = 1,
@@ -21,7 +22,8 @@ class PuppetStorage
 		HP,
 		POWER,
 		SPEED,
-		RANGE_VIEW
+		RANGE_VIEW,
+		PUPPET_TEXT,
 	};
 
 	struct statusViewPosition
@@ -31,7 +33,8 @@ class PuppetStorage
 			hp,
 			power,
 			speed,
-			rangeView;
+			rangeView,
+			text;
 	};
 
 	struct Storage

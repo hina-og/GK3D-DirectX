@@ -1,4 +1,5 @@
 #include "Font.h"
+#include <string>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -155,6 +156,69 @@ void Font::Draw(const std::string& _name, int _x, int _y, const std::wstring& _s
     float lineSpacing = 0.2;
 
     for (auto ch : _str)
+    {
+        auto it = data.charToIndex.find(ch);
+        if (it != data.charToIndex.end())
+        {
+            int index = it->second;
+            int col = index % data.rowLength;
+            int row = index / data.rowLength;
+
+            Transform transform;
+            transform.position_ = { px, py, 0 };
+            transform.scale_ = _size;
+            Image::SetTransform(data.handle, transform);
+            Image::SetRect(data.handle,
+                col * data.cellWidth,
+                row * data.cellHeight,
+                data.cellWidth, data.cellHeight);
+
+            Image::Draw(data.handle);
+
+            px += Image::GetImageSize(data.handle).x * lineSpacing;
+            if (charCount >= _lineWrapLength)
+            {
+                px = static_cast<float>(_x);
+                py -= Image::GetImageSize(data.handle).y * lineSpacing;
+                charCount = 0;
+            }
+            charCount++;
+        }
+        else
+        {
+            float spaceSize = 0.4;
+            // –¢“o˜^•¶Žš ¨ ƒXƒy[ƒX‘Š“–
+            px += Image::GetImageSize(data.handle).x * lineSpacing * spaceSize;
+            if (charCount >= _lineWrapLength)
+            {
+                px = static_cast<float>(_x);
+                py -= Image::GetImageSize(data.handle).y * lineSpacing;
+                charCount = 0;
+            }
+            charCount++;
+        }
+    }
+}
+
+void Font::Draw(const std::string& _name, int _x, int _y, const std::string& _str, XMFLOAT3 _size, int _lineWrapLength)
+{
+    int size_needed = MultiByteToWideChar(932, 0, _str.c_str(), -1, nullptr, 0);
+    std::wstring wstr(size_needed - 1, 0);
+    MultiByteToWideChar(932, 0, _str.c_str(), -1, &wstr[0], size_needed);
+
+    if (fonts_.count(_name) == 0)
+        return;
+
+    const FontData& data = fonts_[_name];
+
+    float px = static_cast<float>(_x);
+    float py = static_cast<float>(_y);
+
+    int charCount = 0;
+
+    float lineSpacing = 0.2;
+
+    for (auto ch : wstr)
     {
         auto it = data.charToIndex.find(ch);
         if (it != data.charToIndex.end())

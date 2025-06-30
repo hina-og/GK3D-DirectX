@@ -156,6 +156,7 @@ public:
 	int GetPower() { return status_.power_; }
 	int GetHitPoint() { return status_.hp_; }
 	float GetSpeed() { return status_.speed_; }
+	std::string GetText() { return text_; }
 
 
 	virtual void Initialize() {};
@@ -236,6 +237,7 @@ protected:
 		//--------------------
 	};
 	Status status_;
+	std::string text_;
 
 	
 
@@ -292,6 +294,7 @@ protected:
 		enum Read_Data
 		{
 			Name = 0,
+			Text,
 			Hp,
 			Cost,
 			Power,
@@ -307,6 +310,7 @@ protected:
 			Range,
 		};
 		status_.name_ = _csv.GetString(_line, Name);
+		text_ = _csv.GetString(_line, Text);
 		status_.hp_ = _csv.GetInt(_line, Hp);
 		status_.cost_ = _csv.GetInt(_line, Cost);
 		status_.power_ = _csv.GetInt(_line, Power);

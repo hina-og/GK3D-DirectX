@@ -43,7 +43,6 @@ void PuppetStorage::Initialize()
 	speedText_->Initialize();
 
 	Font::Initialize("Font/keinan_pop/FontConfig.txt");
-	x = 0;
 
 }
 
@@ -87,21 +86,25 @@ void PuppetStorage::Draw()
 	
 	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
 	{
-		if (puppetList_[i].button.isPress_ && puppetList_[i].isMade)
+		if (puppetList_[i].button.isPress_)
 		{
-			Image::Draw(hStatusBase_);
-			rangeView_->SetData(puppetList_[selectPuppetNumber].puppet->range_);
-			rangeView_->Draw();
-			hpText_->Draw(viewPos_.hp.x, viewPos_.hp.y, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
-			powerText_->Draw(viewPos_.power.x, viewPos_.power.y, puppetList_[selectPuppetNumber].puppet->GetPower());
-			speedText_->Draw(viewPos_.speed.x, viewPos_.speed.y, puppetList_[selectPuppetNumber].puppet->GetSpeed(), 1);
+			if (puppetList_[i].isMade)
+			{
+				Image::Draw(hStatusBase_);
+				rangeView_->SetData(puppetList_[selectPuppetNumber].puppet->range_);
+				rangeView_->Draw();
+				hpText_->Draw(viewPos_.hp.x, viewPos_.hp.y, puppetList_[selectPuppetNumber].puppet->GetHitPoint());
+				powerText_->Draw(viewPos_.power.x, viewPos_.power.y, puppetList_[selectPuppetNumber].puppet->GetPower());
+				speedText_->Draw(viewPos_.speed.x, viewPos_.speed.y, puppetList_[selectPuppetNumber].puppet->GetSpeed(), 1);
+			}
+			else
+			{
+				XMFLOAT3 textSize = { 0.3f,0.3f,1.0f };
+				Font::Draw("Hiragana", viewPos_.text.x, viewPos_.text.y, puppetList_[selectPuppetNumber].puppet->GetText(), textSize, CHARA_TEXT_WIDTH_NUM);
+			}
 		}
-	}
-	
-	XMFLOAT3 textSize = { 0.3f,0.3f,1.0f };
-	Font::Draw("Hiragana", 690, 0, L"のう　が　ういるす　に　おかされている", textSize , 8);
-	x -= 1;
 
+	}
 }
 
 void PuppetStorage::Release()
@@ -147,6 +150,8 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 
 	viewPos_.rangeView = { _csv.GetFloat(RANGE_VIEW,POSITION_X),_csv.GetFloat(RANGE_VIEW,POSITION_Y),0 };
 	rangeView_->Initialize(viewPos_.rangeView);
+
+	viewPos_.text = { _csv.GetFloat(PUPPET_TEXT,POSITION_X),_csv.GetFloat(PUPPET_TEXT,POSITION_Y),0 };
 
 	Image::SetPosition(selectFrame_, { (float)puppetList_[0].x / Direct3D::screenWidth_,(float)puppetList_[0].y / -Direct3D::screenHeight_ ,0 });
 
