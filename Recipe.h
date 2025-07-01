@@ -70,7 +70,8 @@ public:
 	int puppetType;//ì‚ê‚éƒLƒƒƒ‰
 };
 
-const int saveNum{ 3 };
+//•Û‘¶‚·‚éƒŒƒVƒs‚Ì”
+const int saveNum{ 1 };
 
 class QuickRecipe
 	: public GameObject

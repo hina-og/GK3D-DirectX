@@ -30,14 +30,17 @@ class MaterialTable
 		MATERIAL_TABLE,
 		MAKE,
 		QUICK_RECIPE,
+		POT,
 	};
 
 	int initMaterialNum;
 	std::vector<std::string> materialName_;
 
-	int hTable_;
+	//画像ハンドル
+	int hTable_;//
+	int hPot_;//大釜
 
-	//音
+	//音ハンドル
 	int hSelect_;
 	int hChoise_;
 
@@ -47,9 +50,11 @@ class MaterialTable
 
 	Button makeButton_;
 	Animation addAnim_;
+	Animation steamAnim_;
 
 	std::vector<Recipe> recipeList_;
 
+	//作成失敗したときに素材が戻ってくる確率
 	int returnProbability_;
 
 
@@ -63,7 +68,6 @@ class MaterialTable
 	void InitMakeButton(int _row, CsvReader _csv);
 	void InitSlotFrames(int _row, CsvReader _csv);
 
-	void ReadMaterialProbability();
 public:
 	MaterialTable(GameObject* parent);
 	void Initialize();

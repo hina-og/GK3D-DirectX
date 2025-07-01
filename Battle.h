@@ -33,10 +33,11 @@ class Battle
 		SPAWN_LINE,
 	};
 
-	enum WIN_CONDITIONS
+	enum END_CONDITIONS
 	{
 		All_Kill,
 		Time_Up,
+		Dead,
 		END,
 	};
 

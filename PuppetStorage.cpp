@@ -18,15 +18,7 @@ void PuppetStorage::Initialize()
 
 	selectPuppetNumber = 0;
 
-	addAnim_.Initialize("Image\\flashAnim.png",
-		0, 0,      // 開始位置
-		64, 64,    // サイズ
-		false,     // 繰り返すか
-		3,         // フレーム数
-		false      // 終了後も描画するか
-	);	
-	float animationSpeed = 0.15;
-	addAnim_.SetSpeed(animationSpeed);
+	addAnim_.Initialize(FLASH);
 
 	selectFrame_ = Image::Load("Image\\frame.png");
 	assert(selectFrame_ >= 0);

@@ -3,8 +3,29 @@
 #include <string>
 #include "Engine/GameObject.h"
 
+enum ANIMATION_DATA
+{
+	CALENDER = 1,
+	FLASH,
+	STEAM,
+};
+
 class Animation
 {
+
+	enum ANIMATION_DATA_ROW
+	{
+		NAME = 0,
+		X,
+		Y,
+		W,
+		H,
+		LOOP,
+		FRAME,
+		END_DRAW,
+		SPEED,
+	};
+
 	float x_;
 	float y_;
 	RECT rect_;
@@ -34,7 +55,7 @@ public:
 	/// <param name="_loop">：終わったら繰り返すか</param>
 	/// <param name="_frame">：全フレーム数</param>
 	/// <param name="_endDraw">：終わっても描画をするか</param>
-	Animation(std::string _fileName,int _x,int _y,int _w,int _h,bool _loop,int _frame,bool _endDraw);
+	Animation(std::string _fileName, int _x, int _y, int _w, int _h, bool _loop, int _frame, bool _endDraw);
 	/// <summary>
 	/// アニメーションの初期化
 	/// </summary>
@@ -47,6 +68,11 @@ public:
 	/// <param name="_frame">：全フレーム数</param>
 	/// <param name="_endDraw">：終わっても描画をするか</param>
 	void Initialize(std::string _fileName, int _x, int _y, int _w, int _h, bool _loop, int _frame, bool _endDraw);
+	/// <summary>
+	/// アニメーションの初期化
+	/// </summary>
+	/// <param name="_dataNumber">：csv読み込みするデータの番号(ANIMATION_DATA)</param>
+	void Initialize(int _dataNumber);
 	void Update();
 	void Draw();
 	void Release();

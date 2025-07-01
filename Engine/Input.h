@@ -1,8 +1,8 @@
 #pragma once
 #define DIRECTINPUT_VERSION 0x0800
-#define LEFT_CLICK 0
-#define RIGHT_CLICK 1
-#define WHEEL_CLICK 2
+//#define LEFT_CLICK 0
+//#define RIGHT_CLICK 1
+//#define WHEEL_CLICK 2
 #include <dInput.h>
 #include <DirectXMath.h>
 #include "XInput.h"
@@ -11,6 +11,13 @@
 #pragma comment(lib, "dInput8.lib")
 #pragma comment(lib, "Xinput.lib")
 
+enum MOUSE_BUTTON
+{
+	LEFT_CLICK = 0,
+	RIGHT_CLICK,
+	WHEEL_CLICK,
+	MOUSE_BUTTON_END
+};
 
 using namespace DirectX;
 
@@ -38,6 +45,10 @@ namespace Input
 	//戻値：押した瞬間だったらtrue
 	bool IsKeyDown(int keyCode);
 
+	//いずれかのキーを今押したか（調べる押しっぱなしは無効）
+	//戻値：押した瞬間だったらtrue
+	bool IsKeyDown();
+
 	//キーを今放したか調べる
 	//引数：keyCode	調べたいキーのコード
 	//戻値：放した瞬間だったらtrue
@@ -54,6 +65,10 @@ namespace Input
 	//引数：buttonCode	調べたいボタンの番号
 	//戻値：押した瞬間だったらtrue
 	bool IsMouseButtonDown(int buttonCode);
+
+	//いずれかのマウスのボタンを今押したか（調べる押しっぱなしは無効）
+	//戻値：押した瞬間だったらtrue
+	bool IsMouseButtonDown();
 
 	//マウスのボタンを今放したか調べる
 	//引数：buttonCode	調べたいボタンの番号

@@ -26,23 +26,27 @@ void MaterialTable::Initialize()
 	InitSlotFrames(MATERIAL_TABLE, csv);
 
 
-
-
-
-
-
-
-
-	addAnim_.Initialize("Image\\flashAnim.png", 0, 0, 64, 64, false, 3, false);
-	addAnim_.SetSpeed(0.15);
+	addAnim_.Initialize(FLASH);
+	steamAnim_.Initialize(STEAM);
 
 	hSelect_ = Audio::Load("Sounds\\SE\\add.wav");
-	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, 5);
+	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, TABLE_SIZE);
 
+	//確率はconfig.iniから読み込み（読み込めなかったら100を入れる）
 	returnProbability_ = GetPrivateProfileInt("Material", "return_probability ", 100, ".\\config.ini");
 
 	quickRecipe = Instantiate<QuickRecipe>(this);
 	quickRecipe->SetPosition(QUICK_RECIPE, csv);
+
+	hPot_ = Image::Load("Image\\" + csv.GetString(POT, NAME) + ".png");
+	assert(hPot_ >= 0);
+
+	Transform tempTrans;
+	tempTrans.position_ = { csv.GetFloat(POT,POSITION_X),csv.GetFloat(POT,POSITION_Y),0 };
+	tempTrans.scale_ = { csv.GetFloat(POT,SCALE_X),csv.GetFloat(POT,SCALE_Y),0 };
+	Image::SetTransform(hPot_, tempTrans);
+	tempTrans.position_.y = -tempTrans.position_.y - Image::GetImageSize(hPot_).y / 2;
+	steamAnim_.SetPosition(tempTrans.position_);
 }
 
 void MaterialTable::Update()
@@ -103,17 +107,20 @@ void MaterialTable::Update()
 			Audio::Play(hChoise_);
 		}
 	}
-	if (makeButton_.isDown_ && table.material[0].name != "frame")
+	if ((makeButton_.isDown_ || Input::IsKeyDown(DIK_SPACE) ) && table.material[0].name != "frame")
 	{
 		TableReset();
 		Audio::Play(hSelect_);
 	}
+	steamAnim_.Update();
 	addAnim_.Update();
 }
 
 void MaterialTable::Draw()
 {
 	Image::Draw(hTable_);
+	Image::Draw(hPot_);
+	steamAnim_.Draw();
 
 	for (int i = 0; i < materialName_.size(); i++)
 	{
@@ -196,9 +203,10 @@ void MaterialTable::TableReset()
 	int makePuppetType = MakePuppet();
 	bool isMade = storage->AddStorage(makePuppetType);
 
-	// ★キャラ作成できた場合、現在のテーブル状態を保存して QuickRecipe に追加
+	//キャラ作成できた場合、現在のテーブル状態を保存して QuickRecipe に追加
 	if (isMade)
 	{
+
 		std::vector<int> currentRecipe(MATERIAL_TYPE::MATERIAL_END, 0);
 		for (int i = 0; i < TABLE_SIZE; i++)
 		{
@@ -209,6 +217,7 @@ void MaterialTable::TableReset()
 				currentRecipe[table.material[i].type]++;
 			}
 		}
+		steamAnim_.Start();
 		quickRecipe->AddRecipe(makePuppetType, currentRecipe);
 	}
 

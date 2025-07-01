@@ -10,9 +10,10 @@ namespace Input
 	LPDIRECTINPUT8			pDInput_;
 
 	//キーボード
+	const int KEY_NUM = 256;
 	LPDIRECTINPUTDEVICE8	pKeyDevice_;	//デバイスオブジェクト
-	BYTE keyState_[256];					//現在の各キーの状態
-	BYTE prevKeyState_[256];				//前フレームでの各キーの状態
+	BYTE keyState_[KEY_NUM];					//現在の各キーの状態
+	BYTE prevKeyState_[KEY_NUM];				//前フレームでの各キーの状態
 
 	//マウス
 	LPDIRECTINPUTDEVICE8	pMouseDevice_;	//デバイスオブジェクト
@@ -109,6 +110,19 @@ namespace Input
 		return false;
 	}
 
+	//いずれかのキーを今押したか調べる（押しっぱなしは無効）
+	bool IsKeyDown()
+	{
+		for (int i = 0; i < KEY_NUM; i++)
+		{
+			if (IsKey(i) && !(prevKeyState_[i] & 0x80))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	//キーを今放したか調べる
 	bool IsKeyUp(int keyCode)
@@ -142,6 +156,18 @@ namespace Input
 		if (IsMouseButton(buttonCode) && !(prevMouseState_.rgbButtons[buttonCode] & 0x80))
 		{
 			return true;
+		}
+		return false;
+	}
+
+	bool IsMouseButtonDown()
+	{
+		for (int i = 0; i < MOUSE_BUTTON_END; i++)
+		{
+			if ((mouseState_.rgbButtons[i] & 0x80) && !(prevMouseState_.rgbButtons[i] & 0x80))
+			{
+				return true;
+			}
 		}
 		return false;
 	}

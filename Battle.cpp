@@ -74,14 +74,17 @@ void Battle::Update()
 
 
 	//勝利条件
-	bool winCondition[WIN_CONDITIONS::END] =
+	bool endCondition[END_CONDITIONS::END] =
 	{ 
-		(spawnedNum < spawnList_.size() || enemy->unit_->GetPuppetArray().size() > 0),//敵がすべて出現して、全滅したか
-		(hud->HP_ > 0 && hud->time_ <= 0)											  //HPが残っていて時間が0になったか
+		(spawnedNum >= spawnList_.size() && enemy->unit_->GetPuppetArray().size() <= 0),//敵がすべて出現して、全滅したか
+		(hud->time_ <= 0),																//時間がなくなったか
+		(hud->HP_ <= 0)																	//体力がなくなったか	
 	};
 
-	if ((spawnedNum < spawnList_.size() || enemy->unit_->GetPuppetArray().size() > 0) &&
-		(hud->HP_ > 0 && hud->time_ > 0))
+	if (!endCondition[END_CONDITIONS::All_Kill] &&//敵がまだいる
+		!endCondition[END_CONDITIONS::Time_Up]  &&//時間がまだある
+		!endCondition[END_CONDITIONS::Dead])	  //体力がまだある
+												  //このとき続ける
 	{
 		for (int i = spawnedNum; i < spawnList_.size(); i++)
 		{
@@ -164,7 +167,7 @@ void Battle::Update()
 	}
 	else if(!isBattleEnd)//バトルが終わったらシーン遷移する
 	{
-		if (hud->time_ <= 0)
+		if (hud->HP_ > 0)
 		{
 			Instantiate<GameClear>(this);
 		}

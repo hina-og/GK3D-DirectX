@@ -1,6 +1,7 @@
 #include "Animation.h"
 #include "Engine/Image.h"
 #include "Engine/Direct3D.h"
+#include "Engine/CsvReader.h"
 
 Animation::Animation()
 {
@@ -41,6 +42,26 @@ void Animation::Initialize(std::string _fileName, int _x, int _y, int _w, int _h
 	Image::SetRect(hPict_, 0, 0, rect_.top, rect_.bottom);
 }
 
+void Animation::Initialize(int _dataNumber)
+{
+	CsvReader csv;
+	csv.Load("ImageData\\AnimationData.csv");
+
+	hPict_ = Image::Load("Image\\" + csv.GetString(_dataNumber, NAME) + "Anim.png");
+	x_ = csv.GetInt(_dataNumber, X);
+	y_ = csv.GetInt(_dataNumber, Y);
+	rect_ = { csv.GetInt(_dataNumber,W),csv.GetInt(_dataNumber,H) };
+	doLoop_ = csv.GetInt(_dataNumber, LOOP);
+	totalFrame_ = csv.GetInt(_dataNumber, FRAME);
+
+	speed_ = csv.GetFloat(_dataNumber, SPEED);
+	addSpeed_ = 0;
+	doStart_ = false;
+	isDrawAfterAnimation = csv.GetInt(_dataNumber, END_DRAW);
+	doReverse_ = false;
+	Image::SetRect(hPict_, 0, 0, rect_.top, rect_.bottom);
+}
+
 void Animation::Update()
 {
 	if (!doReverse_)
@@ -72,7 +93,7 @@ void Animation::Update()
 		}
 	}
 
-	Image::SetRect(hPict_, rect_.left * nowFrame_, 0, rect_.top, rect_.left);
+	Image::SetRect(hPict_, rect_.left * nowFrame_, 0, rect_.left, rect_.top);
 
 	if (doStart_)
 	{

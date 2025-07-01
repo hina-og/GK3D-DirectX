@@ -9,15 +9,16 @@ Calendar::Calendar()
 void Calendar::Initialize()
 {
 	calendar_.Initialize(0, 0, "Image\\Calendar.png");
-	hImage_.Initialize(
-		"Image\\CalendarAnim.png",//画像のパス
-		0, 0,//画像切り取りの左上 (x,y)
-		512, 512,//画像切り取りサイズ (w,h)
-		false,//終わったら繰り返すか
-		8,//フレーム数
-		true//終わっても描画するか
-	);
-	hImage_.SetSpeed(0.8);
+	//hImage_.Initialize(
+	//	"Image\\CalendarAnim.png",//画像のパス
+	//	0, 0,//画像切り取りの左上 (x,y)
+	//	512, 512,//画像切り取りサイズ (w,h)
+	//	false,//終わったら繰り返すか
+	//	8,//フレーム数
+	//	true//終わっても描画するか
+	//);
+	//hImage_.SetSpeed(0.8);
+	hImage_.Initialize(CALENDER);
 	hImage_.ChangeReverse();
 
 	hNumber_ = Image::Load("Image\\CalendarNumber.png");
