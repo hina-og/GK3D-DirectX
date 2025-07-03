@@ -11,11 +11,13 @@ void TutorialScene::Initialize()
 {
 	hMovie_ = Movie::Load("Movie\\TutorialMovie.wmv");
 	assert(hMovie_ >= 0);
+
 	Movie::Play(hMovie_);
 }
 
 void TutorialScene::Update()
 {
+	//èIóπèàóù
 	if (Input::IsMouseButtonDown(LEFT_CLICK) || Input::IsKeyDown(DIK_RETURN) || Movie::IsEnded(hMovie_))
 	{
 		Movie::Stop(hMovie_);

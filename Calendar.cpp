@@ -20,6 +20,7 @@ void Calendar::Initialize()
 	assert(hNumber_ >= 0);
 
 	hPageSE_ = Audio::Load("Sounds\\SE\\page.wav", false, 10);
+	assert(hPageSE_ >= 0);
 
 	day_ = 0;
 
@@ -52,6 +53,7 @@ void Calendar::Draw()
 	}
 	hImage_.Update();
 
+	//0日目はチュートリアル
 	if (day_ == 0)
 	{
 		XMINT2 textPos = { 550,650 };
@@ -65,6 +67,7 @@ void Calendar::Back()
 		hImage_.ChangeReverse();
 	hImage_.Start();
 	Audio::Play(hPageSE_);
+	day_ -= 1;
 }
 
 void Calendar::Next()
@@ -73,6 +76,7 @@ void Calendar::Next()
 		hImage_.ChangeReverse();
 	hImage_.Start();		
 	Audio::Play(hPageSE_);
+	day_ += 1;
 }
 
 void Calendar::SetDay(int _day)

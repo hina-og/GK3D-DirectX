@@ -11,6 +11,7 @@ HUD::HUD(GameObject* parent)
 
 void HUD::Initialize()
 {
+	//csvで位置やサイズの設定
 	CsvReader csv;
 	csv.Load("ImageData\\HUDData.csv");
 
@@ -40,19 +41,15 @@ void HUD::Initialize()
 	fTrans.scale_ = { csv.GetFloat(DIRECTION, SCALE_X), csv.GetFloat(DIRECTION, SCALE_Y), 0 };
 	Image::SetTransform(hModelDirection_, fTrans);
 
-	HP_ = maxHP;
 }
 
 void HUD::Update()
 {
 	Transform hpTransfofm_ = transformHP_;
-
+	//HPが減ったらその分緑の部分を短くして左にずらす
 	hpTransfofm_.position_.x = hpTransfofm_.position_.x + Image::GetImageSize(hHitPoint_).x - Image::GetImageSize(hBaseHitPoint_).x;
 	hpTransfofm_.scale_.x = (float)HP_ / (float)maxHP;
 	Image::SetTransform(hHitPoint_, hpTransfofm_);
-
-	Transform fTrans;
-	fTrans.rotate_.y += 1;
 }
 
 void HUD::Draw()

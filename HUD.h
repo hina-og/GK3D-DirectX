@@ -18,17 +18,17 @@ class HUD
 
 	int maxHP;//耐久の最大値
 
-	int hHitPoint_;
-	int hBaseHitPoint_;
-	Transform transformHP_;
+	int hHitPoint_;//残りのHP（緑のところ）
+	int hBaseHitPoint_;//HPのベース画像
+	Transform transformHP_;//HPの表示位置
 	
-	int hTimeBase_;
-	Text* timeText;
-	Transform transformTime_;
-	Transform transformTimeText_;
+	int hTimeBase_;//時間の後ろに表示するやつ
+	Text* timeText;//時間のテキスト
+	Transform transformTime_;//時間の後ろのやつの位置
+	Transform transformTimeText_;//時間のテキストの位置
 
-	int hModelDirection_;
-	Transform transformArrow_;
+	int hModelDirection_;//キャラを設置するときの矢印
+	Transform transformArrow_;//矢印の表示位置
 public:
 	int HP_;
 	float time_;
@@ -39,8 +39,10 @@ public:
 	void Draw();
 	void Release();
 
+	//HPの初期化
 	void InitHP(int _hp);
 	void TimeUpdate();
+	//時間を文字列に変換する
 	std::string ToMinutesString();
 	void SetDirection(int _dir);
 };

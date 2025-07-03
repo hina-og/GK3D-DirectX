@@ -20,8 +20,8 @@ void Stage::Initialize()
 	{
 		for (int x = 0; x < WIDTH; x++)
 		{
-			mapData_[y][x].tileModel_ = Model::Load("Model\\Tile.fbx");
-			assert(mapData_[y][x].tileModel_ >= 0);
+			mapData_[y][x].hTile_ = Model::Load("Model\\Tile.fbx");
+			assert(mapData_[y][x].hTile_ >= 0);
 
 			mapData_[y][x].pos_ = { (float)x - (WIDTH / 2) , 0 , (float)y - (HEIGHT / 2) };
 			mapData_[y][x].select_ = false;
@@ -118,8 +118,8 @@ void Stage::Draw()
 				transform_.position_.y + mapData_[y][x].pos_.y,
 				transform_.position_.z + mapData_[y][x].pos_.z
 			};
-			Model::SetTransform(mapData_[y][x].tileModel_, ftrans);
-			Model::Draw(mapData_[y][x].tileModel_);
+			Model::SetTransform(mapData_[y][x].hTile_, ftrans);
+			Model::Draw(mapData_[y][x].hTile_);
 		}
 	}
 	Model::Draw(hGround_);
@@ -185,7 +185,7 @@ XMFLOAT3 Stage::SelectTilePosition(XMFLOAT2 _pos)
 			XMStoreFloat3(&data.dir, XMVector3Normalize(mouseBackPos - mouseFrontPos));
 
 
-			Model::RayCast(mapData_[y][x].tileModel_, &data);
+			Model::RayCast(mapData_[y][x].hTile_, &data);
 			if (data.hit)
 			{
 				mapData_[y][x].select_ = true;
@@ -250,7 +250,7 @@ XMFLOAT2 Stage::SelectTileNumber(XMFLOAT2 _pos)
 			XMStoreFloat3(&data.dir, XMVector3Normalize(mouseBackPos - mouseFrontPos));
 
 
-			Model::RayCast(mapData_[y][x].tileModel_, &data);
+			Model::RayCast(mapData_[y][x].hTile_, &data);
 			if (data.hit)
 			{
 				mapData_[y][x].select_ = true;
@@ -303,7 +303,7 @@ bool Stage::SelectTile(XMFLOAT2 _screenPos, XMFLOAT2& _outNum, XMFLOAT3& _outPos
 			XMStoreFloat3(&data.start, mouseFrontPos);
 			XMStoreFloat3(&data.dir, XMVector3Normalize(mouseBackPos - mouseFrontPos));
 
-			Model::RayCast(mapData_[y][x].tileModel_, &data);
+			Model::RayCast(mapData_[y][x].hTile_, &data);
 			if (data.hit)
 			{
 				mapData_[y][x].select_ = true;

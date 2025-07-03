@@ -3,8 +3,9 @@
 #include "Button.h"
 #include "Engine/Text.h"
 #include "Engine/CsvReader.h"
-#include <unordered_map>
+#include <map>
 
+//素材の種類
 enum MATERIAL_TYPE
 {
 	BONE = 0,
@@ -18,9 +19,10 @@ enum MATERIAL_TYPE
 	EMPTY = -1,
 };
 
+//素材の名前→番号出力
 inline int GetMaterialTypeFromName(const std::string& name)
 {
-	static const std::unordered_map<std::string, int> map = {
+	static const std::map<std::string, int> map = {
 		{"Bone", MATERIAL_TYPE::BONE},
 		{"Meat", MATERIAL_TYPE::MEAT},
 		{"Soul", MATERIAL_TYPE::SOUL},
@@ -33,6 +35,7 @@ inline int GetMaterialTypeFromName(const std::string& name)
 	return (it != map.end()) ? it->second : -1;
 }
 
+//素材の名前→番号出力（画像を読み込むときとか使う）
 inline std::string GetMaterialNameFromType(int type)
 {
 	static const std::string names[] = {
@@ -49,18 +52,17 @@ inline std::string GetMaterialNameFromType(int type)
 	return "Unknown";
 }
 
+
 struct Material
 {
-	int type;
-	std::vector<int> tag_;
-	int x;
-	int y;
-	Button button;
-	std::string name;
-	int num;
-	Text text;
-	int textX;
-	int textY;
+	int type;//種類
+	//std::vector<int> tag_;//素材の相性とか決めたい
+	XMFLOAT2 buttonPosition;//ボタンの位置(x,y)
+	Button button;//素材ボタン
+	std::string name;//名前
+	int num;//持っている数
+	Text numText;//持っている数のテキスト表示
+	XMFLOAT2 textPosition;
 };
 
 class Recipe
@@ -73,16 +75,17 @@ public:
 //保存するレシピの数
 const int saveNum{ 1 };
 
+//クイックレシピ（ごちゃごちゃしそうだから消すかも）
 class QuickRecipe
 	: public GameObject
 {
 	struct QuickRecipeButton
 	{
-		Button saveRecipeBtn;
-		int charaIcon;
-		std::vector<int>recipeIcon;
-		std::vector<int>material;
-		bool inData;
+		Button saveRecipeBtn;//ベースのボタン
+		int charaIcon;//キャラ画像
+		std::vector<int>recipeIcon;//素材画像
+		std::vector<int>material;//素材
+		bool inData;//データが入っているか
 	};
 
 	QuickRecipeButton qButton[saveNum];
@@ -95,7 +98,14 @@ public:
 	void Update();
 	void Draw();
 	void Release();
+	//csvで位置と画像を読み込む（_row：行）
 	void SetPosition(int _row, CsvReader _csv);
+	//ボタンサイズ
 	XMFLOAT3 GetSize();
+	/// <summary>
+	/// クイックレシピ追加（数がsaveNumを超えると最初に入れたものから消えていく）
+	/// </summary>
+	/// <param name="_charaType">作れるキャラの種類</param>
+	/// <param name="_recipe">選択した素材の配列</param>
 	void AddRecipe(int _charaType,std::vector<int> _recipe);
 };

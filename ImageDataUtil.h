@@ -3,6 +3,7 @@
 #include <vector>
 #include "Engine/CsvReader.h"
 
+//画像のデータ
 struct ImageData 
 {
     std::string name;
@@ -12,6 +13,7 @@ struct ImageData
     float scaleY;
 };
 
+//画像データが入っているcsvのカラム
 enum ImageCsvColumn 
 {
     NAME = 0,
@@ -21,6 +23,7 @@ enum ImageCsvColumn
     SCALE_Y
 };
 
+//csvの画像データをまとめて出力
 inline std::vector<ImageData> LoadImageData(const std::string& csvPath) 
 {
     std::vector<ImageData> imageList;

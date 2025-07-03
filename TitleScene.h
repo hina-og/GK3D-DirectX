@@ -14,7 +14,7 @@ class TitleScene :
     int hOperation_;//操作
     int hLogo_;//ロゴ
 
-    bool canSelect_;
+    bool canSelect_;//ステージ選択ができる状態か（ロゴが出ている間はfalse）
 
     SelectStage* selectStage_;
     SceneManager* pSM;

@@ -191,15 +191,15 @@
     <ClCompile Include="File.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>Scene\PlayScene</Filter>
-    </ClCompile>
     <ClCompile Include="TutorialScene.cpp">
       <Filter>Scene\TutorialScene</Filter>
     </ClCompile>
     <ClCompile Include="Recipe.cpp" />
     <ClCompile Include="RangeView.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="HUD.cpp">
+      <Filter>Scene\PlayScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">

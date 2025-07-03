@@ -125,7 +125,7 @@ void MaterialTable::Draw()
 	for (int i = 0; i < materialName_.size(); i++)
 	{
 		materialList_[i].button.Draw();
-		materialList_[i].text.Draw(materialList_[i].x + materialList_[i].textX, materialList_[i].y + materialList_[i].textY, materialList_[i].num);
+		materialList_[i].numText.Draw(materialList_[i].buttonPosition.x + materialList_[i].textPosition.x, materialList_[i].buttonPosition.y + materialList_[i].textPosition.y, materialList_[i].num);
 	}
 
 	for (int i = 0; i < TABLE_SIZE; i++)
@@ -254,7 +254,7 @@ void MaterialTable::GetRandomMaterial()
 {
 	int randNum = rand() % materialName_.size();
 	materialList_[randNum].num++;
-	addAnim_.SetPosition({ (float)materialList_[randNum].x,(float)materialList_[randNum].y,0 });
+	addAnim_.SetPosition({ (float)materialList_[randNum].buttonPosition.x,(float)materialList_[randNum].buttonPosition.y,0 });
 	addAnim_.Start();
 }
 
@@ -287,13 +287,13 @@ void MaterialTable::InitMaterialList(int _row, CsvReader _csv)
 		std::string fileName = "Image\\" + materialList_[i].name + ".png";
 		materialList_[i].button.LoadButtonImage(fileName);
 
-		materialList_[i].x = i % TABLE_SIZE * materialList_[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
-		materialList_[i].y = i / TABLE_SIZE * materialList_[i].button.GetSize().y + _csv.GetFloat(_row, POSITION_Y);
-		materialList_[i].button.Initialize(materialList_[i].x, materialList_[i].y);
+		materialList_[i].buttonPosition.x = i % TABLE_SIZE * materialList_[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
+		materialList_[i].buttonPosition.y = i / TABLE_SIZE * materialList_[i].button.GetSize().y + _csv.GetFloat(_row, POSITION_Y);
+		materialList_[i].button.Initialize(materialList_[i].buttonPosition.x, materialList_[i].buttonPosition.y);
 		materialList_[i].num = 0;
-		materialList_[i].text.Initialize();
-		materialList_[i].textX = _csv.GetFloat(MATERIAL_NUM, POSITION_X);
-		materialList_[i].textY = _csv.GetFloat(MATERIAL_NUM, POSITION_Y);
+		materialList_[i].numText.Initialize();
+		materialList_[i].textPosition.x = _csv.GetFloat(MATERIAL_NUM, POSITION_X);
+		materialList_[i].textPosition.y = _csv.GetFloat(MATERIAL_NUM, POSITION_Y);
 	}
 }
 
@@ -307,13 +307,13 @@ void MaterialTable::InitSlotFrames(int _row, CsvReader _csv)
 	for (int i = 0; i < TABLE_SIZE; i++)
 	{
 		table.material[i].type = MATERIAL_TYPE::EMPTY;
-		table.material[i].x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
-		table.material[i].y = _csv.GetFloat(_row, POSITION_Y);
-		table.material[i].button.Initialize(table.material[i].x, table.material[i].y, "Image\\frame.png");
+		table.material[i].buttonPosition.x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
+		table.material[i].buttonPosition.y = _csv.GetFloat(_row, POSITION_Y);
+		table.material[i].button.Initialize(table.material[i].buttonPosition.x, table.material[i].buttonPosition.y, "Image\\frame.png");
 
-		table.material[i].x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
-		table.material[i].y = _csv.GetFloat(_row, POSITION_Y);
-		table.material[i].button.SetPosition({ (float)table.material[i].x ,(float)table.material[i].y,0 });
+		table.material[i].buttonPosition.x = i * table.material[i].button.GetSize().x + _csv.GetFloat(_row, POSITION_X);
+		table.material[i].buttonPosition.y = _csv.GetFloat(_row, POSITION_Y);
+		table.material[i].button.SetPosition({ (float)table.material[i].buttonPosition.x ,(float)table.material[i].buttonPosition.y,0 });
 
 		table.material[i].name = "frame";
 	}

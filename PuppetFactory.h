@@ -6,8 +6,9 @@
 #include "Golem.h"
 #include "Ghost.h"
 #include <string>
-#include <unordered_map>
+#include <map>
 
+//実体を作る
 inline Puppet* CreatePuppetByName(const std::string& name, GameObject* parent)
 {
 	if (name == "Mouse")     return new Mouse(parent);
@@ -19,9 +20,10 @@ inline Puppet* CreatePuppetByName(const std::string& name, GameObject* parent)
 	return nullptr;
 }
 
+//キャラの名前→種類番号に変換
 inline int GetCharacterTypeFromName(const std::string& name)
 {
-	static const std::unordered_map<std::string, int> map = {
+	static const std::map<std::string, int> map = {
 		{"Mouse", CHARA_TYPE::MOUSE},
 		{"Zombie", CHARA_TYPE::ZOMBIE},
 		{"Mushroom", CHARA_TYPE::MUSHROOM},
@@ -33,6 +35,7 @@ inline int GetCharacterTypeFromName(const std::string& name)
 	return (it != map.end()) ? it->second : -1;
 }
 
+//キャラの種類番号→名前に変換
 inline std::string GetCharacterNameFromType(int type)
 {
 	static const std::string names[] = {

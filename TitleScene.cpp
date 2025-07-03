@@ -44,6 +44,7 @@ void TitleScene::Update()
 			}
 			else
 			{
+				//ステージ決定
 				SetUp::currentDifficulty = File::GetFileName("GameData\\StageData", selectStage_->GetStageNum());
 				pSM->ChangeScene(SCENE_ID::SCENE_ID_PLAY);
 			}

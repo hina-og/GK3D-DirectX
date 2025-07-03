@@ -4,6 +4,7 @@
 class TutorialScene :
     public GameObject
 {
+    //“®‰æƒnƒ“ƒhƒ‹
     int hMovie_;
 public:
     TutorialScene(GameObject* parent);
