@@ -199,6 +199,7 @@
     </ClCompile>
     <ClCompile Include="Recipe.cpp" />
     <ClCompile Include="RangeView.cpp" />
+    <ClCompile Include="Font.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -359,6 +360,7 @@
     <ClInclude Include="Recipe.h" />
     <ClInclude Include="RangeView.h" />
     <ClInclude Include="ImageDataUtil.h" />
+    <ClInclude Include="Font.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
@@ -375,7 +377,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="3DTank.rc">
+    <ResourceCompile Include="MyGame.rc">
       <Filter>リソース ファイル</Filter>
     </ResourceCompile>
   </ItemGroup>

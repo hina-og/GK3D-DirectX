@@ -28,6 +28,12 @@ public:
 
 
 	Button();
+	/// <summary>
+	/// ‰Šú‰»
+	/// </summary>
+	/// <param name="_x"></param>
+	/// <param name="_y"></param>
+	/// <param name="_fileName"></param>
 	void Initialize(int _x, int _y, std::string _fileName);
 	void Initialize(int _x, int _y);
 	void Update();

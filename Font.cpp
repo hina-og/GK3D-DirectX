@@ -7,14 +7,19 @@
 
 std::map<std::string, Font::FontData> Font::fonts_;
 
+
+
 std::wstring Font::UTF8toWString(const std::string& str)
 {
-    if (str.empty()) return std::wstring();
+    if (str.empty())
+    {
+        return std::wstring();
+    }
 
     int sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
     std::wstring result(sizeNeeded, 0);
     MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &result[0], sizeNeeded);
-    result.pop_back(); // null文字を削除
+    result.pop_back();//null文字を削除
     return result;
 }
 
@@ -27,14 +32,18 @@ void Font::Initialize(const std::string& configFile)
         return;
     }
 
+
     std::string line;
     std::string currentFontName;
     FontData data;
 
+
     while (std::getline(ifs, line))
     {
         if (line.empty() || line[0] == '#')
+        {
             continue;
+        }
 
         if (line.find('=') == std::string::npos)
         {
@@ -42,6 +51,7 @@ void Font::Initialize(const std::string& configFile)
             {
                 fonts_[currentFontName] = data;
             }
+
             currentFontName = line;
             data = FontData();
         }
@@ -57,7 +67,7 @@ void Font::Initialize(const std::string& configFile)
             }
             else if (key == "type")
             {
-                // unicode or list
+                //何もやってない
             }
             else if (key == "start")
             {
@@ -69,6 +79,8 @@ void Font::Initialize(const std::string& configFile)
                 wchar_t start = data.characters[0];
                 wchar_t end = static_cast<wchar_t>(std::stoi(value.substr(2), nullptr, 16));
                 data.characters = L"";
+
+
                 for (wchar_t c = start; c <= end; c++)
                 {
                     data.characters += c;
@@ -102,7 +114,9 @@ void Font::Initialize(const std::string& configFile)
 void Font::Draw(const std::string& _name, int _x, int _y, const std::wstring& _str)
 {
     if (fonts_.count(_name) == 0)
+    {
         return;
+    }
 
     const FontData& data = fonts_[_name];
 
@@ -135,7 +149,7 @@ void Font::Draw(const std::string& _name, int _x, int _y, const std::wstring& _s
         else
         {
             float spaceSize = 0.4;
-            // 未登録文字 → スペース相当
+            //未登録文字 -> スペース相当
             px += Image::GetImageSize(data.handle).x * lineSpacing * spaceSize;
         }
     }
@@ -144,7 +158,9 @@ void Font::Draw(const std::string& _name, int _x, int _y, const std::wstring& _s
 void Font::Draw(const std::string& _name, int _x, int _y, const std::wstring& _str, XMFLOAT3 _size, int _lineWrapLength) 
 {
     if (fonts_.count(_name) == 0)
+    {
         return;
+    }
 
     const FontData& data = fonts_[_name];
 
@@ -158,6 +174,7 @@ void Font::Draw(const std::string& _name, int _x, int _y, const std::wstring& _s
     for (auto ch : _str)
     {
         auto it = data.charToIndex.find(ch);
+
         if (it != data.charToIndex.end())
         {
             int index = it->second;
@@ -187,7 +204,7 @@ void Font::Draw(const std::string& _name, int _x, int _y, const std::wstring& _s
         else
         {
             float spaceSize = 0.4;
-            // 未登録文字 → スペース相当
+            //未登録文字 -> スペース相当
             px += Image::GetImageSize(data.handle).x * lineSpacing * spaceSize;
             if (charCount >= _lineWrapLength)
             {
@@ -207,7 +224,9 @@ void Font::Draw(const std::string& _name, int _x, int _y, const std::string& _st
     MultiByteToWideChar(932, 0, _str.c_str(), -1, &wstr[0], size_needed);
 
     if (fonts_.count(_name) == 0)
+    {
         return;
+    }
 
     const FontData& data = fonts_[_name];
 
@@ -250,7 +269,7 @@ void Font::Draw(const std::string& _name, int _x, int _y, const std::string& _st
         else
         {
             float spaceSize = 0.4;
-            // 未登録文字 → スペース相当
+            //未登録文字 → スペース相当
             px += Image::GetImageSize(data.handle).x * lineSpacing * spaceSize;
             if (charCount >= _lineWrapLength)
             {

@@ -6,6 +6,7 @@
 class HUD
 	: public GameObject
 {
+	//csv‚Ìã‚©‚ç‡”Ô
 	enum IMAGE_ROW
 	{
 		BASE_HP = 1,
