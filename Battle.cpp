@@ -90,7 +90,7 @@ void Battle::Update()
 		{
 			if (hud->time_ < spawnList_[i].time_)
 			{
-				XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,stage->startLine_ };
+				XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,stage->spawnLine_ };
 				enemy->unit_->AddCharacter(pos, spawnList_[i].type_, Puppet::DOWN);
 				spawnedNum++;
 			}
@@ -148,7 +148,7 @@ void Battle::Update()
 		player->unit_->InRange(enemy->unit_->GetPuppetArray());
 		enemy->unit_->InRange(player->unit_->GetPuppetArray());
 
-		enemy->unit_->PastLine(stage->endLine_, hud->HP_);
+		enemy->unit_->PastLine(stage->wallLine_, hud->HP_);
 
 		if (GiveMaterialTime <= getMaterialTime)
 		{

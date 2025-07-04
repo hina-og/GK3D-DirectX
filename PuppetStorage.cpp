@@ -12,21 +12,15 @@ PuppetStorage::PuppetStorage(GameObject* parent)
 
 void PuppetStorage::Initialize()
 {
-	CsvReader csv("ImageData\\PuppetStorageData.csv");
-
+	
+	addAnim_.Initialize(FLASH);
 
 
 	selectPuppetNumber = 0;
-
-	addAnim_.Initialize(FLASH);
-
-	selectFrame_ = Image::Load("Image\\frame.png");
-	assert(selectFrame_ >= 0);
+	hSelectFrame_ = Image::Load("Image\\frame.png");
+	assert(hSelectFrame_ >= 0);
 
 	rangeView_ = new RangeView();
-
-	LoadImageData(csv);
-
 	hpText_ = new Text;
 	hpText_->Initialize();
 	powerText_ = new Text;
@@ -34,8 +28,12 @@ void PuppetStorage::Initialize()
 	speedText_ = new Text;
 	speedText_->Initialize();
 
+	//フォント初期化
 	Font::Initialize("Font/keinan_pop/FontConfig.txt");
 
+	//画像のデータ
+	CsvReader csv("ImageData\\PuppetStorageData.csv");
+	LoadImageData(csv);
 }
 
 void PuppetStorage::Update()
@@ -46,7 +44,7 @@ void PuppetStorage::Update()
 
 		if (puppetList_[i].button.isPress_)
 		{
-			Image::SetPosition(selectFrame_, { (float)puppetList_[selectPuppetNumber].x / Direct3D::screenWidth_,(float)puppetList_[selectPuppetNumber].y / -Direct3D::screenHeight_ ,0 });
+			Image::SetPosition(hSelectFrame_, { (float)puppetList_[selectPuppetNumber].x / Direct3D::screenWidth_,(float)puppetList_[selectPuppetNumber].y / -Direct3D::screenHeight_ ,0 });
 			selectPuppetNumber = i;
 		}
 	}
@@ -63,23 +61,21 @@ void PuppetStorage::Draw()
 	{
 		puppetList_[i].button.Draw();
 		puppetList_[i].numText.Draw(puppetList_[i].x + puppetList_[i].textX, puppetList_[i].y + puppetList_[i].textY, puppetList_[i].num);
-		if (puppetList_[i].num > 0)
-		{
-			int i = 0;
-		}
 
 		puppetList_[i].puppet = CreatePuppetByName(puppetList_[i].name, this);
 		puppetList_[i].puppet->Initialize();
 	}
 
 	addAnim_.Draw();
-	Image::Draw(selectFrame_);
+	Image::Draw(hSelectFrame_);
 
 	
 	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
 	{
+		//ストレージボタンを押しているとき
 		if (puppetList_[i].button.isPress_)
 		{
+			//作ったことがあるならステータス表示、なければ説明文表示
 			if (puppetList_[i].isMade)
 			{
 				Image::Draw(hStatusBase_);
@@ -113,6 +109,8 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 
 	std::string puppetName_[CHARA_TYPE::CHARA_END];
 
+
+	//ストレージのロード
 	for (int i = 0; i < CHARA_TYPE::CHARA_END; i++)
 	{
 		puppetName_[i] = GetCharacterNameFromType(i);
@@ -133,19 +131,36 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 
 	hStatusBase_ = Image::Load("Image\\" + _csv.GetString(STATUS, NAME) + ".png");
 	assert(hStatusBase_ >= 0);
-	viewPos_.base = { _csv.GetFloat(STATUS,POSITION_X) / Direct3D::screenWidth_,_csv.GetFloat(STATUS,POSITION_Y) / Direct3D::screenHeight_,0 };
+	viewPos_.base = { 
+		_csv.GetFloat(STATUS,POSITION_X) / Direct3D::screenWidth_,
+		_csv.GetFloat(STATUS,POSITION_Y) / Direct3D::screenHeight_,
+		0 };
 	Image::SetPosition(hStatusBase_, viewPos_.base);
 
-	viewPos_.hp = { _csv.GetFloat(HP,POSITION_X),_csv.GetFloat(HP,POSITION_Y),0 };
-	viewPos_.power = { _csv.GetFloat(POWER,POSITION_X),_csv.GetFloat(POWER,POSITION_Y),0 };
-	viewPos_.speed = { _csv.GetFloat(SPEED,POSITION_X),_csv.GetFloat(SPEED,POSITION_Y),0 };
+	viewPos_.hp = { 
+		_csv.GetFloat(HP,POSITION_X),
+		_csv.GetFloat(HP,POSITION_Y),
+		0 };
+	viewPos_.power = { 
+		_csv.GetFloat(POWER,POSITION_X),
+		_csv.GetFloat(POWER,POSITION_Y),
+		0 };
+	viewPos_.speed = { 
+		_csv.GetFloat(SPEED,POSITION_X),
+		_csv.GetFloat(SPEED,POSITION_Y),
+		0 };
 
-	viewPos_.rangeView = { _csv.GetFloat(RANGE_VIEW,POSITION_X),_csv.GetFloat(RANGE_VIEW,POSITION_Y),0 };
+	viewPos_.rangeView = { 
+		_csv.GetFloat(RANGE_VIEW,POSITION_X),
+		_csv.GetFloat(RANGE_VIEW,POSITION_Y),
+		0 };
+	viewPos_.text = { 
+		_csv.GetFloat(PUPPET_TEXT,POSITION_X),
+		_csv.GetFloat(PUPPET_TEXT,POSITION_Y),
+		0 };	
 	rangeView_->Initialize(viewPos_.rangeView);
 
-	viewPos_.text = { _csv.GetFloat(PUPPET_TEXT,POSITION_X),_csv.GetFloat(PUPPET_TEXT,POSITION_Y),0 };
-
-	Image::SetPosition(selectFrame_, { (float)puppetList_[0].x / Direct3D::screenWidth_,(float)puppetList_[0].y / -Direct3D::screenHeight_ ,0 });
+	Image::SetPosition(hSelectFrame_, { (float)puppetList_[0].x / Direct3D::screenWidth_,(float)puppetList_[0].y / -Direct3D::screenHeight_ ,0 });
 
 }
 
@@ -153,7 +168,10 @@ bool PuppetStorage::AddStorage(int _type)
 {
 	if (_type >= 0)
 	{
-		addAnim_.SetPosition({ (float)puppetList_[_type].x,(float)puppetList_[_type].y,0 });
+		addAnim_.SetPosition({ 
+			(float)puppetList_[_type].x,
+			(float)puppetList_[_type].y,
+			0 });
 		addAnim_.Start();
 		puppetList_[_type].isMade = true;
 		puppetList_[_type].num++;

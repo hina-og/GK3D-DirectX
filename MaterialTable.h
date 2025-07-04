@@ -8,20 +8,21 @@
 #include "Animation.h"
 #include "Recipe.h"
 
+//素材を選択できる最大数
 const int TABLE_SIZE{ 4 };
 
+//選択した素材を並べるやつ
 struct Table
 {
-	Material material[TABLE_SIZE];
-	int x;
-	int y;
-
-	int num;
+	Material material[TABLE_SIZE];//素材を置く枠みたいなやつ
+	int x, y;//表示位置
+	int num;//並べられている素材の数
 };
 
 class MaterialTable
 	: public GameObject
 {
+	//MaterialTableDataの行
 	enum IMAGE_ROW
 	{
 		TABLE = 1,
@@ -33,35 +34,29 @@ class MaterialTable
 		POT,
 	};
 
-	int initMaterialNum;
-	std::vector<std::string> materialName_;
+	std::vector<std::string> materialName_;//素材の名前
 
 	//画像ハンドル
-	int hTable_;//
+	int hTable_;//後ろの木の板
 	int hPot_;//大釜
 
 	//音ハンドル
-	int hSelect_;
-	int hChoise_;
+	int hSelect_;//選択音
+	int hChoise_;//作成音
 
-	Material materialList_[MATERIAL_TYPE::MATERIAL_END];
-	Table table;
-	PuppetStorage* storage;
+	Material materialList_[MATERIAL_TYPE::MATERIAL_END];//素材の配列
+	Table table;//選択した素材を並べるやつ
+	PuppetStorage* storage;//キャラのストレージ
 
-	Button makeButton_;
-	Animation addAnim_;
-	Animation steamAnim_;
+	Button makeButton_;//作るボタン
+	Animation addAnim_;//素材が増えたときのアニメーション
+	Animation steamAnim_;//作ったときのボワッてするアニメーション
 
-	std::vector<Recipe> recipeList_;
+	std::vector<Recipe> recipeList_;//レシピリスト
 
-	//作成失敗したときに素材が戻ってくる確率
-	int returnProbability_;
+	int returnProbability_;//作成失敗したときに素材が戻ってくる確率
 
-
-	QuickRecipe* quickRecipe;
-
-	std::vector<int> materialProbability_;
-	int totalProbability_;
+	QuickRecipe* quickRecipe;//作ったレシピの保存
 
 	void InitFrameTable(int _row, CsvReader _csv);
 	void InitMaterialList(int _row, CsvReader _csv);
@@ -75,11 +70,18 @@ public:
 	void Draw();
 	void Release();
 
+	//レシピの読み込み
 	void ReadRecipe();
+	//キャラを作る
 	int MakePuppet();
+	//並べている素材をリセットする（作成に失敗したら一定確率で素材を戻す）
 	void TableReset();
+	//選択しているキャラの番号を返す+そのキャラの数を減らす
 	int GetSelectStragePuppet();
+	//選択しているキャラが1体以上いるか
 	bool isNotEmpty();
+	//ランダムで素材が配られる
 	void GetRandomMaterial();
+	//_numの数だけ最初に素材が与えられる
 	void GiveMaterial(int _num);
 };

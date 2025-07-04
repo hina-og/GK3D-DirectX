@@ -157,9 +157,9 @@ namespace Movie
         if (_datas[handle] == nullptr || !_datas[handle]->pEvent) return true;
 
         long evCode = 0;
-        if (SUCCEEDED(_datas[handle]->pEvent->WaitForCompletion(0, &evCode)))
+        if (SUCCEEDED(_datas[handle]->pEvent->WaitForCompletion(1, &evCode)))
         {
-            return true;
+            return evCode == EC_COMPLETE;
         }
         return false;
     }

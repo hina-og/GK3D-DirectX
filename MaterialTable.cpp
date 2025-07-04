@@ -200,7 +200,9 @@ int MaterialTable::MakePuppet()
 
 void MaterialTable::TableReset()
 {
+	//
 	int makePuppetType = MakePuppet();
+	//キャラ作成できたか判定
 	bool isMade = storage->AddStorage(makePuppetType);
 
 	//キャラ作成できた場合、現在のテーブル状態を保存して QuickRecipe に追加
@@ -241,7 +243,6 @@ void MaterialTable::TableReset()
 int MaterialTable::GetSelectStragePuppet()
 {
 	storage->puppetList_[storage->selectPuppetNumber].num--;
-
 	return storage->selectPuppetNumber;
 }
 
