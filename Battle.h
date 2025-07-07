@@ -80,7 +80,5 @@ public:
 	void Draw();
 	void Release();
 
-	void SetSelectTile(XMFLOAT3 _selectPos);
-	XMFLOAT3 GetSelectTile();
 };
 

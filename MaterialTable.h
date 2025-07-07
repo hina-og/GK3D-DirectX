@@ -11,6 +11,9 @@
 //素材を選択できる最大数
 const int TABLE_SIZE{ 4 };
 
+//保持できる素材の最大数
+const int MAX_MATERIAL_NUM{ 99 };
+
 //選択した素材を並べるやつ
 struct Table
 {
@@ -22,6 +25,8 @@ struct Table
 class MaterialTable
 	: public GameObject
 {
+	
+
 	//MaterialTableDataの行
 	enum IMAGE_ROW
 	{
@@ -63,12 +68,16 @@ class MaterialTable
 	void InitMakeButton(int _row, CsvReader _csv);
 	void InitSlotFrames(int _row, CsvReader _csv);
 
+	bool isTutorial;
+
 public:
 	MaterialTable(GameObject* parent);
 	void Initialize();
 	void Update();
 	void Draw();
 	void Release();
+
+	void TutorialInitialize();
 
 	//レシピの読み込み
 	void ReadRecipe();

@@ -3,6 +3,9 @@
 #include "Engine/GameObject.h"
 #include "Engine/Text.h"
 
+//チュートリアルのHP
+const int TUTORIAL_HP{ 999 };
+
 class HUD
 	: public GameObject
 {
@@ -29,6 +32,9 @@ class HUD
 
 	int hModelDirection_;//キャラを設置するときの矢印
 	Transform transformArrow_;//矢印の表示位置
+
+	//チュートリアルか
+	bool isTutorial;
 public:
 	int HP_;
 	float time_;
@@ -39,8 +45,12 @@ public:
 	void Draw();
 	void Release();
 
+	//チュートリアル用
+	void TutorialInitialize();
 	//HPの初期化
 	void InitHP(int _hp);
+	//体力に引数の値を足す（引く場合はマイナスの値を入れる）
+	void AddHP(int _hp);
 	void TimeUpdate();
 	//時間を文字列に変換する
 	std::string ToMinutesString();

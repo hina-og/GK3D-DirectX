@@ -47,6 +47,9 @@ void MaterialTable::Initialize()
 	Image::SetTransform(hPot_, tempTrans);
 	tempTrans.position_.y = -tempTrans.position_.y - Image::GetImageSize(hPot_).y / 2;
 	steamAnim_.SetPosition(tempTrans.position_);
+
+	isTutorial = false;
+
 }
 
 void MaterialTable::Update()
@@ -71,7 +74,10 @@ void MaterialTable::Update()
 			table.material[table.num].name = materialList_[i].name;
 			table.material[table.num].button.ChangeImage("Image\\" + table.material[table.num].name + ".png");
 			table.num++;
-			materialList_[i].num--;
+			if (!isTutorial)
+			{
+				materialList_[i].num--;
+			}
 			Audio::Play(hChoise_);
 		}
 	}
@@ -141,6 +147,15 @@ void MaterialTable::Draw()
 
 void MaterialTable::Release()
 {
+}
+
+void MaterialTable::TutorialInitialize()
+{
+	for (int i = 0; i < materialName_.size(); i++)
+	{
+		materialList_[i].num = MAX_MATERIAL_NUM;
+	}
+	isTutorial = true;
 }
 
 void MaterialTable::ReadRecipe()
@@ -227,7 +242,7 @@ void MaterialTable::TableReset()
 	{
 		if (table.material[i].name == "frame")
 			break;
-		if (!isMade)
+		if (!isMade && !isTutorial)
 		{
 			if (rand() % 100 <= returnProbability_)
 				materialList_[table.material[i].type].num++;

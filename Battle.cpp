@@ -188,13 +188,4 @@ void Battle::Release()
 {
 }
 
-void Battle::SetSelectTile(XMFLOAT3 _selectPos)
-{
-	selectPos_ = _selectPos;
-}
-
-XMFLOAT3 Battle::GetSelectTile()
-{
-	return selectPos_;
-}
 

@@ -41,6 +41,7 @@ void HUD::Initialize()
 	fTrans.scale_ = { csv.GetFloat(DIRECTION, SCALE_X), csv.GetFloat(DIRECTION, SCALE_Y), 0 };
 	Image::SetTransform(hModelDirection_, fTrans);
 
+	isTutorial = false;
 }
 
 void HUD::Update()
@@ -67,10 +68,23 @@ void HUD::Release()
 {
 }
 
+void HUD::TutorialInitialize()
+{
+	maxHP = TUTORIAL_HP;
+	HP_ = maxHP;
+	time_ = 0.0f;
+	isTutorial = true;
+}
+
 void HUD::InitHP(int _hp)
 {
 	maxHP = _hp;
 	HP_ = maxHP;
+}
+
+void HUD::AddHP(int _hp)
+{
+
 }
 
 void HUD::TimeUpdate()
