@@ -55,7 +55,6 @@ public:
 	std::vector<XMFLOAT3> rangePos_;
 	std::vector<EmitterData> particle_;
 
-
 	
 	bool isAttack_;
 	bool isAlive_;//¶‚«‚Ä‚¢‚é‚©
@@ -284,7 +283,10 @@ protected:
 				csv.GetString(line,0) != "default"&& 
 				_type + 2 == line)
 			{
-				SetParticle(csv, line);
+				for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
+				{
+					particle_[rangeNum] = SetParticle(csv, line);;
+				}
 			}
 		}
 	}
@@ -355,7 +357,7 @@ protected:
 		assert(modelList_[CHARA_STATE::ATTACK] >= 0);
 	}
 
-	void SetParticle(CsvReader _csv, int _line)
+	EmitterData SetParticle(CsvReader _csv, int _line)
 	{
 		enum Read_Data
 		{
@@ -408,10 +410,7 @@ protected:
 		data.isBillBoard = _csv.GetInt(_line, IsBillBoard);
 
 
-		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
-		{
-			particle_[rangeNum] = data;
-		}
+		return data;
 	}
 
 	XMINT2 rotate(XMINT2 _pos, int _dir)
@@ -433,6 +432,12 @@ protected:
 	{
 		if (status_.hp_ < 1 && isAlive_)
 		{
+			EmitterData deadParticle_;
+			CsvReader csv("Particle\\PuppetParticleData.csv");
+			deadParticle_ = SetParticle(csv, CHARA_TYPE::CHARA_END + 2);
+
+			VFX::Start(deadParticle_);
+
 			isAlive_ = false;
 			hModel_ = Model::Load("Model\\Garbage.fbx");
 			assert(hModel_ >= 0);
