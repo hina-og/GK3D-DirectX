@@ -435,7 +435,7 @@ protected:
 			EmitterData deadParticle_;
 			CsvReader csv("Particle\\PuppetParticleData.csv");
 			deadParticle_ = SetParticle(csv, CHARA_TYPE::CHARA_END + 2);
-
+			deadParticle_.position = transform_.position_;
 			VFX::Start(deadParticle_);
 
 			isAlive_ = false;

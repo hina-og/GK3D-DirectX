@@ -35,6 +35,12 @@ void Unit::Draw()
 
 void Unit::Release()
 {
+	for (auto puppet : puppet_)
+	{
+		puppet->KillMe();
+	}
+
+	puppet_.clear();
 }
 
 void Unit::AddCharacter(XMFLOAT3 _pos, int _type, Puppet::DIRECTION _dir)

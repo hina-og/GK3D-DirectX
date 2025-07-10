@@ -88,7 +88,7 @@ void TutorialScene::Update()
 			selectPos_ = tilePos;
 			stage->PlaceCharacter(tileNum);
 			player->unit_->AddCharacter(selectPos_, material->GetSelectStragePuppet(), selectDir);
-			this->Initialize();
+			//this->Initialize();
 		}
 	}
 	enemy->unit_->InvaderMove();
@@ -107,6 +107,12 @@ void TutorialScene::Update()
 	if (isReady)
 		isTimeStart = true;
 
+	if (Input::IsKeyDown(DIK_J))
+	{
+		stage->Initialize();
+		player->unit_->Release();
+		enemy->unit_->Release();
+	}
 }
 
 void TutorialScene::Draw()
