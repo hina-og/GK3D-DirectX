@@ -17,27 +17,33 @@ class HUD
 		BASE_TIME,
 		TIME,
 		DIRECTION,
+		END_TEXT,
+		MENU_TEXT,
 	};
 
-	int maxHP;//耐久の最大値
+	int maxHP_;//耐久の最大値
 
 	int hHitPoint_;//残りのHP（緑のところ）
 	int hBaseHitPoint_;//HPのベース画像
 	Transform transformHP_;//HPの表示位置
 	
-	int hTimeBase_;//時間の後ろに表示するやつ
-	Text* timeText;//時間のテキスト
-	Transform transformTime_;//時間の後ろのやつの位置
+	int hTimeBase_;//時間の後ろに表示する画像
+	Text* timeText_;//時間のテキスト
+	Transform transformTime_;//時間の後ろの画像の位置
 	Transform transformTimeText_;//時間のテキストの位置
 
 	int hModelDirection_;//キャラを設置するときの矢印
 	Transform transformArrow_;//矢印の表示位置
 
-	//チュートリアルか
-	bool isTutorial;
+	/*チュートリアル関係*/
+	bool isTutorial_;//チュートリアルか
+	Text* endText_;//チュートリアル終了操作テキスト
+	XMFLOAT3 endTextPos_;//チュートリアル終了操作の位置
+	Text* resetText_;//リセット操作のテキスト
+	XMFLOAT3 resetTextPos_;//リセット操作の位置
 public:
-	int HP_;
-	float time_;
+	int HP_;//体力
+	float time_;//時間
 
 	HUD(GameObject* parent);
 	void Initialize();

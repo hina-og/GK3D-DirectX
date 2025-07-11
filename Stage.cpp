@@ -339,3 +339,8 @@ void Stage::PlaceCharacter(XMFLOAT2 _num)
 		mapData_[(int)_num.y][(int)_num.x].onPlayer_ = true;
 	}
 }
+
+XMFLOAT3 Stage::TilePos(int _x, int _y)
+{
+	return mapData_[_y][_x].pos_;
+}

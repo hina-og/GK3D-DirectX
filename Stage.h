@@ -62,6 +62,14 @@ public:
 
 	//プレイヤーキャラがいますよ状態にする
 	void PlaceCharacter(XMFLOAT2 _num);
+
+	/// <summary>
+	/// 任意のタイルの位置
+	/// </summary>
+	/// <param name="_x">番号x</param>
+	/// <param name="_y">番号y</param>
+	/// <returns></returns>
+	XMFLOAT3 TilePos(int _x, int _y);
 	//ズームしているか
 	bool IsZooming() { return isZooming_; }
 };

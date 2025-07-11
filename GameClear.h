@@ -4,7 +4,6 @@
 class GameClear
 	: public GameObject
 {
-	int hBlack_;
 	int hBord_;
 public:
 	GameClear(GameObject* parent);

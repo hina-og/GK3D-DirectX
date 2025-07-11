@@ -4,3 +4,5 @@ HitPoint,0,-650,1,1
 TimeBase,0,655,1,1
 TimeText,615,-290,1,1
 ModelDirection,450,600,1,1
+EndText,100,-290,1,1
+ResetText,100,-220,1,1

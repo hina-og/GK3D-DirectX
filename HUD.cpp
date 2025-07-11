@@ -1,5 +1,6 @@
 #include "HUD.h"
 #include "Engine/Image.h"
+#include "Engine/Input.h"
 #include "Engine/CsvReader.h"
 #include "Engine/Time.h"
 #include "ImageDataUtil.h"
@@ -29,8 +30,8 @@ void HUD::Initialize()
 	transformTime_.position_ = { csv.GetFloat(BASE_TIME,POSITION_X),csv.GetFloat(BASE_TIME,POSITION_Y),0 };
 	Image::SetTransform(hTimeBase_, transformTime_);
 
-	timeText = new Text;
-	timeText->Initialize();
+	timeText_ = new Text;
+	timeText_->Initialize();
 	transformTimeText_.position_ = { csv.GetFloat(TIME,POSITION_X),csv.GetFloat(TIME,POSITION_Y),0 };
 
 	hModelDirection_ = Image::Load("Image\\ModelDirection.png");
@@ -41,7 +42,17 @@ void HUD::Initialize()
 	fTrans.scale_ = { csv.GetFloat(DIRECTION, SCALE_X), csv.GetFloat(DIRECTION, SCALE_Y), 0 };
 	Image::SetTransform(hModelDirection_, fTrans);
 
-	isTutorial = false;
+	isTutorial_ = false;
+
+	endText_ = new Text;
+	endText_->Initialize();
+	endTextPos_ = { csv.GetFloat(END_TEXT,POSITION_X),csv.GetFloat(END_TEXT,POSITION_Y),0 };
+
+	resetText_ = new Text;
+	resetText_->Initialize();
+	resetTextPos_ = { csv.GetFloat(MENU_TEXT,POSITION_X),csv.GetFloat(MENU_TEXT,POSITION_Y),0 };
+
+
 }
 
 void HUD::Update()
@@ -49,19 +60,28 @@ void HUD::Update()
 	Transform hpTransfofm_ = transformHP_;
 	//HPが減ったらその分緑の部分を短くして左にずらす
 	hpTransfofm_.position_.x = hpTransfofm_.position_.x + Image::GetImageSize(hHitPoint_).x - Image::GetImageSize(hBaseHitPoint_).x;
-	hpTransfofm_.scale_.x = (float)HP_ / (float)maxHP;
+	hpTransfofm_.scale_.x = (float)HP_ / (float)maxHP_;
 	Image::SetTransform(hHitPoint_, hpTransfofm_);
 }
 
 void HUD::Draw()
 {
+	//画像・テキスト表示系
 	Image::Draw(hBaseHitPoint_);
 	Image::Draw(hHitPoint_);
 	Image::Draw(hTimeBase_);
 
-	timeText->Draw((int)transformTimeText_.position_.x, transformTimeText_.position_.y, ToMinutesString().c_str());
+	timeText_->Draw((int)transformTimeText_.position_.x, transformTimeText_.position_.y, ToMinutesString().c_str());
 
 	Image::Draw(hModelDirection_);
+
+	if (isTutorial_)
+	{
+		//終了操作の表示
+		endText_->Draw(endTextPos_.x, endTextPos_.y, "END   : E");
+		//ステージリセット操作の表示
+		resetText_->Draw(resetTextPos_.x, resetTextPos_.y, "RESET : R");
+	}
 }
 
 void HUD::Release()
@@ -70,21 +90,21 @@ void HUD::Release()
 
 void HUD::TutorialInitialize()
 {
-	maxHP = TUTORIAL_HP;
-	HP_ = maxHP;
-	time_ = 0.0f;
-	isTutorial = true;
+	maxHP_ = TUTORIAL_HP;
+	HP_ = maxHP_;
+	//time_ = 5.0f;
+	isTutorial_ = true;
 }
 
 void HUD::InitHP(int _hp)
 {
-	maxHP = _hp;
-	HP_ = maxHP;
+	maxHP_ = _hp;
+	HP_ = maxHP_;
 }
 
 void HUD::AddHP(int _hp)
 {
-
+	HP_ += _hp;
 }
 
 void HUD::TimeUpdate()
@@ -95,7 +115,7 @@ void HUD::TimeUpdate()
 std::string HUD::ToMinutesString()
 {
 	int minutes = (int)time_ / 60;//秒
-	int seconds = (int)time_ % 60;//分
+	int seconds = (int)time_ % 60 + 1;//分（0より大きくて1より小さい場合に1秒と表示させたいから+1してる）
 
 	std::string secStr;
 

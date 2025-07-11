@@ -4,7 +4,6 @@
 class GameOver
 	: public GameObject
 {
-	int hBlack_;
 	int hBord_;
 public:
 	GameOver(GameObject* parent);

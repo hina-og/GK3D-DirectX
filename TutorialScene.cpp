@@ -47,12 +47,15 @@ void TutorialScene::Update()
 		Audio::Play(hBGM_);
 	}
 
-	XMFLOAT2 mousePos = { (float)mouseX, (float)mouseY };
-	stage->SelectTilePosition(mousePos);
-
+	int mouseX;
+	int mouseY;
 
 	Input::GetMousePosition(mouseX, mouseY);
 
+	XMFLOAT2 mousePos = { (float)mouseX, (float)mouseY };
+	stage->SelectTilePosition(mousePos);
+	
+	//ズームしていない場合にキャラの向きを変えられる
 	if (!stage->IsZooming())
 	{
 		if (Input::IsKeyDown(DIK_S))
@@ -75,10 +78,9 @@ void TutorialScene::Update()
 
 	hud->SetDirection(selectDir);
 
-	//マウス左を押したらキャラ配置
+	//左クリックでキャラ配置
 	if (Input::IsMouseButtonDown(LEFT_CLICK))
 	{
-		
 		XMFLOAT2 tileNum = { -1, -1 };
 		XMFLOAT3 tilePos = {};
 
@@ -88,7 +90,6 @@ void TutorialScene::Update()
 			selectPos_ = tilePos;
 			stage->PlaceCharacter(tileNum);
 			player->unit_->AddCharacter(selectPos_, material->GetSelectStragePuppet(), selectDir);
-			//this->Initialize();
 		}
 	}
 	enemy->unit_->InvaderMove();
@@ -100,23 +101,40 @@ void TutorialScene::Update()
 	player->unit_->InRange(enemy->unit_->GetPuppetArray());
 	enemy->unit_->InRange(player->unit_->GetPuppetArray());
 
-
-	if (isTimeStart && hud->time_ >= 0)
-		hud->TimeUpdate();
+	if (isTimeStart)
+	{
+		if (hud->time_ >= 0)
+		{
+			hud->TimeUpdate();
+		}
+		else
+		{
+			enemy->unit_->AddCharacter({ 0,stage->TilePos(WIDTH / 2, 0).x,stage->spawnLine_ }, CHARA_TYPE::MOUSE, Puppet::DOWN);
+			hud->time_ += ENEMY_SPAWN_INTERVAL;
+		}
+	}
 
 	if (isReady)
 		isTimeStart = true;
 
-	if (Input::IsKeyDown(DIK_J))
+	if (Input::IsKeyDown(DIK_R))
 	{
 		stage->Initialize();
+		hud->TutorialInitialize();
 		player->unit_->Release();
 		enemy->unit_->Release();
 	}
+
+	if (Input::IsKeyDown(DIK_E))
+	{
+		SceneManager* pSM = (SceneManager*)(FindObject("SceneManager"));
+		pSM->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
+	}
+
 }
 
 void TutorialScene::Draw()
-{
+{ 
 	isReady = true;
 }
 

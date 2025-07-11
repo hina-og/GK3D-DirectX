@@ -36,7 +36,6 @@ void GameOver::Update()
 
 void GameOver::Draw()
 {
-	//Image::Draw(hBlack_);
 	Image::SetPosition(hBord_, transform_.position_);
 	Image::Draw(hBord_);
 }
