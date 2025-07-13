@@ -53,11 +53,11 @@ void Calendar::Draw()
 	}
 	hImage_.Update();
 
-	//0日目はチュートリアル
+	//0日目は練習モード
 	if (day_ == 0)
 	{
 		XMINT2 textPos = { 550,650 };
-		tutoerialText_->Draw(textPos.x, textPos.y, "Tutorial");
+		tutoerialText_->Draw(textPos.x, textPos.y, "Practice");
 	}
 }
 
