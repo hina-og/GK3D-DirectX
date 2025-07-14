@@ -29,7 +29,7 @@ void MaterialTable::Initialize()
 	addAnim_.Initialize(FLASH);
 	steamAnim_.Initialize(STEAM);
 
-	hSelect_ = Audio::Load("Sounds\\SE\\add.wav");
+	hSelect_ = Audio::Load("Sounds\\SE\\add.wav", false, selectSoundNum);
 	hChoise_ = Audio::Load("Sounds\\SE\\Chenge.wav", false, TABLE_SIZE);
 
 	//Šm—¦‚Íconfig.ini‚©‚ç“Ç‚İ‚İi“Ç‚İ‚ß‚È‚©‚Á‚½‚ç100‚ğ“ü‚ê‚éj

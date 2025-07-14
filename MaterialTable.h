@@ -46,8 +46,9 @@ class MaterialTable
 	int hPot_;//大釜
 
 	//音ハンドル
-	int hSelect_;//選択音
-	int hChoise_;//作成音
+	const int selectSoundNum{ 3 };//hSelectを同時にならす最大数
+	int hSelect_;//作成音
+	int hChoise_;//選択音
 
 	Material materialList_[MATERIAL_TYPE::MATERIAL_END];//素材の配列
 	Table table;//選択した素材を並べるやつ
