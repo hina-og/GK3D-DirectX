@@ -68,7 +68,7 @@ void TitleScene::Draw()
 
 	if (canSelect_)
 	{
-		XMFLOAT3 tampPos = { 0,-1 + Image::GetImageSize(hOperation_).y / Direct3D::screenHeight_,0 };
+		XMFLOAT3 tampPos = { 0,-1 + Image::GetImageSize(hOperation_).y - Direct3D::screenHeight_,0 };
 		Image::SetPosition(hOperation_, tampPos);
 		Image::Draw(hOperation_);
 	}

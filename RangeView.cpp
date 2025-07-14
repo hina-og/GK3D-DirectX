@@ -3,7 +3,7 @@
 void RangeView::Initialize(XMFLOAT3 _position)
 {
 	//左上{-1,-1}右下{1,1}の座標に位置を変換する
-	_position = { _position.x / Direct3D::screenWidth_, _position.y / ::Direct3D::screenHeight_, 0 };
+	//_position = { _position.x / Direct3D::screenWidth_, _position.y / Direct3D::screenHeight_, 0 };
 
 
 	for (int y = 0; y < MAX_TILE_Y; y++)
@@ -29,8 +29,8 @@ void RangeView::Initialize(XMFLOAT3 _position)
 
 			//左上{-1,-1}右下{1,1}の座標に位置を変換しつつタイルを並べる
 			XMFLOAT3 tempPos = { 
-				_position.x + imageSize_ * 2 * x / Direct3D::screenWidth_,
-				_position.y + imageSize_ * 2 * y / Direct3D::screenHeight_,
+				_position.x + imageSize_ * 2 * x,
+				_position.y + imageSize_ * 2 * y,
 				0 
 			};
 			Image::SetPosition(tile[y][x].hRangeTile_, tempPos);

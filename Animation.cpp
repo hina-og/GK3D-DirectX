@@ -116,7 +116,7 @@ void Animation::Draw()
 {
 	if(doStart_)
 	{
-		Image::SetPosition(hPict_, { (float)(x_ / Direct3D::screenWidth_),(float)-(y_ / Direct3D::screenHeight_),0 });
+		Image::SetPosition(hPict_, { x_,-y_,0 });
 		Image::Draw(hPict_);
 	}
 }

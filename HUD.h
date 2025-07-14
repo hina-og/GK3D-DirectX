@@ -17,11 +17,14 @@ class HUD
 		BASE_TIME,
 		TIME,
 		DIRECTION,
+		ENEMY_NUM_BACE,
+		ENEMY_NUM,
 		END_TEXT,
 		MENU_TEXT,
 	};
 
 	int maxHP_;//耐久の最大値
+
 
 	int hHitPoint_;//残りのHP（緑のところ）
 	int hBaseHitPoint_;//HPのベース画像
@@ -29,11 +32,15 @@ class HUD
 	
 	int hTimeBase_;//時間の後ろに表示する画像
 	Text* timeText_;//時間のテキスト
-	Transform transformTime_;//時間の後ろの画像の位置
 	Transform transformTimeText_;//時間のテキストの位置
 
 	int hModelDirection_;//キャラを設置するときの矢印
 	Transform transformArrow_;//矢印の表示位置
+
+	int enemyNum_;//敵の数
+	int hEnemyNumBace_;//残りの敵の数表示の（敵×）の部分
+	Text* enemyNumText_;//残りの敵の数
+	XMFLOAT3 enemyNumTextPos_;//敵の数の表示位置
 
 	/*チュートリアル関係*/
 	bool isTutorial_;//チュートリアルか
@@ -61,5 +68,7 @@ public:
 	//時間を文字列に変換する
 	std::string ToMinutesString();
 	void SetDirection(int _dir);
+	//敵の数のセッター
+	void SetEnemyNum(int _enemyNum);
 };
 

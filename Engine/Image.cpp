@@ -172,6 +172,8 @@ namespace Image
 	void SetPosition(int handle, XMFLOAT3 _pos)
 	{
 		_datas[handle]->transform.position_ = _pos;
+		_datas[handle]->transform.position_.x = _datas[handle]->transform.position_.x / Direct3D::screenWidth_;
+		_datas[handle]->transform.position_.y = _datas[handle]->transform.position_.y / Direct3D::screenHeight_;
 	}
 
 	void SeScale(int handle, XMFLOAT3 _sca)

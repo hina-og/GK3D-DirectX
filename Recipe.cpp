@@ -40,13 +40,13 @@ void QuickRecipe::Draw()
 			qButton[i].saveRecipeBtn.Draw();
 
 			//ƒLƒƒƒ‰‚Ì‰æ‘œ‚Ì•`‰æ
-			Image::SetPosition(qButton[i].charaIcon, { (position_.x - qButton[i].saveRecipeBtn.GetSize().x / 2 + Image::GetImageSize(qButton[i].charaIcon).x) / Direct3D::screenWidth_ , position_.y / Direct3D::screenHeight_ + i * -blankInterval.y / Direct3D::screenHeight_,0 });
+			Image::SetPosition(qButton[i].charaIcon, { (position_.x - qButton[i].saveRecipeBtn.GetSize().x / 2 + Image::GetImageSize(qButton[i].charaIcon).x), position_.y + i * -blankInterval.y,0 });
 			Image::Draw(qButton[i].charaIcon);
 
 			//‘fŞ‰æ‘œ‚Ì•`‰æ
 			for (int j = 0;j < qButton[i].recipeIcon.size();j++)
 			{
-				Image::SetPosition(qButton[i].recipeIcon[j], { (position_.x - Image::GetImageSize(qButton[i].recipeIcon[j]).x + j * blankInterval.x) / Direct3D::screenWidth_, (position_.y - i * blankInterval.y) / Direct3D::screenHeight_, 0});
+				Image::SetPosition(qButton[i].recipeIcon[j], { (position_.x - Image::GetImageSize(qButton[i].recipeIcon[j]).x + j * blankInterval.x), (position_.y - i * blankInterval.y), 0});
 				Image::Draw(qButton[i].recipeIcon[j]);
 			}
 		}

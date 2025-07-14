@@ -47,7 +47,9 @@ class Battle
 		float time_;//出てくる残り時間
 		int line_;//出てくる列
 	};
+	//敵出現リスト
 	std::vector<SpawnData> spawnList_;
+	//スポーンした敵の数
 	int spawnedNum;
 	
 	int hBGM_;

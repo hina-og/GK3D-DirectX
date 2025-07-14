@@ -64,6 +64,7 @@ void Battle::Initialize()
 
 void Battle::Update()
 {
+	hud->SetEnemyNum(spawnList_.size() - spawnedNum);
 	if (!Audio::IsPlaying(hBGM_))
 	{
 		Audio::Play(hBGM_);
@@ -88,6 +89,7 @@ void Battle::Update()
 	{
 		for (int i = spawnedNum; i < spawnList_.size(); i++)
 		{
+			//“G‚ÌoŒ»ŽžŠÔ‚É‚È‚Á‚½‚ç“G‚ðo‚·
 			if (hud->time_ < spawnList_[i].time_)
 			{
 				XMFLOAT3 pos = { (float)spawnList_[i].line_ - (WIDTH / 2 + 1),0,stage->spawnLine_ };

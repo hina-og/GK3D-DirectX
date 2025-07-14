@@ -16,6 +16,7 @@ void HUD::Initialize()
 	CsvReader csv;
 	csv.Load("ImageData\\HUDData.csv");
 
+	Transform fTrans;
 	hBaseHitPoint_ = Image::Load("Image\\" + csv.GetString(BASE_HP, NAME) + ".png");
 	assert(hBaseHitPoint_ >= 0);
 	hHitPoint_ = Image::Load("Image\\" + csv.GetString(HP, NAME) + ".png");
@@ -27,8 +28,8 @@ void HUD::Initialize()
 
 	hTimeBase_ = Image::Load("Image\\" + csv.GetString(BASE_TIME, NAME) + ".png");
 	assert(hTimeBase_ >= 0);
-	transformTime_.position_ = { csv.GetFloat(BASE_TIME,POSITION_X),csv.GetFloat(BASE_TIME,POSITION_Y),0 };
-	Image::SetTransform(hTimeBase_, transformTime_);
+	fTrans.position_ = { csv.GetFloat(BASE_TIME,POSITION_X),csv.GetFloat(BASE_TIME,POSITION_Y),0 };
+	Image::SetTransform(hTimeBase_, fTrans);
 
 	timeText_ = new Text;
 	timeText_->Initialize();
@@ -37,10 +38,19 @@ void HUD::Initialize()
 	hModelDirection_ = Image::Load("Image\\ModelDirection.png");
 	assert(hModelDirection_ >= 0);
 
-	Transform fTrans;
+	
 	fTrans.position_ = { csv.GetFloat(DIRECTION,POSITION_X),csv.GetFloat(DIRECTION,POSITION_Y),0 };
 	fTrans.scale_ = { csv.GetFloat(DIRECTION, SCALE_X), csv.GetFloat(DIRECTION, SCALE_Y), 0 };
 	Image::SetTransform(hModelDirection_, fTrans);
+
+	hEnemyNumBace_ = Image::Load("Image\\enemyNum.png");
+	assert(hEnemyNumBace_ >= 0);
+	fTrans.position_ = { csv.GetFloat(ENEMY_NUM_BACE,POSITION_X),csv.GetFloat(ENEMY_NUM_BACE,POSITION_Y),0 };
+	Image::SetTransform(hEnemyNumBace_, fTrans);
+
+	enemyNumText_ = new Text;
+	enemyNumText_->Initialize();
+	enemyNumTextPos_ = { csv.GetFloat(ENEMY_NUM,POSITION_X),csv.GetFloat(ENEMY_NUM,POSITION_Y),0 };
 
 	isTutorial_ = false;
 
@@ -70,10 +80,10 @@ void HUD::Draw()
 	Image::Draw(hBaseHitPoint_);
 	Image::Draw(hHitPoint_);
 	Image::Draw(hTimeBase_);
+	Image::Draw(hModelDirection_);
 
 	timeText_->Draw((int)transformTimeText_.position_.x, transformTimeText_.position_.y, ToMinutesString().c_str());
-
-	Image::Draw(hModelDirection_);
+	
 
 	if (isTutorial_)
 	{
@@ -81,6 +91,12 @@ void HUD::Draw()
 		endText_->Draw(endTextPos_.x, endTextPos_.y, "END   : E");
 		//ステージリセット操作の表示
 		resetText_->Draw(resetTextPos_.x, resetTextPos_.y, "RESET : R");
+	}
+	else
+	{
+		//チュートリアルでは敵が無限に出るため通常ステージのみ敵の数表示
+		Image::Draw(hEnemyNumBace_);
+		enemyNumText_->Draw(enemyNumTextPos_.x, enemyNumTextPos_.y, enemyNum_);
 	}
 }
 
@@ -136,4 +152,9 @@ void HUD::SetDirection(int _dir)
 {
 	int imageSize = Image::GetImageSize(hModelDirection_).y;//正方形だから縦幅だけ取得する
 	Image::SetRect(hModelDirection_, _dir * imageSize, 0, imageSize, imageSize);
+}
+
+void HUD::SetEnemyNum(int _enemyNum)
+{
+	enemyNum_ = _enemyNum;
 }

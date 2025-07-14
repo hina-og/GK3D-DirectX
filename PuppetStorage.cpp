@@ -44,7 +44,7 @@ void PuppetStorage::Update()
 
 		if (puppetList_[i].button.isPress_)
 		{
-			Image::SetPosition(hSelectFrame_, { (float)puppetList_[selectPuppetNumber].x / Direct3D::screenWidth_,(float)puppetList_[selectPuppetNumber].y / -Direct3D::screenHeight_ ,0 });
+			Image::SetPosition(hSelectFrame_, { (float)puppetList_[selectPuppetNumber].x,(float)-puppetList_[selectPuppetNumber].y,0 });
 			selectPuppetNumber = i;
 		}
 	}
@@ -132,8 +132,8 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 	hStatusBase_ = Image::Load("Image\\" + _csv.GetString(STATUS, NAME) + ".png");
 	assert(hStatusBase_ >= 0);
 	viewPos_.base = { 
-		_csv.GetFloat(STATUS,POSITION_X) / Direct3D::screenWidth_,
-		_csv.GetFloat(STATUS,POSITION_Y) / Direct3D::screenHeight_,
+		_csv.GetFloat(STATUS,POSITION_X),
+		_csv.GetFloat(STATUS,POSITION_Y),
 		0 };
 	Image::SetPosition(hStatusBase_, viewPos_.base);
 
@@ -160,7 +160,7 @@ void PuppetStorage::LoadImageData(CsvReader _csv)
 		0 };	
 	rangeView_->Initialize(viewPos_.rangeView);
 
-	Image::SetPosition(hSelectFrame_, { (float)puppetList_[0].x / Direct3D::screenWidth_,(float)puppetList_[0].y / -Direct3D::screenHeight_ ,0 });
+	Image::SetPosition(hSelectFrame_, { (float)puppetList_[0].x,-(float)puppetList_[0].y,0 });
 
 }
 
