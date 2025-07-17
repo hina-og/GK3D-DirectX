@@ -13,14 +13,14 @@ void GameOver::Initialize()
 {
 	hBord_ = Image::Load("Image\\GameOver.png");
 	assert(hBord_ >= 0);
-	transform_.position_.y = 1 + (Image::GetImageSize(hBord_).y / 2);
+	transform_.position_.y = Direct3D::screenHeight_ + Image::GetImageSize(hBord_).y;
 }
 
 void GameOver::Update()
 {
-	if (transform_.position_.y > 0)
+	if (transform_.position_.y > Image::GetImageSize(hBord_).y / 2)
 	{
-		float downSpeed = 15.0;
+		float downSpeed = 10.0;
 		transform_.position_.y -= downSpeed;
 	}
 	else
@@ -30,7 +30,7 @@ void GameOver::Update()
 			SceneManager* pSM = (SceneManager*)(FindObject("SceneManager"));
 			pSM->ChangeScene(SCENE_ID::SCENE_ID_TITLE);
 		}
-		transform_.position_.y = 1 - (Image::GetImageSize(hBord_).y);
+		transform_.position_.y = Image::GetImageSize(hBord_).y / 2;
 	}
 }
 

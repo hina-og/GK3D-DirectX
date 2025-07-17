@@ -64,7 +64,7 @@ void Battle::Initialize()
 
 void Battle::Update()
 {
-	hud->SetEnemyNum(spawnList_.size() - spawnedNum);
+	hud->SetEnemyNum(spawnList_.size() - spawnedNum + enemy->unit_->GetPuppetArray().size());
 	if (!Audio::IsPlaying(hBGM_))
 	{
 		Audio::Play(hBGM_);
@@ -82,9 +82,9 @@ void Battle::Update()
 		(hud->HP_ <= 0)																	//‘Ì—Í‚ª‚È‚­‚È‚Á‚½‚©	
 	};
 
-	if (!endCondition[END_CONDITIONS::All_Kill] &&//“G‚ª‚Ü‚¾‚¢‚é
-		!endCondition[END_CONDITIONS::Time_Up]  &&//ŽžŠÔ‚ª‚Ü‚¾‚ ‚é
-		!endCondition[END_CONDITIONS::Dead])	  //‘Ì—Í‚ª‚Ü‚¾‚ ‚é
+	if (!endCondition[END_CONDITIONS::All_Kill] &&//“G‚ª‚¢‚é
+		!endCondition[END_CONDITIONS::Time_Up]  &&//ŽžŠÔ‚ª‚ ‚é
+		!endCondition[END_CONDITIONS::Dead])	  //‘Ì—Í‚ª‚ ‚é
 												  //‚±‚Ì‚Æ‚«‘±‚¯‚é
 	{
 		for (int i = spawnedNum; i < spawnList_.size(); i++)
