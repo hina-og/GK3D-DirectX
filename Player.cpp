@@ -22,9 +22,4 @@ void Player::Release()
 {
 }
 
-void Player::SetSelectTile(XMFLOAT3 _selectPos)
-{
-	selectPos_ = _selectPos;
-}
-
 

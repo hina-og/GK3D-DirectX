@@ -33,8 +33,8 @@ class TutorialScene :
 	bool isBattleEnd;
 public:
     TutorialScene(GameObject* parent);
-    void Initialize();
-    void Update();
-    void Draw();
-    void Release();
+    void Initialize() override;
+    void Update() override;
+    void Draw() override;
+    void Release() override;
 };

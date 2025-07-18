@@ -22,8 +22,8 @@ class TitleScene :
     Text* buttonText_;//始めるボタンのテキスト
 public:
     TitleScene(GameObject* parent);
-    void Initialize();
-    void Update();
-    void Draw();
-    void Release();
+    void Initialize() override;
+    void Update() override;
+    void Draw() override;
+    void Release() override;
 };

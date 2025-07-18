@@ -94,8 +94,6 @@ void TutorialScene::Update()
 	}
 	enemy->unit_->InvaderMove();
 
-	player->SetSelectTile(selectPos_);
-
 
 
 	player->unit_->InRange(enemy->unit_->GetPuppetArray());

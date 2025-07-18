@@ -8,7 +8,7 @@
 class Player
 	: public GameObject
 {
-	XMFLOAT3 selectPos_;
+	//•Ç‚Ì‘Ï‹v’l
 	int HP;
 public:
 	Unit* unit_;
@@ -19,6 +19,5 @@ public:
 	void Draw();
 	void Release();
 
-	void SetSelectTile(XMFLOAT3 _selectPos);
 };
 

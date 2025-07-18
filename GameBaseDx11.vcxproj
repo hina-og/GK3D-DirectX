@@ -136,7 +136,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="Battle.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Calendar.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -191,7 +190,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
-    <ClInclude Include="Battle.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Calendar.h" />
     <ClInclude Include="Enemy.h" />
