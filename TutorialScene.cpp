@@ -107,7 +107,14 @@ void TutorialScene::Update()
 		}
 		else
 		{
-			enemy->unit_->AddCharacter({ 0,stage->TilePos(WIDTH / 2, 0).x,stage->spawnLine_ }, CHARA_TYPE::MOUSE, Puppet::DOWN);
+			enemy->unit_->AddCharacter(
+				{
+					stage->TilePos(WIDTH / 2, 0).x,//’†‰›‚Ìƒ^ƒCƒ‹‚Éo‚·‚½‚ß WIDTH / 2 ‚É‚·‚é
+					0,
+					stage->spawnLine_ 
+				}, 
+				CHARA_TYPE::MOUSE, 
+				Puppet::DOWN);
 			hud->time_ += ENEMY_SPAWN_INTERVAL;
 		}
 	}

@@ -131,7 +131,7 @@ void HUD::TimeUpdate()
 std::string HUD::ToMinutesString()
 {
 	int minutes = (int)time_ / 60;//•b
-	int seconds = (int)time_ % 60 + 1;//•ªi0‚æ‚è‘å‚«‚­‚Ä1‚æ‚è¬‚³‚¢ê‡‚É1•b‚Æ•\¦‚³‚¹‚½‚¢‚©‚ç+1‚µ‚Ä‚éj
+	int seconds = (int)time_ % 60;//•ª
 
 	std::string secStr;
 

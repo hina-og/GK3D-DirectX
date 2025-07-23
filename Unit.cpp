@@ -1,9 +1,10 @@
 #include "Unit.h"
 #include "Engine/Camera.h"
 #include "Stage.h"
+#include "PuppetFactory.h"
 
-const float defaultShakeTime = 100;
-const float defaultShakePower = 1;
+const float defaultShakePower{ 1.0f };//読み込めなかった場合のカメラが揺れる強さ
+const float defaultShakeTime{ 100.0f };//読み込めなかった場合のカメラが揺れる時間（ミリ秒）
 
 Unit::Unit()
 {
@@ -16,8 +17,9 @@ Unit::Unit(GameObject* parent)
 
 void Unit::Initialize()
 {
-	//カメラの揺れの設定
+	//カメラが揺れる強さの読み込み
 	shakePower_ = GetPrivateProfileInt("Unit", "camerashake_power", defaultShakePower, ".\\config.ini");
+	//カメラが揺れる時間の読み込み
 	shakeTime_ = (float)GetPrivateProfileInt("Unit", "camerashake_time", defaultShakeTime, ".\\config.ini") / 1000;//ミリ秒から変換
 }
 
@@ -25,6 +27,7 @@ void Unit::Update()
 {
 	for (int p = 0; p < puppet_.size(); p++)
 	{
+		//キャラが死んでいたら配列から削除
 		if (puppet_[p]->IsDead())
 		{
 			puppet_.erase(puppet_.begin() + p);
@@ -38,65 +41,20 @@ void Unit::Draw()
 
 void Unit::Release()
 {
+	//開放処理
 	for (auto puppet : puppet_)
 	{
 		puppet->KillMe();
 	}
-
 	puppet_.clear();
-}
-
-void Unit::AddCharacter(XMFLOAT3 _pos, int _type, Puppet::DIRECTION _dir)
-{
-	switch (_type)
-	{
-	case MOUSE:
-		puppet_.push_back(Instantiate<Mouse>(this));
-		break;
-	case ZOMBIE:
-		puppet_.push_back(Instantiate<Zombie>(this));
-		break;
-	case SLIME:
-		puppet_.push_back(Instantiate<Slime>(this));
-		break;
-	case GOLEM:
-		puppet_.push_back(Instantiate<Golem>(this));
-		break;
-	case GHOST:
-		puppet_.push_back(Instantiate<Ghost>(this));
-		break;
-	default:
-		break;
-	}
-	puppet_.back()->SetPosition(_pos);
-	puppet_.back()->SetDirection(_dir);
 }
 
 void Unit::AddCharacter(XMFLOAT3 _pos, int _type, int _dir)
 {
-	switch (_type)
-	{
-	case MOUSE:
-		puppet_.push_back(Instantiate<Mouse>(this));
-		break;
-	case ZOMBIE:
-		puppet_.push_back(Instantiate<Zombie>(this));
-		break;
-	case MUSHROOM:
-		puppet_.push_back(Instantiate<Mushroom>(this));
-		break;
-	case SLIME:
-		puppet_.push_back(Instantiate<Slime>(this));
-		break;
-	case GOLEM:
-		puppet_.push_back(Instantiate<Golem>(this));
-		break;
-	case GHOST:
-		puppet_.push_back(Instantiate<Ghost>(this));
-		break;
-	default:
-		break;
-	}
+	//キャラの配列に追加
+	puppet_.push_back(CreateInitPuppetByType(_type, this));
+
+	//追加したキャラの位置と向きを設定
 	puppet_.back()->SetPosition(_pos);
 	puppet_.back()->SetDirection(_dir);
 }
@@ -108,53 +66,58 @@ std::vector<Puppet*> Unit::GetPuppetArray()
 
 void Unit::InvaderMove()
 {
-	for (int p = 0; p < puppet_.size(); p++)
+	for (auto puppet : puppet_)
 	{
-		if(!puppet_[p]->isAttack_)
-			puppet_[p]->Move(puppet_[p]->dir_);
+		//攻撃状態でなければ動く
+		if (!puppet->isAttack_)
+			puppet->Move(puppet->dir_);
 
-		if (!puppet_[p]->isAlive_)
-			puppet_[p]->KillMe();
+		if (!puppet->isAlive_)
+			puppet->KillMe();
 	}
-
-	
 }
 
 void Unit::InRange(std::vector<Puppet*> _puppet)
 {
-	for (int my = 0; my < puppet_.size(); my++)
+	for(auto myPuppet : puppet_)
 	{
-		puppet_[my]->inRangeChara_.clear();
-		puppet_[my]->isAttack_ = false;
-		std::vector<XMINT2> attackTiles = puppet_[my]->GetAttackTiles();
+		myPuppet->inRangeChara_.clear();//攻撃範囲内にいるキャラの配列をきれいにする
+		myPuppet->isAttack_ = false;//攻撃していない状態にする
+		std::vector<XMINT2> attackTiles = myPuppet->GetAttackTiles();//攻撃範囲の配列
 
-		for (int enemy = 0; enemy < _puppet.size(); enemy++)
+		for(auto enemy : _puppet)
 		{
-			if (!_puppet[enemy]->isAlive_)
+			//対象が既に死んでいたら次のループ
+			if (!enemy->isAlive_)
 				continue;
 
-			XMFLOAT3 enemyPos = _puppet[enemy]->GetPosition();
+			XMFLOAT3 enemyPos = enemy->GetPosition();//このループで調べている敵の位置
 
-			for (int rangeNum = 0; rangeNum < attackTiles.size(); rangeNum++)
+			for(auto range : attackTiles)
 			{
+				//攻撃範囲の中心の位置
 				XMFLOAT3 attackPos = {
-					puppet_[my]->GetPosition().x + attackTiles[rangeNum].x,
-					puppet_[my]->GetPosition().z + attackTiles[rangeNum].y,
+					myPuppet->GetPosition().x + range.x,
+					myPuppet->GetPosition().z + range.y,
 					0
 				};
 
+				//攻撃範囲の位置と敵の位置の距離
 				float distx = abs(attackPos.x - enemyPos.x),
 					  disty = abs(attackPos.y - enemyPos.z);
 
+				//敵が攻撃範囲内にいる場合
 				if (distx < TILE_SIZE / 2 &&
 					disty < TILE_SIZE / 2)
 				{
-					puppet_[my]->isAttack_ = true;
-					puppet_[my]->inRangeChara_.push_back(_puppet[enemy]);
+					//攻撃している状態にして
+					myPuppet->isAttack_ = true;
+					//攻撃範囲内にいるキャラの配列に敵を追加
+					myPuppet->inRangeChara_.push_back(enemy);
 				}
 			}
 
-			if (puppet_[my]->isAttack_)
+			if (myPuppet->isAttack_)
 				break;
 		}
 	}
@@ -164,13 +127,14 @@ void Unit::PastLine(float _z, int& _durability)
 {
 	for (int p = 0; p < puppet_.size(); p++)
 	{
+		//生きていて壁に到達した場合
 		if (puppet_[p]->GetPosition().z < _z && !puppet_[p]->IsDead())
 		{
-			_durability -= puppet_[p]->GetPower();
-			puppet_[p]->KillMe();
-			puppet_.erase(puppet_.begin() + p);
+			_durability -= puppet_[p]->GetPower();//耐久値から攻撃力の値を引く
+			puppet_[p]->KillMe();//到達したキャラは消す
+			puppet_.erase(puppet_.begin() + p);//配列からも消す
 
-			Camera::StartShake(shakePower_, shakeTime_);
+			Camera::StartShake(shakePower_, shakeTime_);//カメラの振動開始
 		}
 	}
 }

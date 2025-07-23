@@ -29,13 +29,7 @@ public:
 	void Draw();
 	//開放
 	void Release();
-	/// <summary>
-	/// キャラの追加
-	/// </summary>
-	/// <param name="_pos">キャラの位置</param>
-	/// <param name="_type">キャラの種類</param>
-	/// <param name="_dir">キャラの向き</param>
-	void AddCharacter(XMFLOAT3 _pos, int _type, Puppet::DIRECTION _dir);
+
 	/// <summary>
 	/// キャラの追加
 	/// </summary>
@@ -45,11 +39,18 @@ public:
 	void AddCharacter(XMFLOAT3 _pos, int _type, int _dir);
 	//キャラの配列のゲッター
 	std::vector<Puppet*> GetPuppetArray();
-	//上から手前に侵略してくる動き()
+	//上から手前に侵略してくる動き
 	void InvaderMove();
-	//攻撃範囲に入ったときの処理
+	/// <summary>
+	/// 攻撃範囲に入ったときの処理
+	/// </summary>
+	/// <param name="_puppet">攻撃対象のキャラの配列</param>
 	void InRange(std::vector<Puppet*> _puppet);
-	//壁まで到達したときの処理
+	/// <summary>
+	/// 壁まで到達したときの処理
+	/// </summary>
+	/// <param name="_z">壁のZ座標</param>
+	/// <param name="_durability">壁の耐久値</param>
 	void PastLine(float _z, int& _durability);
 };
 

@@ -106,11 +106,7 @@ void PlayScene::Update()
 					stage->spawnLine_
 				};
 				enemy->unit_->AddCharacter(pos, spawnList_[i].type_, Puppet::DOWN);
-			}
-			else
-			{
-				spawnedNum = i;
-				break;
+				spawnedNum++;
 			}
 		}
 

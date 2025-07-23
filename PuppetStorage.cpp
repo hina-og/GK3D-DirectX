@@ -62,7 +62,7 @@ void PuppetStorage::Draw()
 		puppetList_[i].button.Draw();
 		puppetList_[i].numText.Draw(puppetList_[i].x + puppetList_[i].textX, puppetList_[i].y + puppetList_[i].textY, puppetList_[i].num);
 
-		puppetList_[i].puppet = CreatePuppetByName(puppetList_[i].name, this);
+		puppetList_[i].puppet = CreatePuppetByType(puppetList_[i].type, this);
 		puppetList_[i].puppet->Initialize();
 	}
 

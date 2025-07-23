@@ -8,21 +8,6 @@
 std::map<std::string, Font::FontData> Font::fonts_;
 
 
-
-std::wstring Font::UTF8toWString(const std::string& str)
-{
-    if (str.empty())
-    {
-        return std::wstring();
-    }
-
-    int sizeNeeded = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
-    std::wstring result(sizeNeeded, 0);
-    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &result[0], sizeNeeded);
-    result.pop_back();//null•¶š‚ğíœ
-    return result;
-}
-
 void Font::Initialize(const std::string& configFile)
 {
     std::ifstream ifs(configFile);

@@ -9,19 +9,53 @@
 #include <map>
 
 //実体を作る
-inline Puppet* CreatePuppetByName(const std::string& name, GameObject* parent)
+inline Puppet* CreatePuppetByType(int _type, GameObject* _parent)
 {
-	if (name == "Mouse")     return new Mouse(parent);
-	if (name == "Zombie")    return new Zombie(parent);
-	if (name == "Mushroom")  return new Mushroom(parent);
-	if (name == "Slime")     return new Slime(parent);
-	if (name == "Golem")     return new Golem(parent);
-	if (name == "Ghost")     return new Ghost(parent);
+	switch (_type)
+	{
+	case CHARA_TYPE::MOUSE:
+		return new Mouse(_parent);
+	case CHARA_TYPE::ZOMBIE:
+		return new Zombie(_parent);
+	case CHARA_TYPE::MUSHROOM:
+		return new Mushroom(_parent);
+	case CHARA_TYPE::SLIME:
+		return new Slime(_parent);
+	case CHARA_TYPE::GOLEM:
+		return new Golem(_parent);
+	case CHARA_TYPE::GHOST:
+		return new Ghost(_parent);
+	default:
+		break;
+	}
+	return nullptr;
+}
+
+//↑のCreatePuppetByNameのInstantiateバージョン
+inline Puppet* CreateInitPuppetByType(int _type, GameObject* _parent)
+{
+	switch (_type)
+	{
+	case CHARA_TYPE::MOUSE:
+		return Instantiate<Mouse>(_parent);
+	case CHARA_TYPE::ZOMBIE:
+		return Instantiate<Zombie>(_parent);
+	case CHARA_TYPE::MUSHROOM:
+		return Instantiate<Mushroom>(_parent);
+	case CHARA_TYPE::SLIME:
+		return Instantiate<Slime>(_parent);
+	case CHARA_TYPE::GOLEM:
+		return Instantiate<Golem>(_parent);
+	case CHARA_TYPE::GHOST:
+		return Instantiate<Ghost>(_parent);
+	default:
+		break;
+	}
 	return nullptr;
 }
 
 //キャラの名前→種類番号に変換
-inline int GetCharacterTypeFromName(const std::string& name)
+inline int GetCharacterTypeFromName(const std::string& _name)
 {
 	static const std::map<std::string, int> map = {
 		{"Mouse", CHARA_TYPE::MOUSE},
@@ -31,12 +65,12 @@ inline int GetCharacterTypeFromName(const std::string& name)
 		{"Golem", CHARA_TYPE::GOLEM},
 		{"Ghost", CHARA_TYPE::GHOST}
 	};
-	auto it = map.find(name);
+	auto it = map.find(_name);
 	return (it != map.end()) ? it->second : -1;
 }
 
 //キャラの種類番号→名前に変換
-inline std::string GetCharacterNameFromType(int type)
+inline std::string GetCharacterNameFromType(int _type)
 {
 	static const std::string names[] = {
 		"Mouse",
@@ -46,7 +80,7 @@ inline std::string GetCharacterNameFromType(int type)
 		"Golem",
 		"Ghost"
 	};
-	if (type >= 0 && type < CHARA_TYPE::CHARA_END)
-		return names[type];
+	if (_type >= 0 && _type < CHARA_TYPE::CHARA_END)
+		return names[_type];
 	return "Unknown";
 }

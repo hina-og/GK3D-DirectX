@@ -8,6 +8,7 @@
 #include "Engine/Audio.h"
 #include "Engine/VFX.h"
 
+//キャラの種類
 enum CHARA_TYPE
 {
 	MOUSE = 0,
@@ -19,6 +20,7 @@ enum CHARA_TYPE
 	CHARA_END
 };
 
+//キャラの状態
 enum CHARA_STATE
 {
 	STAND = 0,
@@ -31,16 +33,17 @@ enum CHARA_STATE
 class Puppet
 	: public GameObject
 {
+	//音の種類
 	enum SOUND_TYPE
 	{
 		ATTACK = 0,
 		DEAD,
-		END
+		SOUND_END
 	};
 
-	const float effectPosY = 0.5;
+	const float effectPosY = 0.5;//攻撃エフェクトが出る高さ（キャラの中心が0.5）
 public:
-
+	//向き
 	enum DIRECTION
 	{
 		DOWN = 0,
@@ -49,80 +52,60 @@ public:
 		RIGHT
 	};
 
-	DIRECTION dir_;
+	DIRECTION dir_;//キャラの向き
 
-	std::vector<XMINT2> range_;
-	std::vector<XMFLOAT3> rangePos_;
-	std::vector<EmitterData> particle_;
+	std::vector<XMINT2> range_;//自分の位置が（0,0）の場合の攻撃範囲のマス
+	std::vector<XMFLOAT3> rangePos_;//攻撃範囲の位置
+	std::vector<EmitterData> particle_;//攻撃エフェクトの配列
 
 	
-	bool isAttack_;
+	bool isAttack_;//攻撃しているか
 	bool isAlive_;//生きているか
 
-	std::vector<Puppet*> inRangeChara_;
+	std::vector<Puppet*> inRangeChara_;//攻撃範囲内にいるキャラの配列
 
+	//キャラのHPを操作する関数（引数をマイナスにすれば減らせる）
 	void ControlHP (int _addNum)
 	{
 		status_.hp_ += _addNum;
+		//効果音再生
 		Audio::Play(hAttackSE_);
 	}
 
-	std::vector<XMINT2> GetAttackTiles()
-	{
-		return range_;
-	}
-
-	void SetDirection(DIRECTION _dir)
-	{
-		dir_ = _dir;
-
-		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
-		{
-			range_[rangeNum] = rotate(range_[rangeNum], dir_);
-		}
-	}
-
+	//向きのセッター
 	void SetDirection(int _dir)
 	{
-		switch (_dir)
+		dir_ = (Puppet::DIRECTION)_dir;
+
+		//攻撃範囲も向きによって変える
+		for (auto range : range_)
 		{
-		case 0:
-			dir_ = DOWN;
-			break;
-		case 1:
-			dir_ = LEFT;
-			break;
-		case 2:
-			dir_ = UP;
-			break;
-		case 3:
-			dir_ = RIGHT;
-			break;
-		default:
-			break;
-		}
-		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
-		{
-			range_[rangeNum] = rotate(range_[rangeNum], dir_);
+			range = Rotate(range, dir_);
 		}
 	}
 
+	//向きを設定
 	void FacingDirection()
 	{
-		transform_.rotate_.y = dir_ * 90;
+		int directionAngle = 90;//向きは下から時計回りで90度ごと
+		transform_.rotate_.y = dir_ * directionAngle;
 	}
 
+	//向いている方向に動く
 	void Move(DIRECTION _dir)
 	{
-		if (hModel_ != modelList_[RUN])
+		
+		if (hModel_ != modelList_[RUN])//モデルのアニメーションをRUNにする
 		{
 			hModel_ = modelList_[RUN];
 			Model::SetAnimFrame(hModel_, 0, animData_.totalRunFrame_, animData_.runSpeed_);
 		}
-		else if (animData_.eRun_ <= Model::GetAnimFrame(hModel_))
+		else if (animData_.eRun_ <= Model::GetAnimFrame(hModel_))//RUNアニメーションが終わったら最初のフレームに戻る
 		{
 			Model::SetAnimFrame(hModel_, animData_.sRun_, animData_.eRun_, animData_.runSpeed_);
 		}
+
+		//位置を向いている方に動かす
 		switch (dir_)
 		{
 		case Puppet::UP:
@@ -142,48 +125,55 @@ public:
 		}
 	}
 
-	int CharacterType(std::string _type)
+	//攻撃力のゲッター
+	int GetPower() { return status_.power_; }
+	//HPのゲッター
+	int GetHitPoint() { return status_.hp_; }
+	//速度のゲッター
+	float GetSpeed() { return status_.speed_; }
+	//キャラの説明文のゲッター
+	std::string GetText() { return text_; }
+	//攻撃範囲のゲッター
+	std::vector<XMINT2> GetAttackTiles()
 	{
-		if (_type == "Mouse") return CHARA_TYPE::MOUSE;
-		if (_type == "Zombie") return CHARA_TYPE::ZOMBIE;
-		if (_type == "Mushrom") return CHARA_TYPE::MUSHROOM;
-		if (_type == "Slime") return CHARA_TYPE::SLIME;
-		if (_type == "Golem") return CHARA_TYPE::GOLEM;
-		if (_type == "Ghost") return CHARA_TYPE::GHOST;
+		return range_;
 	}
 
-	int GetPower() { return status_.power_; }
-	int GetHitPoint() { return status_.hp_; }
-	float GetSpeed() { return status_.speed_; }
-	std::string GetText() { return text_; }
-
-
+	//初期化
 	virtual void Initialize() {};
+	//更新
 	void Update()
 	{
+		//向きの設定
 		FacingDirection();
 
 
+		//HPが残ってる
 		if (status_.hp_ > 0)
 		{
+			//攻撃状態である
 			if (isAttack_)
 			{
+				//攻撃アニメーションにする
 				if (hModel_ != modelList_[CHARA_STATE::ATTACK])
 				{
 					hModel_ = modelList_[CHARA_STATE::ATTACK];
 					Model::SetAnimFrame(hModel_, 0, animData_.totalAttackFrame_, animData_.attackSpeed_);
 				}
+				//攻撃するフレームになったら攻撃する
 				if (Model::GetAnimFrame(hModel_) >= animData_.attack_ && !attacked_)
 					Attack();
 			}
+			//攻撃状態じゃない＆走っていない場合はデフォルトのモデルにする
 			else if (hModel_ != modelList_[CHARA_STATE::RUN])
 			{
 				hModel_ = modelList_[CHARA_STATE::STAND];
 			}
 		}
 
-
-		if (hModel_ == modelList_[CHARA_STATE::ATTACK] && Model::GetAnimFrame(hModel_) >= animData_.totalAttackFrame_)
+		//攻撃アニメーションが終わったら攻撃状態を解除
+		if (hModel_ == modelList_[CHARA_STATE::ATTACK] && 
+			Model::GetAnimFrame(hModel_) >= animData_.totalAttackFrame_)
 		{
 			isAttack_ = false;
 			attacked_ = false;
@@ -191,18 +181,26 @@ public:
 
 		for (int rangeNum = 0; rangeNum < range_.size(); rangeNum++)
 		{
-			rangePos_[rangeNum] = { transform_.position_.x + range_[rangeNum].x,effectPosY,transform_.position_.z + range_[rangeNum].y };
+			//攻撃範囲の位置をキャラの位置を基準に更新する
+			rangePos_[rangeNum] = { 
+				transform_.position_.x + range_[rangeNum].x,
+				effectPosY,
+				transform_.position_.z + range_[rangeNum].y 
+			};
 		}
 
 		Die();
 	};
+	//描画
 	void Draw()
 	{
 		Model::SetTransform(hModel_, transform_);
 		Model::Draw(hModel_);
 	};
+	//開放
 	void Release() {};
 protected:
+
 
 	struct AnimationData
 	{
@@ -215,14 +213,11 @@ protected:
 		int totalAttackFrame_;//Runアニメーションのフレーム数
 	};
 
-	AnimationData animData_;
-	int hModel_;
-	int modelList_[CHARA_STATE::STATE_END];
-	int hPict_;
-	int rangePict_;
-	bool attacked_;
-
-	int hAttackSE_;
+	AnimationData animData_;//アニメーションのデータ
+	int hModel_;//表示するモデルのハンドル
+	int modelList_[CHARA_STATE::STATE_END];//モデルを変更しやすくするための配列
+	bool attacked_;//アニメーションの1ループの中で既に攻撃したか
+	int hAttackSE_;//攻撃時の効果音
 
 	struct Status
 	{
@@ -235,18 +230,18 @@ protected:
 		float speed_;//移動速度
 		//--------------------
 	};
-	Status status_;
-	std::string text_;
+	Status status_;//キャラのステータス情報
+	std::string text_;//キャラの説明文
 
 	
-
+	//ステータスの読み込み
 	void LoadStatus(int _type)
 	{
 		CsvReader csv("GameData\\PuppetData.csv");
 
 		for (int line = 0;line < csv.GetLines();line++)
 		{
-			//1行目説明のデータがあるから+1
+			//1行目説明のデータがあるから + 1
 			if (csv.GetString(line, 0) != "name" &&
 				_type + 1 == line)
 			{
@@ -254,24 +249,26 @@ protected:
 			}
 		}
 
+		//------いろいろ初期状態にする------
 		hModel_ = modelList_[STAND];
-		Model::SetAnimFrame(hModel_, 1, animData_.totalRunFrame_, animData_.runSpeed_);
+		Model::SetAnimFrame(hModel_, 0, animData_.totalRunFrame_, animData_.runSpeed_);
 
 		dir_ = DIRECTION::UP;
 
 		isAlive_ = true;
 		isAttack_ = false;
 		attacked_ = false;
+		//----------------------------------
 
+		//攻撃範囲のマスの数エフェクトを用意する
 		for (int rangeNum = 0;rangeNum < range_.size();rangeNum++)
 		{
 			EmitterData data;
 			particle_.push_back(data);
 		}
-
-
 	}
 
+	//エフェクト情報の読み込み
 	void LoadParticle(int _type)
 	{
 		CsvReader csv("Particle\\PuppetParticleData.csv");
@@ -291,8 +288,10 @@ protected:
 		}
 	}
 
+	//ステータスのセッター
 	void SetStatus(CsvReader _csv, int _line)
 	{
+		//csvに入っているデータ
 		enum Read_Data
 		{
 			Name = 0,
@@ -311,6 +310,7 @@ protected:
 			AttackSE,
 			Range,
 		};
+
 		status_.name_ = _csv.GetString(_line, Name);
 		text_ = _csv.GetString(_line, Text);
 		status_.hp_ = _csv.GetInt(_line, Hp);
@@ -334,8 +334,10 @@ protected:
 		{
 			XMFLOAT2 readRange;
 			readRange = _csv.GetFloat2(_line, column);
+
 			XMINT2 pushData;
 			pushData = { (int)readRange.x,(int)readRange.y };
+
 			if (range_.size() > 0)
 			{
 				if (range_.back().x == pushData.x && range_.back().y == pushData.y)
@@ -357,8 +359,10 @@ protected:
 		assert(modelList_[CHARA_STATE::ATTACK] >= 0);
 	}
 
+	//エフェクトのセッター
 	EmitterData SetParticle(CsvReader _csv, int _line)
 	{
+		//csvに入っているデータ
 		enum Read_Data
 		{
 			Name = 0,
@@ -413,7 +417,8 @@ protected:
 		return data;
 	}
 
-	XMINT2 rotate(XMINT2 _pos, int _dir)
+	//攻撃範囲のマスを向きによって変える関数
+	XMINT2 Rotate(XMINT2 _pos, int _dir)
 	{
 		switch (_dir)
 		{
@@ -428,17 +433,23 @@ protected:
 		}
 	}
 
+	//死んでいるときの処理
 	void Die() 
 	{
+		//HPがなくてisAliveがtrueのときに
 		if (status_.hp_ < 1 && isAlive_)
 		{
+			//エフェクトを出す
 			EmitterData deadParticle_;
 			CsvReader csv("Particle\\PuppetParticleData.csv");
 			deadParticle_ = SetParticle(csv, CHARA_TYPE::CHARA_END + 2);
 			deadParticle_.position = transform_.position_;
 			VFX::Start(deadParticle_);
 
+			//生きていない状態にする
 			isAlive_ = false;
+
+			//モデルをゴミ山にする
 			hModel_ = Model::Load("Model\\Garbage.fbx");
 			assert(hModel_ >= 0);
 		}
