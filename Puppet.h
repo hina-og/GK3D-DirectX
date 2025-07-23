@@ -78,7 +78,7 @@ public:
 		dir_ = (Puppet::DIRECTION)_dir;
 
 		//UŒ‚”ÍˆÍ‚àŒü‚«‚É‚æ‚Á‚Ä•Ï‚¦‚é
-		for (auto range : range_)
+		for (auto& range : range_)
 		{
 			range = Rotate(range, dir_);
 		}
@@ -418,7 +418,7 @@ protected:
 	}
 
 	//UŒ‚”ÍˆÍ‚Ìƒ}ƒX‚ğŒü‚«‚É‚æ‚Á‚Ä•Ï‚¦‚éŠÖ”
-	XMINT2 Rotate(XMINT2 _pos, int _dir)
+	XMINT2 Rotate(XMINT2& _pos, int _dir)
 	{
 		switch (_dir)
 		{

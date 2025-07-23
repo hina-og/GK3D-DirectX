@@ -73,22 +73,32 @@ public:
 };
 
 //保存するレシピの数
-const int saveNum{ 1 };
+const int MaxSaveNum{ 3 };
 
 //クイックレシピ（ごちゃごちゃしそうだから消すかも）
 class QuickRecipe
 	: public GameObject
 {
+	//2個以上表示する場合にどれくらいずらして表示するか
+	const XMFLOAT3 blankInterval = { 100.0f,128.0f,0.0f };
+
 	struct QuickRecipeButton
 	{
 		Button saveRecipeBtn;//ベースのボタン
-		int charaIcon;//キャラ画像
+		int charaIcon = -1;//キャラ画像
 		std::vector<int>recipeIcon;//素材画像
 		std::vector<int>material;//素材
-		bool inData;//データが入っているか
+		bool inData = false;//データが入っているか
+
+		void Clear() {
+			saveRecipeBtn.Release();
+			recipeIcon.clear();
+			charaIcon = -1;
+			inData = false;
+		}
 	};
 
-	QuickRecipeButton qButton[saveNum];
+	QuickRecipeButton qButton[MaxSaveNum];
 
 	XMFLOAT3 position_;
 public:
@@ -103,7 +113,7 @@ public:
 	//ボタンサイズ
 	XMFLOAT3 GetSize();
 	/// <summary>
-	/// クイックレシピ追加（数がsaveNumを超えると最初に入れたものから消えていく）
+	/// クイックレシピ追加（数がMaxSaveNumを超えると最初に入れたものから消えていく）
 	/// </summary>
 	/// <param name="_charaType">作れるキャラの種類</param>
 	/// <param name="_recipe">選択した素材の配列</param>
